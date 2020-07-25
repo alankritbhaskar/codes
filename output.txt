@@ -1,0 +1,1 @@
+Max. of the min. distance between cows is :3
