@@ -1,4 +1,4 @@
-/*Next greater element to right of array
+/*Nearest smaller element to right of array
 
 Sample input:- 
 2
@@ -6,9 +6,11 @@ Sample input:-
 1 3 2 4
 7
 1 3 0 0 1 2 4
+
 Sample output:-
-3 4 4 -1 
-3 4 1 1 2 4 -1 
+-1 2 -1 -1 
+0 0 -1 -1 -1 -1 -1  
+
 */
 
 #include <bits/stdc++.h>
@@ -42,17 +44,17 @@ int main(){
 		for(int i=n-1;i>=0;i--){
 
 			if(s.empty()){
-				s.push(a[i]);
 				v.push_back(-1);
+				s.push(a[i]);
 			}
 			else{
 
-				if(s.top()>a[i]){
+				if(s.top()<a[i]){
                  v.push_back(s.top());
                  s.push(a[i]);
 			}
 			else{
-				while(!s.empty() && s.top()<=a[i])
+				while(!s.empty() && s.top()>=a[i])
 					s.pop();
 				if(s.size()==0)
 					v.push_back(-1);
