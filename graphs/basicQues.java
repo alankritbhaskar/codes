@@ -75,7 +75,7 @@ public class basicQues{
         addEdge(4,5,2);
         addEdge(4,6,8);
         addEdge(5,6,3);
-        addEdge(2,5,6);
+        
     }
 
     /* DFS:-
@@ -85,34 +85,129 @@ public class basicQues{
     */
 
     public static boolean hasPath(int src,int dest,boolean vis[]){
-
+    if(src==dest){
+        return true;
+    }
+    vis[src]=true;
+    boolean ans=false;
+    for(Edge e: graph[src]){
+        if(!vis[e.v])
+        ans=ans||hasPath(src+1,dest,vis);
+    }
+    vis[src]=false;
+    return ans;
     }
 
     public static int allPaths(int src,int dest,boolean vis[],int wsf,String psf){
         //wsf-- weight so far
         //psf-- path so far
-
-
-    }
-
-    public static int maxWeightPath(int src,int dest){
-
-    }
-
-    public static void minWeightPath(int src,int dest){
-
-    }
-
-    public static int hamiltonian(int src){
-
+    if(src==dest){
+        System.out.println(psf+src+" @"+wsf);
+        return 1;
     }
     
+    vis[src]=true;
+    int c=0;
+    for(Edge e: graph[src]){
+        if(!vis[e.v]){
+            c+=allPaths(e.v,dest,vis,wsf+e.w,psf+src);
+        }
+    }
+    vis[src]=false;
+    return c;
+    }
+    
+    public static class Pair{
+        int wt=0;
+        String path="";
+
+        public Pair(String path,int wt){
+            this.path=path;this.wt=wt;
+        }
+    }
+    public static int maxWeightPath(int src,int dest,boolean vis[]){
+        Pair ans=maxWeightPaths(src,dest,vis);
+        return ans.wt;
+    }
+
+    public static Pair maxWeightPaths(int src,int dest,boolean vis[]){
+    if(src==dest){
+    return new Pair(src+"",0);
+    }
+
+    vis[src]=true;
+    Pair myAns=new Pair("",0);
+    for(Edge e:graph[src]){
+        if(!vis[e.v]){
+            Pair recAns=maxWeightPaths(e.v,dest,vis);
+            if(recAns.wt+e.w>myAns.wt){
+                myAns.wt=recAns.wt+e.w;
+                myAns.path=src+myAns.path;
+            }
+        }
+    }
+    vis[src]=false;
+    return myAns;
+    }
+
+    public static int minWeightPath(int src,int dest,boolean vis[]){
+    Pair ans=minWeightPaths(src,dest,vis);
+    return ans.wt;
+    }
+    
+    public static Pair minWeightPaths(int src,int dest,boolean vis[]){
+
+        if(src==dest){
+            return new Pair(src+"",(int)10e5);
+        }
+
+        vis[src]=true;
+        Pair myAns=new Pair("",(int)10e5);
+        for(Edge e: graph[src]){
+            if(!vis[e.v]){
+                Pair recAns=minWeightPaths(e.v,dest,vis);
+                if(recAns.wt+e.w<myAns.wt){
+                    myAns.wt=recAns.wt+e.w;
+                    myAns.path=src+recAns.path;
+                }
+            }
+        }
+        vis[src]=false;
+        return myAns;
+    }
+    
+    public static int hamiltonianPath(int src,int osrc,boolean vis[],String psf,int edgeCount)
+    {
+      
+      if(edgeCount==N-1){
+      psf+=src;
+      int idx=searchEdge(src,osrc);
+      if(idx!=0)
+      System.out.println("cycle: "+psf+"");
+      else
+      System.out.println("path: "+psf+"");
+      return 1;
+      }
+      vis[src]=true;
+      int count=0;
+        for(Edge e:graph[src]){
+            if(!vis[e.v])
+            count+=hamiltonianPath(e.v,osrc,vis,psf+src,edgeCount+1);            
+            }
+        vis[src]=false;
+        return count;
+    }
+
     public static void main(String args[]){
 
         constructGraph();
-        System.out.println(searchEdge(0,2));
-        removeEdge(0,1);
-        removeVertex(2);
+        // System.out.println(searchEdge(0,2));
+        // removeEdge(0,1);
+        // removeVertex(2);
+        
+        boolean vis[]=new boolean[n];
+        int an=allPaths(1,4,vis,0,"");
+        System.out.println(an);
         display();
     }
 }
