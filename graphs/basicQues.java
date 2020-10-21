@@ -120,9 +120,12 @@ public class basicQues{
     public static class Pair{
         int wt=0;
         String path="";
+        boolean isDestHit=false;
 
-        public Pair(String path,int wt){
-            this.path=path;this.wt=wt;
+        public Pair(String path,int wt,boolean isDestHit){
+            this.path=path;
+            this.wt=wt;
+            this.isDestHit=isDestHit;
         }
     }
     public static int maxWeightPath(int src,int dest,boolean vis[]){
@@ -132,17 +135,18 @@ public class basicQues{
 
     public static Pair maxWeightPaths(int src,int dest,boolean vis[]){
     if(src==dest){
-    return new Pair(src+"",0);
+    return new Pair(src+"",0,true);
     }
 
     vis[src]=true;
-    Pair myAns=new Pair("",0);
+    Pair myAns=new Pair("",0,false);
     for(Edge e:graph[src]){
         if(!vis[e.v]){
             Pair recAns=maxWeightPaths(e.v,dest,vis);
-            if(recAns.wt+e.w>myAns.wt){
+            if(recAns.wt+e.w>myAns.wt && recAns.isDestHit){
                 myAns.wt=recAns.wt+e.w;
                 myAns.path=src+myAns.path;
+                myAns.isDestHit=true;
             }
         }
     }
@@ -158,17 +162,18 @@ public class basicQues{
     public static Pair minWeightPaths(int src,int dest,boolean vis[]){
 
         if(src==dest){
-            return new Pair(src+"",(int)10e5);
+            return new Pair(src+"",(int)10e5,true);
         }
 
         vis[src]=true;
-        Pair myAns=new Pair("",(int)10e5);
+        Pair myAns=new Pair("",(int)10e5,false);
         for(Edge e: graph[src]){
             if(!vis[e.v]){
                 Pair recAns=minWeightPaths(e.v,dest,vis);
-                if(recAns.wt+e.w<myAns.wt){
+                if(recAns.wt+e.w<myAns.wt && myAns.isDestHit){
                     myAns.wt=recAns.wt+e.w;
                     myAns.path=src+recAns.path;
+                    myAns.isDestHit=true;
                 }
             }
         }
