@@ -178,6 +178,49 @@ public class dijkstraAndPrims{
         }
     }
 
-    // Belman Ford:--
+    // Bellman Ford:-- O(V*E)
+
+    //edges={{u,v,w},....}
+
+    public static void bellmanFordAlgo_1(int edges[][],int n,int src){
+    int dis[]=new int[n];
+    Arrays.fill(dis,(int)1e8);
+
+    dis[src]=0;
+    boolean negativeCycle=false;
+    for(int i=1;i<=n;i++){
+        boolean isAnyUpdate=false;
+        int ndis[]=new int[n];
+        for(int i=0;i<n;i++)
+        ndis[i]=dis[i];
+        for(int e[]: edges){
+            if(dis[e[0]]!=(int)1e8 && dis[e[0]+e[2]<ndis[e[1]])
+            ndis[e[1]]=dis[e[0]]+e[2];
+        }
+        if(isAnyUpdate && i==n)
+        negativeCycle=true;
+        if(!isAnyUpdate && i<n)
+        break;
+    }
+    }
     
+    public static void bellmanFordAlgo_2(int edges[][],int n,int src){
+    int dis[]=new int[n];
+    Arrays.fill(dis,(int)1e8);
+
+    dis[src]=0;
+    boolean negativeCycle=false;
+    for(int i=1;i<=n;i++){
+        boolean isAnyUpdate=false;
+        for(int e[]: edges){
+            if(dis[e[0]]!=(int)1e8 && dis[e[0]]+e[2]<dis[e[1]])
+            dis[e[1]]=dis[e[0]]+e[2];
+        }
+        if(isAnyUpdate && i==n)
+        negativeCycle=true;
+        if(!isAnyUpdate && i<n)
+        break;
+    }
+    }
+    }
 
