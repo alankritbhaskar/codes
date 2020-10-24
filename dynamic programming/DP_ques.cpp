@@ -192,61 +192,125 @@ void mazePath()
     print2D(dp);
 }
 
-// Leetcode 64
-int minPathSum(int sr, int sc, int er, int ec, vector<vector<int>> &grid, vector<vector<int>> &dp)
-{
-    if (sr == er && sc == ec)
-    {
-        return dp[sr][sc] = grid[sr][sc];
-    }
+        // Leetode 63: Unique Path-II
 
-    if (dp[sr][sc] != 1e8)
-        return dp[sr][sc];
+        //Faith:- path(x,y)=path(x+1,y)+path(x,y+1),,,, in case grid[x][y]==0
 
-    if (sr + 1 <= er)
-        dp[sr][sc] = min(dp[sr][sc], minPathSum(sr + 1, sc, er, ec, grid, dp));
-    if (sc + 1 <= ec)
-        dp[sr][sc] = min(dp[sr][sc], minPathSum(sr, sc + 1, er, ec, grid, dp));
+        int uniquePathMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
+        
+        if(sr==er && sc==ec && grid[er][ec]==0){
+            return dp[sr][sc]=1;
+        }
+        
+           if(dp[sr][sc]!=-1)
+               return dp[sr][sc];
+           
+        int c=0;
+        if(sr+1<=er && grid[sr+1][sc]==0)
+        c+=uniquePathMemo(sr+1,sc,er,ec,grid,dp);
+        if(sc+1<=ec && grid[sr][sc+1]==0)
+        c+=uniquePathMemo(sr,sc+1,er,ec,grid,dp);
+        
+        return dp[sr][sc]=c;
+        }
 
-    return dp[sr][sc] += grid[sr][sc];
-}
-
-int minPathSumDP(int sr, int sc, int er, int ec, vector<vector<int>> &grid, vector<vector<int>> &dp)
-{
-    for (sr = er; sr >= 0; sr--)
-    {
-        for (sc = ec; sc >= 0; sc--)
-        {
-            if (sr == er && sc == ec)
-            {
-                dp[sr][sc] = grid[sr][sc];
-                continue;
+        long long int uniquePathTabulation(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
+        
+        for(sr=er;sr>=0;sr--){
+            for(sc=ec;sc>=0;sc--){
+            if(sr==er && sc==ec && grid[sr][sc]==0){
+            dp[sr][sc]=1;
+            continue;
             }
-
-            if (sr + 1 <= er)
-                dp[sr][sc] = min(dp[sr][sc], dp[sr+1][sc]);
-            if (sc + 1 <= ec)
-                dp[sr][sc] = min(dp[sr][sc], dp[sr][sc + 1]);
-
-            dp[sr][sc] += grid[sr][sc];
+    
+            long long int count=0;
+            if(sr+1<=er && grid[sr][sc]==0)
+            count+=dp[sr+1][sc];
+            if(sc+1<=ec && grid[sr][sc]==0)
+            count+=dp[sr][sc+1];//uniquePathMemo(sr,sc+1,er,ec,dp);
+              
+            dp[sr][sc]=count;
+        }
+        }
+        
+        return dp[0][0];
+        }
+    
+        int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
+        
+        int n=obstacleGrid.size();
+        int m=obstacleGrid[0].size();
+        
+        vector<vector<int>> dp(n,vector<int>(m,0));
+        
+        if(obstacleGrid[0][0]==1)
+            return 0;
+        else if(obstacleGrid[n-1][m-1]==1)
+            return 0;
+        else{
+        int ans=uniquePathTabulation(0,0,n-1,m-1,obstacleGrid,dp);
+        return ans;
         }
     }
+    
 
+// Leetcode 64: Min Path Sum
+
+//Faith:- minCost(x,y)=grid[x][y]+min(minCost(x+1,y),minCost(x,y+1))
+
+    int minPathSumMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
+    
+        if(sr==er && sc==ec)
+        return dp[sr][sc]=grid[sr][sc];
+        
+        if(dp[sr][sc]!=-1)
+            return dp[sr][sc];
+            
+        int minCost=1e8;
+        
+        if(sr+1<=er)
+        minCost=min(minCost,minPathSumMemo(sr+1,sc,er,ec,grid,dp));
+        if(sc+1<=ec)
+        minCost=min(minCost,minPathSumMemo(sr,sc+1,er,ec,grid,dp));
+        
+        return  dp[sr][sc]=minCost+grid[sr][sc];
+    }
+    
+     int minPathSumDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
+        
+         for(sr=er;sr>=0;sr--)
+         {
+          for(sc=ec;sc>=0;sc--){
+        
+           if(sr==er && sc==ec)
+           {
+           dp[sr][sc]=grid[sr][sc];
+           continue;
+           }
+           int minCost=1e8;
+     
+        if(sr+1<=er)
+        minCost=min(minCost,dp[sr+1][sc]);
+        if(sc+1<=ec)
+        minCost=min(minCost,dp[sr][sc+1]);
+      
+        dp[sr][sc]=minCost+grid[sr][sc];
+      }   
+    } 
     return dp[0][0];
-}
+   }
+        
+    
+    int minPathSum(vector<vector<int>>& grid) {
+        int m=grid.size();
+        int n=grid[0].size();
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+        
+        int ans=minPathSumDP(0,0,m-1,n-1,grid,dp);
+        return ans;
+    }
 
-int minPathSum(vector<vector<int>> &grid)
-{
-    if (grid.size() == 0 || grid[0].size() == 0)
-        return 0;
-    int n = grid.size();
-    int m = grid[0].size();
-
-    vector<vector<int>> dp(n, vector<int>(m, 1e8));
-    int ans = minPathSum(0, 0, n - 1, m - 1, grid, dp);
-
-    return ans;
-}
+    
 
 void twoPointer()
 {
