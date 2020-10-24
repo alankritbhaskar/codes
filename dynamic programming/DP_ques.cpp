@@ -23,6 +23,8 @@ void print2D(vector<vector<int>> &arr)
 
 //Two Pointer Type.========================================================
 
+// Leetcode-509: Fibbonacci Number
+
 int fib01(int n, vector<int> &dp)
 {
     if (n <= 1)
@@ -309,6 +311,36 @@ void mazePath()
         int ans=minPathSumDP(0,0,m-1,n-1,grid,dp);
         return ans;
     }
+
+    //Leetcode-70: Climbing Stairs(Java)
+
+    //Faith-- climb(n)=climb(n-1)+climb(n-2)
+
+
+    public int climbStairs(int n) {
+    int dp[]=new int[n+1];
+    int ans=climbDP(n,dp);
+    return ans;
+    }
+    
+    public int climbMemo(int n,int dp[]){
+        
+        if(n==0)
+        return dp[n]=1;
+        
+        if(dp[n]!=0)
+            return dp[n];
+        
+        int p1=0,p2=0;
+        if(n-1>=0)
+        p1=climbMemo(n-1,dp);
+        if(n-2>=0)
+        p2=climbMemo(n-2,dp);
+        int paths=p1+p2;
+        
+        return dp[n]=paths;
+    }
+    
 
     
 
