@@ -341,8 +341,132 @@ void mazePath()
         return dp[n]=paths;
     }
     
+    //GFG:- Friends Pairing Problem 
 
+    //Faith:- countPairs(n)=countPairs(n-1)+countPairs(n-2)*(n-1)...
+
+    // https://practice.geeksforgeeks.org/problems/friends-pairing-problem5425/1#
     
+    public long countPairs(int n){
+        
+        if(n<=1)
+        return 1;
+        
+        long single=countPairs(n-1);
+        long pairUp=countPairs(n-2)*(n-1);
+        
+        long ans=single+pairUp;
+        
+        return ans;
+    }
+    
+    public long countPairsMemo(int n,long dp[],long M){
+        
+        if(n<=1)
+        return dp[n]=1;
+        
+        if(dp[n]!=0)
+        return dp[n];
+        
+        long single=countPairsMemo(n-1,dp,M)%M;
+        long pairUp=(countPairsMemo(n-2,dp,M)%M*(n-1)%M)%M;
+        
+        long ans=(single%M+pairUp%M)%M;
+        
+        return dp[n]=ans;
+    
+    }
+    
+    public long countPairsDP(int N,long dp[],long M){
+        
+        for(int n=0;n<=N;n++){
+        
+        if(n<=1){
+        dp[n]=1;
+        continue;
+        }
+        
+        long single=dp[n-1]%M;
+        long pairUp=(dp[n-2]%M*(n-1)%M)%M;
+        
+        long ans=(single%M+pairUp%M)%M;
+        
+        dp[n]=ans;
+        
+        }
+        return dp[N];
+    }
+    
+    public long countPairsOptimized(int n,long M){
+        
+        long a=1;
+        long b=1;
+        
+        for(int i=2;i<=n;i++){
+            
+            long s=((a%M*(i-1)%M)%M+b%M)%M;
+            a=b;
+            b=s;
+        }
+        
+        return b;
+    }
+    
+    public long countFriendsPairings(int n) 
+    { 
+       long dp[]=new long[n+1];
+       long M=(int)1e9+7;
+       //long ans=countPairsMemo(n,dp,M);
+    //   for(int e=0;e<dp.length;e++)
+    //   System.out.print(dp[e]+" ");
+       long ans=countPairsOptimized(n,M);
+       return ans;
+    }
+    
+    //Leetcode 746: Min Cost Climbing Stairs
+
+    //If n==length(cost) then add 0 to min obtained else add cost[n]....(I)
+    
+    //Faith:- minCost(n)=(I)+min(minCost(n-1),minCost(n-2))  
+
+    int minCostClimbingStairs(int n,vector<int>& cost,vector<int>& dp) {
+        if(n<=1) 
+        return dp[n] = cost[n];
+        
+        if(dp[n]!=0) 
+        return dp[n];
+        
+        int val = min(minCostClimbingStairs(n-1,cost,dp),minCostClimbingStairs(n-2,cost,dp));
+        
+        return dp[n] = val +  ((n < cost.size()) ? cost[n] : 0);
+    }
+    
+    int minCostClimbingStairsDP(int N,vector<int>& cost,vector<int>& dp) {
+        
+        for(int n=0;n<=N;n++){
+        if(n<=1) 
+        {dp[n] = cost[n];
+        continue;
+        }
+        
+        int val = min(minCostClimbingStairs(n-1,cost,dp),minCostClimbingStairs(n-2,cost,dp));
+        
+        dp[n] = val +  ((n < cost.size()) ? cost[n] : 0);
+        
+    }
+        
+        return dp[N];
+    }
+    
+    int minCostClimbingStairs(vector<int>& cost) {
+        if(cost.size() == 0) 
+            return 0;
+        
+        int n = cost.size();
+        vector<int> dp(n+1,0);
+        
+        return minCostClimbingStairsDP(n,cost,dp);
+}
 
 void twoPointer()
 {
