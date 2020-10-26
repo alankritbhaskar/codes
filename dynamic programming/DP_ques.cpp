@@ -636,6 +636,41 @@ long long countWays(int m){
         return mx;
     }
 
+// Count no. of paths to reach end on dice throw
+
+int countWays(int sp,int ep,vector<int> &dp){
+    if(sp==ep)
+    return dp[sp]=1;
+    
+    if(dp[sp]!=0){
+        return dp[sp];
+    }
+
+    int c=0;
+    for(int dice=1;dice<=6 && sp+dice<=ep;dice++){
+        c+=countWays(sp+dice,ep,dp);
+    }
+    return dp[sp]=c;
+}
+
+int countWaysDP(int sp,int ep,vector<int> &dp){
+
+for(sp=ep;sp>=0;sp--){
+
+    if(sp==ep){
+    dp[sp]=1;
+    continue;
+    }
+
+    int c=0;
+    for(int dice=1;dice<=6 && sp+dice<=ep;dice++){
+        c+=countWays(sp+dice,ep,dp);
+    }
+    dp[sp]=c;
+ }
+ 
+ return dp[0];
+}
 
 
 
