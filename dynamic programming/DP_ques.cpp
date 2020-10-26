@@ -552,6 +552,91 @@ void goldMine()
     cout << maxVal << endl;
 }
 
+//GFG:- NO. of hops    https://practice.geeksforgeeks.org/problems/count-number-of-hops-1587115620/1/?track=amazon-dynamic-programming&batchId=192
+
+long long mod=1000000007;
+
+long long countWays(int n){
+    
+    // your code here
+    long long dp[n+1];
+    dp[0]=1;
+    for(int i=1;i<=n;i++){
+        if(i==1)
+        dp[i]=dp[i-1]%mod;
+        else if(i==2)
+        dp[i]=(dp[i-1]%mod+dp[i-2]%mod)%mod;
+        else
+        dp[i]=(dp[i-1]%mod+dp[i-2]%mod+dp[i-3]%mod)%mod;
+    }
+    return dp[n];
+    
+}
+
+//GFG:-  Count ways to reach nth stair   https://practice.geeksforgeeks.org/problems/count-ways-to-reach-the-nth-stair-1587115620/1/?track=amazon-dynamic-programming&batchId=192 
+
+long long countWays(int m){
+    
+    long long int dp[m+1];
+    
+    dp[0]=1;
+    for(int i=1;i<=m;i++){
+        if(i==1)
+        dp[i]=dp[i-1]%1000000007;
+        else{
+            dp[i]=(dp[i-1]%1000000007+dp[i-2]%1000000007)%1000000007;
+        }
+    }
+    return dp[m];
+}
+
+
+// GFG:- Max. path sum    https://practice.geeksforgeeks.org/problems/path-in-matrix3805/1#
+
+
+     int maxPathSumMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,
+     vector<vector<int>> &dir,vector<vector<int>> &dp){
+        
+        if(sr==er)
+        return dp[sr][sc]=grid[sr][sc];
+        
+        if(dp[sr][sc]!=0)
+            return dp[sr][sc];
+            
+        int maxCost=0;
+        
+        for(int d=0;d<3;d++){
+            int x=sr+dir[d][0];
+            int y=sc+dir[d][1];
+            
+            if(x>=0 && y>=0 && x<=er && y<=ec)
+            maxCost=max(maxCost,maxPathSumMemo(x,y,er,ec,grid,dir,dp)+grid[sr][sc]);
+            
+        }
+        
+        return  dp[sr][sc]=maxCost;
+    }
+        
+    
+    int maximumPath(int N,vector<vector<int>>& grid) {
+        int m=grid.size();
+        int n=grid[0].size();
+        vector<vector<int>> dp(m,vector<int>(n,0));
+        vector<vector<int>> dir({
+           {1,-1},{1,0},{1,1} 
+        });
+        int mx=-1;
+        for(int c=0;c<n;c++)
+        mx=max(mx,maxPathSumMemo(0,c,m-1,n-1,grid,dir,dp));
+        // for(int i=0;i<dp.size();i++){
+        //     for(int j=0;j<dp[0].size();j++)
+        //     cout<<dp[i][j]<<" ";
+        //     cout<<"\n";
+        // }
+        return mx;
+    }
+
+
 
 
 void twoPointer()
