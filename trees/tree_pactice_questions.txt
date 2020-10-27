@@ -1,0 +1,52 @@
+                                       This is a sheet of solution of some important binary tree questions and their solutions
+
+
+// 1:- Level order traversal....... https://practice.geeksforgeeks.org/problems/level-order-traversal/1
+
+ static ArrayList <Integer> levelOrder(Node node) 
+    {
+    ArrayList<Integer> arr=new ArrayList<>();
+    Queue<Node> qu = new LinkedList<Node>();
+    qu.add(node);
+    while(!qu.isEmpty()){
+    Node temp = qu.poll();
+    arr.add(temp.data);
+    if(temp.left != null){
+    qu.add(temp.left);
+    }
+    if(temp.right != null){
+    qu.add(temp.right);
+    }        
+    }
+    return arr;
+    }
+
+// 2:- Reverse level order.........  https://practice.geeksforgeeks.org/problems/reverse-level-order-traversal/1
+
+
+
+
+// 3:- Height..... (in terms of node)
+
+int height(Node* root)
+{
+   if(root==NULL)
+   return 0;
+   return 1+max(height(root->left),height(root->right));
+}
+
+// 4:- https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1
+
+
+
+// 5:- LeftView of a binary tree.... https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
+
+
+
+
+
+// 6:- 
+
+//  x. LCA..... https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/submissions/
+
+// 863. All Nodes Distance K in Binary Tree
