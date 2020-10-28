@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <
 
 using namespace std;
 
@@ -672,7 +673,9 @@ for(sp=ep;sp>=0;sp--){
  return dp[0];
 }
 
-
+int countWaysOptimized(int n){
+li
+}
 
 void twoPointer()
 {
