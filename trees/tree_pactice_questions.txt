@@ -38,15 +38,117 @@ int height(Node* root)
 // 4:- https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1
 
 
+    // O(n2) solution
+    
+    int height(TreeNode* root){
+        if(root==nullptr)
+            return -1;
+        return max(height(root->left),height(root->right))+1;
+    }
+    
+    int diameterOfBinaryTree(TreeNode* root) {
+        
+        if(root==nullptr)
+            return 0;
+        
+        int ld=diameterOfBinaryTree(root->left);
+        int rd=diameterOfBinaryTree(root->right);
+        
+        int lh=height(root->left);
+        int rh=height(root->right);
+        
+        return max({ld,rd,lh+rh+2});
+    }
 
+    //O(n) solution
+
+    // O(n2) solution
+    
+    int height(TreeNode* root){
+        if(root==nullptr)
+            return -1;
+        return max(height(root->left),height(root->right))+1;
+    }
+    
+    int diameterOfbinaryTree(TreeNode* root) {
+        
+        if(root==nullptr)
+            return 0;
+        
+        int ld=diameterOfBinaryTree(root->left);
+        int rd=diameterOfBinaryTree(root->right);
+        
+        int lh=height(root->left);
+        int rh=height(root->right);
+        
+        return max({ld,rd,lh+rh+2});
+    }
+    
+    pair<int,int> diameter(TreeNode *root){
+        if(root==nullptr){
+            return make_pair(0,-1);
+        }
+        pair<int,int> la=diameter(root->left);
+        pair<int,int> ra=diameter(root->right);
+        
+        int dia=max({la.first,ra.first,la.second+ra.second+2});
+        int ht=max(la.second,ra.second)+1;
+        
+        return make_pair(dia,ht);
+    }
+    int diameterOfBinaryTree(TreeNode* root){
+        return diameter(root).first;
+    }
+    
 // 5:- LeftView of a binary tree.... https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
 
 
+ public boolean nodeToRootPath(TreeNode node,int data,ArrayList<TreeNode> ans){
+        if(node==null) 
+            return false;
+        
+        if(node.val == data){
+            ans.add(node);
+            return true;
+        }
+        
+        boolean res = nodeToRootPath(node.left,data,ans) || nodeToRootPath(node.right,data,ans);
+        if(res){
+            ans.add(node);
+        }
+        
+        return res;
+    }
+    
+ //  6. LCA..... https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/submissions/ 
 
+ // O(n) time, O(n) space  
+    
+    public TreeNode lowestCommonAncestor(TreeNode node, TreeNode p, TreeNode q) {
+            ArrayList<TreeNode> list1 = new ArrayList<>(); 
+                nodeToRootPath(node,p.val,list1);
+            ArrayList<TreeNode> list2 = new ArrayList<>(); 
+            nodeToRootPath(node,q.val,list2);
+
+        int i = list1.size()-1;
+        int j = list2.size()-1;
+
+        TreeNode LCA = null;
+        while(i>=0 && j>=0){
+            if(list1.get(i)==list2.get(j)) 
+                LCA = list1.get(i);
+
+            i--;
+            j--;
+        }
+        
+        return LCA;
+    }
+    
 
 
 // 6:- 
 
-//  x. LCA..... https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/submissions/
+
 
 // 863. All Nodes Distance K in Binary Tree

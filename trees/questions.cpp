@@ -71,6 +71,107 @@ bool find(Node *node, int data)
     return find(node->left, data) || find(node->right, data);
 }
 
+bool rootToNodePath(Node *node, int data, vector<Node *> &path)
+{
+    if (node == nullptr)
+        return false;
+    if (node->data == data)
+    {
+        path.push_back(node);
+        return true;
+    }
+    bool res = rootToNodePath(node->left, data, path) || rootToNodePath(node->right, data, path);
+    if (res)
+        path.push_back(node);
+    return res;
+}
+
+vector<Node*> rootToNodePath02(Node *node,int data){
+
+    if(node==nullptr)
+    return {};
+    if(node->data==data){
+        vector<Node*> ba;
+        ba.push_back(node);
+        return ba;
+    }
+    vector<Node*> la=rootToNodePath02(node->left,data);
+    if(la.size()!=0){
+        la.push_back(node);
+        return la;
+    }
+    vector<Node*> ra=rootToNodePath02(node->right,data);
+    if(ra.size()!=0){
+        ra.push_back(node);
+        return ra;
+    }
+    return {};
+}
+
+// LCA
+
+Node* lowestCommonAncestor(Node *node, Node *p, Node *q) {
+            vector <Node* > list1; 
+            rootToNodePath(node,p->data,list1);
+            vector <Node*> list2; 
+            rootToNodePath(node,q->data,list2);
+
+            int i = list1.size()-1;
+            int j = list2.size()-1;
+
+            Node* LCA = nullptr;
+            while(i>=0 && j>=0){
+            if(list1[i]==list2[j]) 
+                LCA = list1[i];
+
+            i--;
+            j--;
+           }
+           return LCA;
+    }
+    
+
+// Distance b/w two nodes in terms of edges
+
+int distancebwNodes(Node *node,Node *p,Node *q){
+
+            vector <Node* > list1,list2; 
+            bool res=rootToNodePath(node,p->data,list1) && rootToNodePath(node,q->data,list2);
+            if(!res)
+            return 0;
+
+            int i=list1.size()-1;int j=list2.size()-1;
+            int LCA=0;
+            while(i>=0 && j>=0){
+                if(list1[i]==list2[i])
+                LCA++;
+            }
+
+            int ans=list1.size()+list2.size()-2*LCA;
+
+            return ans;
+}
+
+// Diameter
+
+    pair<int,int> diameter(Node *root){
+        if(root==nullptr){
+            return make_pair(0,-1);
+        }
+        pair<int,int> la=diameter(root->left);
+        pair<int,int> ra=diameter(root->right);
+        
+        int dia=max({la.first,ra.first,la.second+ra.second+2});
+        int ht=max(la.second,ra.second)+1;
+        
+        return make_pair(dia,ht);
+    }
+    int diameterOfBinaryTree(Node* root){
+        return diameter(root).first;
+    }
+
+
+
 void display(Node *node)
 {
     if (node == nullptr)
