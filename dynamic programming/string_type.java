@@ -74,9 +74,64 @@ public class string_type{
         return str.substring(si,ei+1);
     }
 
+// Leetcode 516:- Longest Palindromic Subsequence
+
+    public int longestPalindromeSubseq(String s) {
+       int n=s.length();
+       
+       int dp[][]=new int[n][n];
+       int ans=lpsDP(s,0,n-1,dp);
+       return ans;
+    }
+    public int lpsDP(String s,int I,int J,int dp[][]){
+        int n=s.length();
+        
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;i<n && j<n;i++,j++){
+        
+        if(i==j)
+        {dp[i][j]=(i==j)?1:0;
+         continue;
+        }
+        
+        
+        int l=0;
+        if(s.charAt(i)==s.charAt(j))
+            l=dp[i+1][j-1]+2;
+        else
+            l=Math.max(dp[i+1][j],dp[i][j-1]);
+        
+        dp[i][j]=l;
+            }
+        }
+        return dp[I][J];
+    }
+    public int lps(String s,int i,int j,int dp[][]){
+        
+        if(i>j || i==j)
+            return dp[i][j]=(i==j)?1:0;
+        
+        if(dp[i][j]>0)
+            return dp[i][j];
+        
+        int l=0;
+        if(s.charAt(i)==s.charAt(j))
+            l=lps(s,i+1,j-1,dp)+2;
+        else
+            l=Math.max(lps(s,i+1,j,dp),lps(s,i,j-1,dp));
+        
+        return dp[i][j]=l;
+    }
+
+
+
+
+
+
+
     public static void main(String args[]){
 
-        
+
     }
 
 }
