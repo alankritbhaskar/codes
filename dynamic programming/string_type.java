@@ -424,6 +424,59 @@ public int lcsOpti(String s,String t){
         return dp[ind][n]; 
     }
 
+// Leetcode 1035:- Uncrossed Lines
+
+public int maxUncrossedLines(int[] A, int[] B) {
+    
+    int m=A.length;int n=B.length;
+    int dp[][]=new int[m+1][n+1];
+    for(int d[]: dp)
+        Arrays.fill(d,-1);
+        
+    // int ans=uncrossedMemo(A,B,m,n,dp);
+        int ans=uncrossedDP(A,B,m,n,dp);
+    return ans;
+    }
+    public int uncrossedDP(int a[],int b[],int M,int N,int dp[][]){
+       
+        for(int m=0;m<=a.length;m++){
+            for(int n=0;n<=b.length;n++){
+                
+        if(m==0 || n==0)
+        {dp[m][n]=0;
+         continue;
+        }
+                
+
+        int c=0;
+        if(a[m-1]==b[n-1])
+            c+=1+dp[m-1][n-1];//uncrossedMemo(a,b,m-1,n-1,dp);
+        else{
+            c+=Math.max(dp[m-1][n],dp[m][n-1]);
+        }
+        dp[m][n]=c;        
+                }
+        }
+        return dp[M][N];
+        }
+
+    public int uncrossedMemo(int a[],int b[],int m,int n,int dp[][]){
+        
+       if(m==0 || n==0)
+            return dp[m][n]=0;
+        
+        if(dp[m][n]!=-1)
+            return dp[m][n];
+        int c=0;
+        if(a[m-1]==b[n-1])
+            c+=1+uncrossedMemo(a,b,m-1,n-1,dp);
+        else{
+            c+=Math.max(uncrossedMemo(a,b,m,n-1,dp ),uncrossedMemo(a,b,m-1,n,dp));
+        }
+        return dp[m][n]=c;
+        
+    }
+
 
     public static void main(String args[]){
 
