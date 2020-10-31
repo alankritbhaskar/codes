@@ -674,8 +674,12 @@ for(sp=ep;sp>=0;sp--){
 }
 
 int countWaysOptimized(int n){
-li
+
 }
+
+
+
+
 
 void twoPointer()
 {
