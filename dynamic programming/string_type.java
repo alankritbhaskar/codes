@@ -313,7 +313,117 @@ public class string_type{
         
         return dp[si][ei]=c;
     }
+
+
+// Leetcode 1143:- Longest Common Subsequence
+
+    public int longestCommonSubsequence(String text1, String text2) {
+        int m=text1.length();int n=text2.length();
+        int dp[][]=new int[m+1][n+1];
+        
+        for(int d[]: dp)
+            Arrays.fill(d,-1);
+        
+        // int ans=lcsMemo(text1,text2,m,n,dp);
+       // int ans=lcsDP(text1,text2,m,n,dp);
+        //print2D(dp);
+        int ans=lcsOpti(text1,text2);
+        return ans;
+    }
+    
+        public static void print(int[] arr){
+        for(int ele: arr)
+          System.out.print(ele + " "); 
+        
+        System.out.println();
+    }
+
+    public static void print2D(int[][] arr){
+        for(int[] a: arr)
+          print(a);
+
+        System.out.println();
+    }
+    
+    public int lcsMemo(String s,String t,int m,int n,int dp[][])     {
+        
+
+        if(m==0 || n==0)
+            return dp[m][n]=0;
+        
+        if(dp[m][n]!=-1)
+            return dp[m][n];
+        
+        int c=0,c1=0,c2=0;
+        if(s.charAt(m-1)==t.charAt(n-1))
+            c+=1+lcsMemo(s,t,m-1,n-1,dp);
+        else{
+            c1=lcsMemo(s,t,m-1,n,dp);
+            c2=lcsMemo(s,t,m,n-1,dp);
+            c+=Math.max(c1,c2);
+    }
+        return dp[m][n]=c;
 }
+    
+public int lcsDP(String s,String t,int M,int N,int dp[][]){
+        
+        for(int m=0;m<=s.length();m++){
+            for(int n=0;n<=t.length();n++){
+               
+        if(m==0 || n==0)
+        {
+            dp[m][n]=0;
+            continue;
+        }
+        
+        
+        int c=0,c1=0,c2=0;
+        if(s.charAt(m-1)==t.charAt(n-1))
+            c+=1+lcsMemo(s,t,m-1,n-1,dp);
+        else{
+            c1=lcsMemo(s,t,m-1,n,dp);
+            c2=lcsMemo(s,t,m,n-1,dp);
+            c+=Math.max(c1,c2);
+            }
+         dp[m][n]=c;
+              }    
+            }
+        return dp[M][N];
+        }
+    
+public int lcsOpti(String s,String t){
+    
+        // Find lengths of two strings 
+        int m = s.length(), n = t.length(); 
+      
+        int dp[][] = new int[2][n+1]; 
+ 
+        int ind=0; 
+      
+        for (int i = 0; i <= m; i++) 
+        { 
+            if(ind%2==0)
+                ind=1;
+            else
+                ind=0; 
+            for (int j = 0; j <= n; j++) 
+            { 
+                if (i == 0 || j == 0) 
+                    dp[ind][j] = 0; 
+      
+                else if (s.charAt(i - 1) ==  
+                         t.charAt(j - 1)) 
+                    dp[ind][j] = dp[1-ind][j - 1]+ 1; 
+      
+                else
+                    dp[ind][j] = Math.max(dp[1 -ind][j],  
+                                        dp[ind][j - 1]); 
+            } 
+        } 
+        
+        return dp[ind][n]; 
+    }
+
 
     public static void main(String args[]){
 
