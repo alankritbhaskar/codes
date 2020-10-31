@@ -207,7 +207,7 @@ public class string_type{
             
         //count=fn(s,t,n-1,m)
             
-        c1=distinctMemo(s,t,n-1,m,dp);
+        cgg1=distinctMemo(s,t,n-1,m,dp);
         count+=c1;
     }
         return dp[n][m]=count;
@@ -314,12 +314,6 @@ public class string_type{
         return dp[si][ei]=c;
     }
 }
-
-
-
-
-
-
 
     public static void main(String args[]){
 
