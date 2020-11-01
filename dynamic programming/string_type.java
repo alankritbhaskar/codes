@@ -477,6 +477,72 @@ public int maxUncrossedLines(int[] A, int[] B) {
         
     }
 
+// Leetcode 72:- Edit Distance
+
+    public int minDistance(String word1, String word2) {
+      
+        int m=word1.length();int n=word2.length();
+        
+        int dp[][]=new int[m+1][n+1];
+        
+        for(int d[]: dp)
+            Arrays.fill(d,-1);
+        
+        // int ans=minDistanceMemo(word1,word2,m,n,dp);
+        int ans=minDistanceDP(word1,word2,m,n,dp);
+        return ans;
+    }
+    
+    public int minDistanceMemo(String s,String t,int m,int n,int dp[][]){
+        if(m==0 || n==0){
+            return dp[m][n] = m!=0 ? m : n;
+        }
+        
+        if(dp[m][n]!=-1)
+            return dp[m][n];
+        
+        int dis=0;
+        if(s.charAt(m-1)==t.charAt(n-1)){
+            dis=minDistanceMemo(s,t,m-1,n-1,dp);
+        }
+        else{
+            int insert=minDistanceMemo(s,t,m,n-1,dp);
+            int remove=minDistanceMemo(s,t,m-1,n,dp);
+            int replace=minDistanceMemo(s,t,m-1,n-1,dp);
+            dis=1+Math.min(Math.min(insert,remove),replace);
+        }
+        return dp[m][n]=dis;
+    }
+    
+        public int minDistanceDP(String s,String t,int M,int N,int dp[][]){
+
+        for(int m=0;m<=s.length();m++){
+            for(int n=0;n<=t.length();n++){
+            
+        if(m==0 || n==0){
+            dp[m][n] = m!=0 ? m : n;
+            continue;
+        }
+        
+       
+        int dis=0;
+        if(s.charAt(m-1)==t.charAt(n-1)){
+            dis=dp[m-1][n-1];//minDistanceMemo(s,t,m-1,n-1,dp);
+        }
+        else{
+            int insert=dp[m][n-1];//minDistanceMemo(s,t,m,n-1,dp);
+            int remove=dp[m-1][n];//minDistanceMemo(s,t,m-1,n,dp);
+            int replace=dp[m-1][n-1];//minDistanceMemo(s,t,m-1,n-1,dp);
+            dis=1+Math.min(Math.min(insert,remove),replace);
+             }
+     dp[m][n]=dis;
+               }
+            }
+        return dp[M][N];
+        }
+        
+          
+
 
     public static void main(String args[]){
 
