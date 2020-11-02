@@ -126,58 +126,6 @@ For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1
         return dp[Tar];
     }
 
-// Target Sum (only addition)
-
-//  public int targetSumAdd(int arr[],int ind,int tar,int dp[][]){
-
-//     if(ind==arr.length-1 && tar!=0){
-//     return dp[ind][tar]=0;
-//     }
-//     else if(tar==0){
-//         return dp[ind][tar]=1;
-//     }
-    
-//     if(dp[ind][tar]!=-1)
-//     return dp[ind][tar];
-
-//     int c=0;
-//     if(arr[ind]>tar)
-//     c+=targetSumAdd(arr,ind+1,tar,dp);
-//     else{
-//         c+=targetSumAdd(arr,ind+1,tar-arr[ind],dp)+targetSumAdd(arr,ind+1,tar,dp);
-//     }
-//     return dp[ind][tar];
-// }
-//  public int target(int arr[],int tar){
-//     int dp[][]=new int[arr.length]
-// }
-
-
-    public static int solve(){
-        int ar[]={2,3,5};
-        int tar=9;
-        int dp[][]=new int[ar.length+1][tar+1];
-        
-        for(int d[]:dp)
-        Arrays.fill(d,-1);
-        int dpp[]=new int[tar+1];
-        Arrays.fill(dpp,-1);
-         int dppp[]=new int[tar+1];
-         Arrays.fill(dppp,-1);
-        int ans=coinChangePermutations2D(ar,3,tar,dp);
-        int ans1=coinChangePermutations1D_DP(ar,tar,dpp);
-        int ans2=coinChangePermutations1D(ar,tar,dppp);
-        print2D(dp);
-         System.out.println(ans);
-        print(dpp);
-         System.out.println(ans1);
-         print(dppp);
-          System.out.println(ans2);
-      
-        // targetSum();
-        return ans;
-    }
-
 // Leetcode 377:- Combination Sum-IV
 
  //Don't confuse with the question name it is asking about all the permutations
@@ -205,6 +153,234 @@ For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1
      }
      return dp[tar]=ways;
    }
+
+// Leetcode 322:- Coin change(min. no. of coins combination)
+
+public int coinChange(int[] coins, int amount) {
+        
+        int dp[]=new int[amount+1];
+        Arrays.fill(dp,-1);
+        
+        int ans=minCoinChangeDP(coins,amount,dp);
+        return ans==(int)1e9?-1:ans;
+    }
+    
+    public int minCoinChange(int coins[],int amt,int dp[]){
+        
+        if(amt==0)
+            return dp[amt]=0;
+        
+        if(dp[amt]!=-1)
+            return dp[amt];
+        
+        // Dhyan dene ki baat hai ki yaha min ko 1e9 se initialize kiya hai not with INT_MAX bcoz us case mein +1 krne pe integer overflow hojayega
+        
+        // Agar aisa nhi krna chahte hai to...
+        
+        //int val=minCoinChange(coins,amt-coin,dp);
+        //if(val!=INT_MAX && val+1<min_)
+        //min_=val+1;
+        
+        int min_=(int)1e9;
+        for(int coin: coins){
+            if(amt-coin>=0)
+                min_=Math.min(min_,minCoinChange(coins,amt-coin,dp)+1);
+        }
+        return dp[amt]=min_;
+    }
+    
+    public int minCoinChangeDP(int coins[],int Amt,int dp[]){
+        
+        for(int amt=0;amt<=Amt;amt++){
+        
+        if(amt==0)
+        {dp[amt]=0;
+         continue;
+        }
+        
+        int min_=(int)1e9;
+        for(int coin: coins){
+            if(amt-coin>=0)
+                min_=Math.min(min_,dp[amt-coin]+1);
+        }
+            
+        dp[amt]=min_;
+    }
+    return dp[Amt];
+}
+
+//https://www.geeksforgeeks.org/subset-sum-problem-dp-25/  i.e. only addition allowed
+
+    public static int targetSum(int[] arr,int idx,int tar,int[][] dp){
+        if(tar == 0 || idx == arr.length){
+            return dp[idx][tar] = tar == 0 ? 1 : 0;
+        }
+
+        if(dp[idx][tar] != -1) return dp[idx][tar];
+
+        int count = 0;
+        if(tar - arr[idx] >= 0)
+          count += targetSum(arr,idx+1,tar - arr[idx], dp);
+        count += targetSum(arr,idx+1,tar, dp);
+
+        return dp[idx][tar] = count;
+    }
+
+    public static int targetSumDP(int[] arr,int Idx,int Tar,int[][] dp){
+        for(int idx = arr.length;idx >= 0;idx--){
+            for(int tar = 0;tar<=Tar;tar++){
+                if(tar == 0 || idx == arr.length){
+                    dp[idx][tar] = (tar == 0) ? 1 : 0;
+                    continue;
+                }
+                
+                int count = 0;
+                if(tar - arr[idx] >= 0)
+                   count += dp[idx + 1][tar-arr[idx]];
+                count += dp[idx + 1][tar];
+               
+                dp[idx][tar] = count;
+            }
+        }
+
+        return dp[Idx][Tar];
+    }
+
+
+    public static int targetSum2(int[] arr,int n,int tar,int[][] dp){
+        if(tar == 0 || n == 0){
+            return dp[n][tar] = (tar == 0) ? 1 : 0;
+        }
+
+        if(dp[n][tar] != -1) return dp[n][tar];
+
+        int count = 0;
+        if(tar - arr[n - 1] >= 0)
+          count += targetSum2(arr,n - 1,tar - arr[n - 1], dp);
+        count += targetSum2(arr,n - 1,tar, dp);
+
+        return dp[n][tar] = count;
+    }
+
+    public static int targetSumDP2(int[] arr,int N,int Tar,int[][] dp){
+        for(int n = 0;n<=N;n++){
+            for(int tar = 0;tar<=Tar;tar++){
+                if(tar == 0 || n == 0){
+                    dp[n][tar] = (tar == 0) ? 1 : 0;
+                    continue;
+                }
+                
+                int count = 0;
+                if(tar - arr[n - 1] >= 0)
+                   count += dp[n-1][tar-arr[n-1]];
+                count += dp[n-1][tar];
+               
+                dp[n][tar] = count;
+            }
+        }
+
+        return dp[N][Tar];
+    }
+
+// For single target sum path (a way to reverse engineer from dp)
+
+    public static boolean targetSumPath(int[] arr,int n,int tar,int[][] dp,String psf){
+        if(tar == 0 || n == 0){
+           if(tar == 0){
+            System.out.println(psf);
+            return true;
+           }
+           return false;
+        }
+
+        boolean res = false;
+        if(tar - arr[n - 1] >= 0 && dp[n-1][tar - arr[n-1]] > 0)
+          res = res || targetSumPath(arr,n - 1,tar - arr[n - 1], dp, psf + arr[n-1] + ",");
+        if(dp[n-1][tar] > 0) res = res || targetSumPath(arr,n - 1,tar, dp,psf);
+
+        return res;
+    }
+
+// For all target sum paths
+
+    public static int targetSumPath(int[] arr,int n,int tar,int[][] dp,String psf){
+        if(tar == 0 || n == 0){
+           if(tar == 0){
+            System.out.println(psf);
+            return 1;
+           }
+           return 0;
+        }
+
+        int res = 0;
+        if(tar - arr[n - 1] >= 0 && dp[n-1][tar - arr[n-1]] > 0)
+          res += targetSumPath(arr,n - 1,tar - arr[n - 1], dp, psf + arr[n-1] + ",");
+        if(dp[n-1][tar] > 0) 
+        res += targetSumPath(arr,n - 1,tar, dp,psf);
+
+        return res;
+    }
+
+// Leetcode 416:- Partition Equal Subset Sum
+
+ public boolean canPartition(int[] arr) {
+        int N = arr.length;
+        if(N==0) return false;
+
+        int sum = 0;
+        for(int ele : arr) sum+=ele;
+        if(sum % 2 != 0) return false;
+
+        int Tar = sum / 2;
+        boolean[][] dp = new boolean[N + 1][Tar + 1];
+
+        for(int n = 0;n<=N;n++){
+            for(int tar = 0;tar<=Tar;tar++){
+                if(tar == 0 || n == 0){
+                    dp[n][tar] = (tar == 0) ? true : false;
+                    continue;
+                }
+                
+                int count = 0;
+                if(tar - arr[n - 1] >= 0)
+                   dp[n][tar] = dp[n][tar] || dp[n-1][tar-arr[n-1]];
+                dp[n][tar] = dp[n][tar] ||  dp[n-1][tar];               
+            }
+        }
+        System.out.print(dp[N][Tar]);
+        return dp[N][Tar];
+    }
+
+
+
+
+
+    public static int solve(){
+        int ar[]={2,3,5};
+        int tar=9;
+        int dp[][]=new int[ar.length+1][tar+1];
+        
+        for(int d[]:dp)
+        Arrays.fill(d,-1);
+        int dpp[]=new int[tar+1];
+        Arrays.fill(dpp,-1);
+         int dppp[]=new int[tar+1];
+         Arrays.fill(dppp,-1);
+        int ans=coinChangePermutations2D(ar,3,tar,dp);
+        int ans1=coinChangePermutations1D_DP(ar,tar,dpp);
+        int ans2=coinChangePermutations1D(ar,tar,dppp);
+        print2D(dp);
+         System.out.println(ans);
+        print(dpp);
+         System.out.println(ans1);
+         print(dppp);
+          System.out.println(ans2);
+      
+        // targetSum();
+        return ans;
+    }
+
+
 
 
     public static void main(String[] args){
