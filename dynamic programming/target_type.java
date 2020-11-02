@@ -351,8 +351,35 @@ public int coinChange(int[] coins, int amount) {
         return dp[N][Tar];
     }
 
+    //https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
 
+    public static int knapsack01(int[] weight,int[] value,int n,int tar,int[][] dp){
+        if(n == 0 || tar == 0){
+            return dp[n][tar] = 0;
+        }
 
+        if(dp[n][tar] != -1) return dp[n][tar];
+
+        int maxValue = 0;
+        if(tar - weight[n - 1] >= 0)
+           maxValue = knapsack01(weight,val,n - 1,tar - weight[n - 1],dp) + value[n - 1];
+        maxValue = Math.max(maxValue, knapsack01(weight,val,n - 1,tar,dp))
+        
+        return dp[n][tar] = maxValue;
+    }
+
+    //https://www.geeksforgeeks.org/unbounded-knapsack-repetition-items-allowed/
+
+    public static int unboundedKnapsack(int[] weight,int[] val,int Tar){
+        int[] dp = new int[tar+1];
+        for(int i = 0;i<weight.length;i++){   
+           for(int tar = weight[i];tar <= Tar;tar++){
+               dp[tar] = Math.max(dp[tar],dp[tar - weight[i]] + val[i]);
+           }
+        }
+
+        return dp[Tar];
+    }
 
 
     public static int solve(){
