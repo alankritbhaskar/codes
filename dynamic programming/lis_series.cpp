@@ -64,6 +64,54 @@ int LISRec()
 }
 
 
+// LIS Tabulation------------> O(n2), O(n)
+
+int LIS(vector<int> &arr, vector<int> &dp)
+{
+    int n = arr.size();
+    
+    int maxLen = 0;
+    for (int i = 0; i < n; i++)
+    {
+        dp[i] = 1;
+        for (int j = i - 1; j >= 0; j--)
+        {
+            if (arr[i] > arr[j])
+                dp[i] = max(dp[i], dp[j] + 1);
+        }
+        maxLen = max(maxLen, dp[i]);
+    }
+
+    return maxLen;
+}
+
+// Longest Decreasing Subsequence, here the frame of reference i.e. how lis from last of array to first element of array
+// gives the LDS of array is quite important
+
+int LDS(vector<int> &arr, vector<int> &dp)
+{
+    int n = arr.size();
+    int maxLen = 0;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        dp[i] = 1;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[i] > arr[j])
+                dp[i] = max(dp[i], dp[j] + 1);
+        }
+        maxLen = max(maxLen, dp[i]);
+    }
+
+    return maxLen;
+}
+
+// Longest Bitonic Subsequence
+
+
+
 int main(int argc, const char** argv) {
+    int ans=LISRec();
+    cout<<ans<<"\n";
     return 0;
 }
