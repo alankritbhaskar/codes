@@ -107,7 +107,67 @@ int LDS(vector<int> &arr, vector<int> &dp)
 
 // Longest Bitonic Subsequence
 
+	int LongestBitonicSequence(vector<int>nums)
+	{
+	int n=nums.size();
+    vector<int> dp(n,0);
+    int ans=LBS(nums,dp);
+    return ans;
+	}
+	
+	int LBS(vector<int> &nums,vector<int> &dp){
+	    int n=nums.size();
+	    
+	    vector<int>dp1(n,0);
+	    vector<int>dp2(n,0);
+        LIS(nums, dp1);
+        LDS(nums, dp2);
 
+        int maxLen = 0;
+        for (int i = 0; i < n; i++)
+        {
+        maxLen = max(maxLen, dp1[i] + dp2[i] - 1);
+        }
+
+        return maxLen;
+	}
+	
+int LIS(vector<int> &arr, vector<int> &dp)
+{
+    int n = arr.size();
+    
+    int maxLen = 0;
+    for (int i = 0; i < n; i++)
+    {
+        dp[i] = 1;
+        for (int j = i - 1; j >= 0; j--)
+        {
+            if (arr[i] > arr[j])
+                dp[i] = max(dp[i], dp[j] + 1);
+        }
+        maxLen = max(maxLen, dp[i]);
+    }
+
+    return maxLen;
+}
+	
+int LDS(vector<int> &arr, vector<int> &dp)
+{
+    int n = arr.size();
+    int maxLen = 0;
+    for (int i = n - 1; i >= 0; i--)
+    {
+        dp[i] = 1;
+        for (int j = i + 1; j < n; j++)
+        {
+            if (arr[i] > arr[j])
+                dp[i] = max(dp[i], dp[j] + 1);
+        }
+        maxLen = max(maxLen, dp[i]);
+    }
+
+    return maxLen;
+}
 
 int main(int argc, const char** argv) {
     int ans=LISRec();
