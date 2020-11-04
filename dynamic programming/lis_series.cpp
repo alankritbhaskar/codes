@@ -105,7 +105,7 @@ int LDS(vector<int> &arr, vector<int> &dp)
     return maxLen;
 }
 
-// Longest Bitonic Subsequence
+// Longest Bitonic Subsequence  https://practice.geeksforgeeks.org/problems/longest-bitonic-subsequence0824/1
 
 	int LongestBitonicSequence(vector<int>nums)
 	{
@@ -168,6 +168,31 @@ int LDS(vector<int> &arr, vector<int> &dp)
 
     return maxLen;
 }
+
+// https://practice.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1
+
+	int maxSumIS(int arr[], int n)  
+	{  
+	    int dp[n]={0};
+	    int ans=LISum(arr,n,dp);
+	    return ans;
+	}  
+	
+	int LISum(int a[],int n,int dp[]){
+	    
+	    int maxSum=0;
+	    for(int i= 0;i<n;i++){
+	        dp[i] = a[i];
+	        for(int j= i-1;j>=0;j--){
+	            if(a[j]<a[i]){
+	                dp[i]=max(dp[i],dp[j]+a[i]);
+	            }
+	        }
+	        maxSum=max(maxSum,dp[i]);
+	    }
+	    return maxSum;
+	}
+
 
 int main(int argc, const char** argv) {
     int ans=LISRec();
