@@ -199,13 +199,13 @@ void mazePath()
 
         //Faith:- path(x,y)=path(x+1,y)+path(x,y+1),,,, in case grid[x][y]==0
 
-        int uniquePathMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
+       int uniquePathMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
         
-        if(sr==er && sc==ec && grid[er][ec]==0){
+        if(sr==er && sc==ec){
             return dp[sr][sc]=1;
         }
         
-           if(dp[sr][sc]!=-1)
+           if(dp[sr][sc]!=0)
                return dp[sr][sc];
            
         int c=0;
@@ -213,47 +213,46 @@ void mazePath()
         c+=uniquePathMemo(sr+1,sc,er,ec,grid,dp);
         if(sc+1<=ec && grid[sr][sc+1]==0)
         c+=uniquePathMemo(sr,sc+1,er,ec,grid,dp);
-        
+           
         return dp[sr][sc]=c;
-        }
-
-        long long int uniquePathTabulation(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
+        
+}
+long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<long long int>> &dp){
         
         for(sr=er;sr>=0;sr--){
             for(sc=ec;sc>=0;sc--){
-            if(sr==er && sc==ec && grid[sr][sc]==0){
-            dp[sr][sc]=1;
+               
+        if(sr==er && sc==ec){
+         dp[sr][sc]=1;
             continue;
-            }
-    
-            long long int count=0;
-            if(sr+1<=er && grid[sr][sc]==0)
-            count+=dp[sr+1][sc];
-            if(sc+1<=ec && grid[sr][sc]==0)
-            count+=dp[sr][sc+1];//uniquePathMemo(sr,sc+1,er,ec,dp);
-              
-            dp[sr][sc]=count;
         }
+           
+        long long int c=0;
+        if(sr+1<=er && grid[sr+1][sc]==0)
+        c+=dp[sr+1][sc];//uniquePathMemo(sr+1,sc,er,ec,grid,dp);
+        if(sc+1<=ec && grid[sr][sc+1]==0)
+        c+=dp[sr][sc+1];//uniquePathMemo(sr,sc+1,er,ec,grid,dp);
+           
+         dp[sr][sc]=c;
+            }
         }
         
         return dp[0][0];
-        }
+}
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
     
-        int uniquePathsWithObstacles(vector<vector<int>> &obstacleGrid) {
+    if(obstacleGrid.size()==0 || obstacleGrid[0].size()==0)
+    return 0;
+
+    int m=obstacleGrid.size();
+    int n=obstacleGrid[0].size();
+    if(obstacleGrid[0][0]==1 || obstacleGrid[m-1][n-1]==1)      
+    return 0;
         
-        int n=obstacleGrid.size();
-        int m=obstacleGrid[0].size();
-        
-        vector<vector<int>> dp(n,vector<int>(m,0));
-        
-        if(obstacleGrid[0][0]==1)
-            return 0;
-        else if(obstacleGrid[n-1][m-1]==1)
-            return 0;
-        else{
-        int ans=uniquePathTabulation(0,0,n-1,m-1,obstacleGrid,dp);
-        return ans;
-        }
+    vector<vector<long long int>> dp(m,vector<long long int> (n,0));
+    int ans=uniquePathDP(0,0,m-1,n-1,obstacleGrid,dp);
+    return ans;
+    
     }
     
 
@@ -591,6 +590,24 @@ long long countWays(int m){
     return dp[m];
 }
 
+// Leetcode 53:- Maximum SubArray
+
+    //Kadane's Algorithm
+    
+    int maxSubArray(vector<int>& nums) {
+        
+        int sum=0;//instantaneos sum
+        int maxi=nums[0];//overall largest sum 
+        
+        for(int i: nums){
+            sum+=i;
+            maxi=max(maxi,sum);
+            if(sum<0)
+                sum=0;
+        }
+        return maxi;
+        
+    }
 
 // GFG:- Max. path sum    https://practice.geeksforgeeks.org/problems/path-in-matrix3805/1#
 

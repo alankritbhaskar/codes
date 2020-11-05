@@ -193,6 +193,29 @@ int LDS(vector<int> &arr, vector<int> &dp)
 	    return maxSum;
 	}
 
+// https://practice.geeksforgeeks.org/problems/minimum-number-of-deletions-to-make-a-sorted-sequence3248/1
+
+	int minDeletions(int arr[], int n) 
+	{ 
+	    int dp[n]={0};
+	    int l=lis(arr,n,dp);
+	    return n-l;
+	} 
+	
+	int lis(int a[],int n,int dp[]){
+	    
+	    int maxLen=0;
+	    for(int i=0;i<n;i++){
+	        dp[i]=1;
+	        for(int j=i-1;j>=0;j--){
+	            if(a[j]<a[i])
+	            dp[i]=max(dp[i],dp[j]+1);
+	        }
+	        maxLen=max(dp[i],maxLen);
+	    }
+	    return maxLen;
+	}
+
 
 int main(int argc, const char** argv) {
     int ans=LISRec();

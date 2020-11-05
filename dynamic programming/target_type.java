@@ -154,6 +154,46 @@ For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1
      return dp[tar]=ways;
    }
 
+// https://practice.geeksforgeeks.org/problems/reach-a-given-score/0#
+
+int reachScore(vector<int> &scores,int n,vector<int> &dp){
+ dp[0]=1;
+ for(int score: scores){
+     for(int i=score;i<=n;i++){
+        dp[i]+=dp[i-score];
+     }
+ }
+ return dp[n];
+    
+}
+int reachScoreSolve(int n){
+    vector<int> dp(n+1,0);
+    vector<int> scores({3,5,10});
+    int ans=reachScore(scores,n,dp);
+    return ans;
+}
+
+// https://practice.geeksforgeeks.org/problems/count-ways-to-nth-stairorder-does-not-matter5639/1
+
+    public long nthStair(int n)
+    {
+    
+    int jumps[]={1,2};
+    int dp[]=new int[n+1];
+    long ans=countCombinations(jumps,n,dp);
+    return ans;
+    }
+     public static long countCombinations(int[] arr,int Tar,int[] dp){
+        dp[0] = 1;
+        for(int ele : arr){
+        for(int tar = ele; tar <= Tar; tar++){
+                    dp[tar] += dp[tar-ele];
+            }            
+        }
+
+        return dp[Tar];
+    }
+
 // Leetcode 322:- Coin change(min. no. of coins combination)
 
 public int coinChange(int[] coins, int amount) {
@@ -367,6 +407,8 @@ public int coinChange(int[] coins, int amount) {
         
         return dp[n][tar] = maxValue;
     }
+
+
 
     //https://www.geeksforgeeks.org/unbounded-knapsack-repetition-items-allowed/
 
