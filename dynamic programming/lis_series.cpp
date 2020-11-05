@@ -217,6 +217,34 @@ int LDS(vector<int> &arr, vector<int> &dp)
 	}
 
 
+// Leetcode 354:- Russian Doll Envelopes
+
+int maxEnvelopes(vector<vector<int>>& arr) {
+        
+        int n=arr.size();
+        vector<int> dp(n,0);
+        
+        sort(arr.begin(),arr.end(),[](auto a,auto b){
+            return a[0]<b[0];// this < other,default value
+        });
+        
+        int maxStack=0;
+        for(int i=0;i<n;i++){
+            dp[i]=1;
+            for(int j=i-1;j>=0;j--){
+                if(arr[j][0]<arr[i][0] && arr[j][1]<arr[i][1])
+                dp[i]=max(dp[i],dp[j]+1);
+            }
+            maxStack=max(dp[i],maxStack);
+        }
+        return maxStack;
+    }
+
+// https://www.geeksforgeeks.org/dynamic-programming-building-bridges/
+
+// Same as above problem approach
+
+
 int main(int argc, const char** argv) {
     int ans=LISRec();
     cout<<ans<<"\n";
