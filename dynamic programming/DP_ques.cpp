@@ -340,12 +340,61 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
         
         return dp[n]=paths;
     }
+
+// Leetcode 198:- House Robber
+
+    int rob(vector<int>& nums) {
+       
+        int n=nums.size();
+        if(n==0)
+            return 0;
+        
+        vector<int> dp(n+1,-1);
+        int ans=robDP(nums,n,dp);
+        return ans;
+    }
     
-    //GFG:- Friends Pairing Problem 
+    //Faith:- robMemo(n)=Math.max(robMemo(n-2)+house[n],robMemo(n-1))
+    
+    int robMemo(vector<int> &nums,int n,vector<int> &dp){
+        
+        if(n==1 || n==2){
+            if(n==1)
+            return dp[n]=nums[n-1];
+            return dp[n]=max(nums[n-1],nums[n-2]);
+        }
+        
+        if(dp[n]!=-1)
+            return dp[n];
+        
+        int amt=0;
+        amt=max(nums[n-1]+robMemo(nums,n-2,dp),robMemo(nums,n-1,dp));
+        return dp[n]=amt;
+    }
+    
+    int robDP(vector<int> &nums,int n,vector<int> &dp){
+        
+        for(int i=1;i<=n;i++){
+        if(n==1 || n==2){
+            if(n==1)
+            {dp[n]=nums[n-1];
+             continue;
+            }
+            dp[n]=max(nums[n-1],nums[n-2]);
+            continue;
+        }
+        
+        int amt=0;
+        amt=max(nums[n-1]+robMemo(nums,n-2,dp),robMemo(nums,n-1,dp));
+        dp[n]=amt;
+    }
+        return dp[n];
+    }
+    
+//GFG:- Friends Pairing Problem 
 
-    //Faith:- countPairs(n)=countPairs(n-1)+countPairs(n-2)*(n-1)...
-
-    // https://practice.geeksforgeeks.org/problems/friends-pairing-problem5425/1#
+//Faith:- countPairs(n)=countPairs(n-1)+countPairs(n-2)*(n-1)...
+// https://practice.geeksforgeeks.org/problems/friends-pairing-problem5425/1#
     
     public long countPairs(int n){
         
