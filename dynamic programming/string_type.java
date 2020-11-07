@@ -123,6 +123,38 @@ public class string_type{
         return dp[i][j]=l;
     }
 
+// Leetcode 392:- Is subsequence 
+
+    public boolean isSubsequence(String s, String t) {
+        
+        int n=s.length();int m=t.length();
+        boolean dp[][]=new boolean[n+1][m+1];
+        
+        for(boolean d[]: dp)
+            Arrays.fill(d,false);
+        
+        boolean ans=isSubseq(s,t,n,m,dp);
+        return ans;
+    }
+    
+    public boolean isSubseq(String s,String t,int n,int m,boolean dp[][]){
+        
+        if(n==0 || m==0)
+            return dp[n][m]=(n==0)?true:false;
+        
+        if(dp[n][m]!=false)
+            return dp[n][m];
+        
+        boolean res=false;
+        if(s.charAt(n-1)==t.charAt(m-1)){
+            res=isSubseq(s,t,n-1,m-1,dp);
+        }
+        else
+            res=isSubseq(s,t,n,m-1,dp);
+        
+        return dp[n][m]=res;
+    }
+
 // Leetcode 115:- Distinct Subsequences
 
     public int numDistinct(String s, String t) {
