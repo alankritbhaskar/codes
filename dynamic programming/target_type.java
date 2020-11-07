@@ -391,9 +391,10 @@ public int coinChange(int[] coins, int amount) {
         return dp[N][Tar];
     }
 
-    //https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
+//https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
 
     public static int knapsack01(int[] weight,int[] value,int n,int tar,int[][] dp){
+        
         if(n == 0 || tar == 0){
             return dp[n][tar] = 0;
         }
@@ -402,18 +403,29 @@ public int coinChange(int[] coins, int amount) {
 
         int maxValue = 0;
         if(tar - weight[n - 1] >= 0)
-           maxValue = knapsack01(weight,val,n - 1,tar - weight[n - 1],dp) + value[n - 1];
-        maxValue = Math.max(maxValue, knapsack01(weight,val,n - 1,tar,dp))
+           maxValue = knapsack01(weight,value,n - 1,tar - weight[n - 1],dp) + value[n - 1];
+        maxValue = Math.max(maxValue, knapsack01(weight,value,n - 1,tar,dp));
         
         return dp[n][tar] = maxValue;
+    }
+    
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+        int dp[][]=new int[n+1][W+1];
+        for(int d[]: dp)
+        Arrays.fill(d,-1);
+        int ans=knapsack01(wt,val,n,W,dp);
+        return ans;
+        
     }
 
 
 
-    //https://www.geeksforgeeks.org/unbounded-knapsack-repetition-items-allowed/
+// https://www.geeksforgeeks.org/unbounded-knapsack-repetition-items-allowed/
 
-    public static int unboundedKnapsack(int[] weight,int[] val,int Tar){
-        int[] dp = new int[tar+1];
+  public static int unboundedKnapsack(int[] weight,int[] val,int Tar){
+        int[] dp = new int[Tar+1];
+        
         for(int i = 0;i<weight.length;i++){   
            for(int tar = weight[i];tar <= Tar;tar++){
                dp[tar] = Math.max(dp[tar],dp[tar - weight[i]] + val[i]);
@@ -422,7 +434,11 @@ public int coinChange(int[] coins, int amount) {
 
         return dp[Tar];
     }
-
+    static int knapSack(int N, int W, int val[], int wt[])
+    {
+        int ans=unboundedKnapsack(wt,val,W);
+        return ans;
+    }
 
     public static int solve(){
         int ar[]={2,3,5};

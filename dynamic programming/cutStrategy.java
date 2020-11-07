@@ -5,6 +5,7 @@ public class cutStrategy{
 // GFG:- Matrix Chain Multiplication(MCM) https://www.geeksforgeeks.org/matrix-chain-multiplication-dp-8/
 
     public static int MCM(int[] arr,int si,int ei,int[][] dp){
+
         if(si + 1 == ei){
             return dp[si][ei] = 0;
         }
@@ -44,7 +45,6 @@ public class cutStrategy{
                 dp[si][ei] = minCost;
             }
         }
-
         return dp[SI][EI];
     }
     
