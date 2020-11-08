@@ -47,6 +47,7 @@ public class stack{
 
         int rv=this.arr[this.tos];
         this.arr[this.tos--]=0;
+        this.elementCount--;
         return rv;
     }
 
@@ -56,6 +57,7 @@ public class stack{
         }
 
         this.arr[++this.tos]=data;
+        this.elementCount++;
     }
 
 }
