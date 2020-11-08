@@ -99,9 +99,11 @@ int height(Node* root)
     int diameterOfBinaryTree(TreeNode* root){
         return diameter(root).first;
     }
-    
+
 // 5:- LeftView of a binary tree.... https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
 
+
+// 6:- Path from root to node.....
 
  public boolean nodeToRootPath(TreeNode node,int data,ArrayList<TreeNode> ans){
         if(node==null) 
