@@ -8,7 +8,7 @@ public class stack{
     private int tos; // top of stack
     private int elementCount;
 
-    private initializeValues(int size){
+    protected initializeValues(int size){
         this.arr=new int[size];
         this.tos=-1;
         this.elementCount=0;
