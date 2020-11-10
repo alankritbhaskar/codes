@@ -194,6 +194,94 @@ push(5), pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
         return st.size()==0;
     }
 
+// Leetcode 1021: Remove Outermost Parenthesis
+
+/*
+Input: "(()())(())"
+Output: "()()()"
+Explanation: 
+The input string is "(()())(())", with primitive decomposition "(()())" + "(())".
+After removing outer parentheses of each part, this is "()()" + "()" = "()()()".
+*/
+
+// Using O(1) space
+    
+    string removeOuterParentheses(string s) {
+        
+        string ans="";
+        int count=0;
+        
+        for(char c: s){
+            if(c=='(' && count++>0)
+            ans+=c;
+            if(c==')' && count-->1)
+            ans+=c;
+        } 
+        return ans;
+    }
+    
+// Using O(n) space
+    string removeOuterParentheses(string s) {
+      string ans="";
+      stack<char> st;
+      
+      for(char c: s){
+          if(c=='(' && st.size()>0){
+              st.push(c);
+              ans+=c;
+          }
+          else if(c=='(' && st.size()==0){
+              st.push(c);
+          }
+          else if(c==')' && st.size()==1){
+              st.pop();
+          }
+          if(c==')' && st.size()>1){
+              st.pop();
+              ans+=c;
+          }
+      }
+     return ans;
+    }
+
+// Leetcode 1249:- Minimum Remove to Make Valid Parenthesis
+/*
+Input: s = "lee(t(c)o)de)"
+Output: "lee(t(c)o)de"
+Explanation: "lee(t(co)de)" , "lee(t(c)ode)" would also be accepted.
+*/
+
+    string minRemoveToMakeValid(string s) {
+        
+        string ans="";
+        stack<int> st;
+        
+        for(int i=0;i<s.length();i++){
+            char c=s[i];
+            if(c==')'){
+              if(st.size()!=0)
+                st.pop();
+              else
+                  s[i]='#';                
+            }
+            if(c=='(')
+                st.push(i);
+        }
+
+        // only opening brackets left in stack
+        while(st.size()!=0){
+            s[st.top()]='#';
+            st.pop();
+        }
+        
+        for(char c: s){
+            if(c!='#')
+                ans+=c;
+        }
+        
+        return ans;
+    }
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
