@@ -456,6 +456,39 @@ public int lcsOpti(String s,String t){
         return dp[ind][n]; 
     }
 
+// Longest Repeated Subsequences... https://practice.geeksforgeeks.org/problems/longest-repeating-subsequence/0#
+
+
+int lcs(string &s,string &t,int m,int n,vector<vector<int>> &dp){
+    if(m==0 || n==0)
+    return dp[m][n]=0;
+    
+    if(dp[m][n]!=-1)
+    return dp[m][n];
+    
+    int l=0;
+    if(s[m-1]==t[n-1] && m!=n)
+    l=lcs(s,t,m-1,n-1,dp)+1;
+    else
+    l= max(lcs(s,t,m-1,n,dp),lcs(s,t,m,n-1,dp));
+    
+    return dp[m][n]=l;
+}
+int main()
+ {
+		int t;cin>>t;
+	    while(t-->0){
+	        int m;
+	        cin>>m;
+	        string str1;
+	        cin>>str1;
+	        vector<vector<int>> dp(m+1,vector<int>(m+1,-1));
+	        int ans=lcs(str1,str1,m,m,dp);
+	        cout<<ans<<"\n";
+	    }
+	return 0;
+}
+
 // Leetcode 1035:- Uncrossed Lines
 
 public int maxUncrossedLines(int[] A, int[] B) {
