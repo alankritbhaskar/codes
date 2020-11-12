@@ -606,7 +606,77 @@ public int maxUncrossedLines(int[] A, int[] B) {
         return dp[M][N];
         }
         
-          
+// Leetcode 44:- Wildcard Pattern Matching
+
+/*
+Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*' where:
+
+'?' Matches any single character.
+'*' Matches any sequence of characters (including the empty sequence).
+The matching should cover the entire input string (not partial).
+
+Input: s = "adceb", p = "*a*b"
+Output: true
+Explanation: The first '*' matches the empty sequence, while the second '*' matches the substring "dce".
+*/
+
+    public String generateSequence(String s){
+        if(s.length()==0)
+            return "";
+        StringBuilder sb=new StringBuilder();
+        sb.append(s.charAt(0));
+        int i=1;
+        
+        while(i<s.length()){
+            while(i<s.length() && s.charAt(i-1)=='*' &&
+                 s.charAt(i)=='*')
+                i++;
+            if(i<s.length())
+                sb.append(s.charAt(i));
+            i++;
+        }
+        return sb.toString();
+    }
+    
+    public int wildcard(String s,String p,int m,int n,int dp[][]){
+        if(m==0 || n==0){
+            if(m==0 && n==0)
+                return dp[m][n]=1;
+            else if(n==1 && p.charAt(n-1)=='*')
+                return dp[m][n]=1;
+            return dp[m][n]=0;
+        }
+    
+        if(dp[m][n]!=-1)
+            return dp[m][n];
+        
+        int val=-1;
+        
+        if(s.charAt(m-1)==p.charAt(n-1) || p.charAt(n-1)=='?')
+            val=wildcard(s,p,m-1,n-1,dp);
+        else if(p.charAt(n-1)=='*'){
+                boolean res=false;
+                res=res || (wildcard(s,p,m-1,n,dp)==1);// match a char
+                res=res || (wildcard(s,p,m,n-1,dp)==1);// match a empty string
+                val=res?1:0;
+            }
+            else
+                val=0;
+        return dp[m][n]=val;
+    }
+    
+    public boolean isMatch(String s, String p) {
+        p=generateSequence(p);
+        int m=s.length();
+        int n=p.length();
+        
+        int dp[][]=new int[m+1][n+1];
+        for(int d[]: dp)
+            Arrays.fill(d,-1);
+        
+        boolean ans=(wildcard(s,p,m,n,dp)==1)?true:false;
+        return ans;
+    }
 
 
     public static void main(String args[]){
