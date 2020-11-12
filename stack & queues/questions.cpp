@@ -282,6 +282,75 @@ Explanation: "lee(t(co)de)" , "lee(t(c)ode)" would also be accepted.
         return ans;
     }
 
+// Leetcode 1027:- Remove All Adjacent Duplicates in a String
+/*
+Eg:-
+I/P:- abbaca
+O/P:- ca
+*/
+
+    string removeDuplicates(string s) {
+        string ans="";
+        stack<char> st;
+        
+        for(char c: s){
+          
+            if(st.size()==0)
+                st.push(c);
+            else if(st.top()==c)
+                st.pop();
+            else if(st.top()!=c)
+                st.push(c);
+        }
+        
+        while(st.size()!=0)
+        {
+            ans+=st.top();
+            st.pop();
+        }
+    
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+
+// Leetcode 496:- Next Greater Element-1
+/*
+You are given two arrays (without duplicates) nums1 and nums2 where nums1’s elements are subset of nums2. 
+Find all the next greater numbers for nums1's elements in the corresponding places of nums2.
+
+The Next Greater Number of a number x in nums1 is the first greater number to its right in nums2.
+If it does not exist, output -1 for this number.
+
+Example 1:
+Input: nums1 = [4,1,2], nums2 = [1,3,4,2].
+Output: [-1,3,-1]
+*/
+
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        
+        map<int,int> mp;
+        stack<int> st;
+        int n=nums2.size();
+        int m=nums1.size();
+        vector<int> ans(m,-1);
+        
+        for (int i=0;i<n;i++) {
+            while (st.size() && st.top()<nums2[i]) {
+                mp[st.top()]=nums2[i];
+                st.pop();
+            }
+            st.push(nums2[i]);
+        }
+        
+        for(int i=0;i<m;i++){
+            int e=nums1[i];
+            if(mp.find(e)!=mp.end()){
+                ans[i]=mp.find(e)->second;
+            }
+        }
+        return ans;
+    }
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
