@@ -351,6 +351,39 @@ Output: [-1,3,-1]
         return ans;
     }
 
+// Leetcode 32:- Longest Valid Parenthesis
+/*
+Given a string containing just the characters '(' and ')', 
+find the length of the longest valid (well-formed) parentheses substring.
+
+Example 1:
+
+Input: s = "(()"
+Output: 2
+Explanation: The longest valid parentheses substring is "()".
+Example 2:
+
+Input: s = ")()())"
+Output: 4
+Explanation: The longest valid parentheses substring is "()()".
+*/
+
+    int longestValidParentheses(string s) {
+       stack<int> st;
+       st.push(-1);
+       
+       int len=0;
+       for(int i=0;i<s.length();i++){
+           if(st.top()!=-1 && s[st.top()]=='(' && s[i]==')'){
+            st.pop();
+            len=max(len,i-st.top());
+           }
+          else
+            st.push(i);
+       }
+        return len;
+    }
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
