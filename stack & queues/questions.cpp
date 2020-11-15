@@ -422,6 +422,157 @@ public:
  */
 
 
+// Leetcode 84:- Largest Area Histogram/Rectangle
+
+/*
+Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, 
+find the area of largest rectangle in the histogram.
+
+Example:
+
+Input: [2,1,5,6,2,3]
+Output: 10
+*/
+    
+//Next Smaller Element to Right ---> returns a vector of indices
+
+vector<int> nser(vector<int> &arr){
+
+int n=arr.size();
+vector<int> ans(n,n);// we already initialize the vector with a legitmate default value so that we don't need to 
+                      // vacate the remaining elements from the stack
+
+stack<int> st;
+for(int i=0; i<n ; i++){
+while(st.size()!=0 && arr[st.top()]>arr[i])
+{
+    ans[st.top()]=i;
+    st.pop();
+}
+st.push(i);
+}
+return ans;
+}
+
+//Next Smaller Element to Left ---> returns a vector of indices
+
+vector<int> nsel(vector<int> &arr){
+
+int n=arr.size();
+vector<int> ans(n,-1);// we already initialize the vector with a legitmate default value so that we don't need to 
+                      // vacate the remaining elements from the stack
+
+stack<int> st;
+for(int i=n-1;i>=0;i--){
+while(st.size()!=0 && arr[st.top()]>arr[i])
+{
+    ans[st.top()]=i;
+    st.pop();
+}
+st.push(i);
+}
+return ans;
+}
+    
+    
+int largestRectangleArea(vector<int>& heights) {
+    vector<int> left=nsel(heights);
+    vector<int> right=nser(heights);
+    int curr=0;
+    int mx=0;
+    for(int i=0;i<left.size();i++){
+        curr=(right[i]-left[i]-1)*heights[i];// width=right-left-1(exclusive boundaries)
+        // height=heights[i]
+        mx=max(mx,curr);
+    }
+    
+    return mx;
+    }
+
+// Leetcode 85:- Maximal Rectangle
+
+/*
+Given a rows x cols binary matrix filled with 0's and 1's, 
+find the largest rectangle containing only 1's and return its area.
+
+Example:-
+
+Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+Output: 6
+*/
+
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        if(matrix.size()==0 || matrix[0].size()==0)
+            return 0;
+        int n=matrix.size();int m=matrix[0].size();
+        
+        vector<int> arr(m,0);
+        int area=0;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                arr[j]=matrix[i][j]=='1'?arr[j]+1:0;
+            }
+            area=max(area,largestRectangleArea(arr));
+        }
+        return area;
+    }
+    
+    //Next Smaller Element to Right ---> returns a vector of indices
+
+vector<int> nser(vector<int> &arr){
+
+int n=arr.size();
+vector<int> ans(n,n);// we already initialize the vector with a legitmate default value so that we don't need to 
+                      // vacate the remaining elements from the stack
+
+stack<int> st;
+for(int i=0; i<n ; i++){
+while(st.size()!=0 && arr[st.top()]>arr[i])
+{
+    ans[st.top()]=i;
+    st.pop();
+}
+st.push(i);
+}
+return ans;
+}
+
+//Next Smaller Element to Left ---> returns a vector of indices
+
+vector<int> nsel(vector<int> &arr){
+
+int n=arr.size();
+vector<int> ans(n,-1);// we already initialize the vector with a legitmate default value so that we don't need to 
+                      // vacate the remaining elements from the stack
+
+stack<int> st;
+for(int i=n-1;i>=0;i--){
+while(st.size()!=0 && arr[st.top()]>arr[i])
+{
+    ans[st.top()]=i;
+    st.pop();
+}
+st.push(i);
+}
+return ans;
+}
+    
+    
+int largestRectangleArea(vector<int>& heights) {
+    vector<int> left=nsel(heights);
+    vector<int> right=nser(heights);
+    int curr=0;
+    int mx=0;
+    for(int i=0;i<left.size();i++){
+        curr=(right[i]-left[i]-1)*heights[i];// width=right-left-1(exclusive boundaries)
+        // height=heights[i]
+        mx=max(mx,curr);
+    }
+    
+    return mx;
+    }
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
