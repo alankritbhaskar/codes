@@ -489,6 +489,38 @@ int largestRectangleArea(vector<int>& heights) {
     return mx;
     }
 
+int largestRectangleArea(vector<int> &heights)
+{
+    int n = heights.size();
+    stack<int> st;
+    st.push(-1);
+
+    int area = 0;
+    for (int i = 0; i < n; i++)
+    {
+        while (st.top() != -1 && heights[st.top()] >= heights[i])
+        {
+            int h = heights[st.top()];
+            st.pop();
+
+            int w = i - st.top() - 1;
+            area = max(area, h * w);
+        }
+        st.push(i);
+    }
+
+    while (st.size() != 1)
+    {
+        int h = heights[st.top()];
+        st.pop();
+
+        int w = n - st.top() - 1;
+        area = max(area, h * w);
+    }
+
+    return area;
+}
+
 // Leetcode 85:- Maximal Rectangle
 
 /*
@@ -572,6 +604,119 @@ int largestRectangleArea(vector<int>& heights) {
     
     return mx;
     }
+
+// Leetcode 155. Min Stack
+
+/*
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+push(x) -- Push element x onto stack.
+pop() -- Removes the element on top of the stack.
+top() -- Get the top element.
+getMin() -- Retrieve the minimum element in the stack.
+ 
+
+Example 1:
+
+Input
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+*/
+
+// Method 1:- Using 2n space---> using pair of stack
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<pair<long,long>> st;
+    
+    MinStack() {
+       
+    }
+    
+    void push(int x) {
+     if(st.size()==0)
+         st.push({x,x});
+      else if(x>=st.top().second)
+          st.push({x,st.top().second});
+        else
+            st.push({x,x});
+    }
+    
+    void pop() {
+        if(st.size()!=0)
+            st.pop();
+    }
+    
+    int top() {
+        return st.top().first;
+    }
+    
+    int getMin() {
+            return st.top().second;
+    }
+};
+
+// Method 2:- Using exact n space i.e. using encoding
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<long> st;
+    long minEle=0;// global variable for minimum
+    
+    MinStack() {
+       
+    }
+    
+    void push(int x) {
+     if(st.size()==0){
+         st.push(x);
+         minEle=x;
+         return;
+     }
+        
+     if(x>=minEle)
+         st.push(x);
+     else{
+         st.push((x-minEle)+x);
+         minEle=x;
+     }
+    }
+    
+    void pop() {
+    
+    long ele=st.top(); 
+    if(ele<minEle){
+            minEle =(minEle-ele)+minEle;
+    }
+        st.pop();
+    }
+    
+    int top() {
+        
+       if(st.top()<minEle)
+           return (int)minEle;
+        
+       return (int)st.top(); 
+    }
+    
+    int getMin() {
+            return (int)minEle;
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
 
 int main(int argc, const char** argv) {
     
