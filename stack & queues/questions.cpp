@@ -718,6 +718,48 @@ public:
  * int param_4 = obj->getMin();
  */
 
+
+
+// Leetcode 402:- Remove k digits
+/*
+Given a non-negative integer num represented as a string, remove k digits from the number 
+so that the new number is the smallest possible.
+
+Note:
+The length of num is less than 10002 and will be ≥ k.
+The given num does not contain any leading zero.
+Example 1:
+
+Input: num = "1432219", k = 3
+Output: "1219"
+Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 which is the smallest.
+*/
+
+string removeKdigits(string num, int k) {
+        string ans="";
+        stack<char> st;
+        for(char c: num){
+            while(st.size()>0 && (int)(st.top()-'0')>(int)(c-'0') && k>0){
+                st.pop();k--;
+            }
+            if(st.size()==0 && c=='0')
+                continue;
+            
+            st.push(c);
+            }
+        while(k-->0 && st.size()>0)
+            st.pop();
+        
+        while(st.size()>0){
+            char e=st.top();
+            ans+=e;
+            st.pop();
+        }
+        reverse(ans.begin(),ans.end());
+        return (ans.length()==0)?"0":ans;
+    }
+
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
