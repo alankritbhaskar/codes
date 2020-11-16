@@ -759,6 +759,92 @@ string removeKdigits(string num, int k) {
         return (ans.length()==0)?"0":ans;
     }
 
+// Leetcode 316:- Remove Duplicate Letters
+
+ string removeDuplicateLetters(string s)
+{
+    if (s.length() == 0)
+        return s;
+
+    int n = s.length();
+    vector<int> freq(26, 0);
+    vector<bool> vis(26, false);
+
+    for (char ch : s)
+        freq[ch - 'a']++;
+
+    string st = ""; // could be alternatively done using stack, linkedlist, vector, StringBuilder in Java
+    for (char ch : s)
+    {
+
+        freq[ch - 'a']--;
+
+        if (vis[ch - 'a'])
+            continue;
+
+        while (st.length() != 0 && st.back() > ch && freq[st.back() - 'a'] > 0)
+        {
+            vis[st.back() - 'a'] = false;
+            st.pop_back();
+        }
+
+        vis[ch - 'a'] = true;
+        st += ch;
+    }
+
+    return st;
+}
+
+// Leetcode 1081- 1081. Smallest Subsequence of Distinct Characters
+/*
+Return the lexicographically smallest subsequence of s that contains all the distinct characters of s 
+exactly once.
+
+Note: This question is the same as 316: https://leetcode.com/problems/remove-duplicate-letters/
+
+Example 1:
+
+Input: s = "bcabc"
+Output: "abc"
+*/
+
+        string smallestSubsequence(string s) {
+        if(s.length()==0)
+        return s;
+
+        vector<int> freq(26,0);
+        vector<bool> vis(26,false);
+        stack<char> st;
+
+        for(char ch: s)
+        freq[ch-'a']++;
+
+        for(char ch: s){
+            freq[ch-'a']--;
+
+            if(vis[ch-'a'])
+            continue;
+
+            while(st.size()!=0 && st.top()>ch && freq[st.top()-'a']>0){
+                vis[st.top()-'a']=false;
+                st.pop();
+            }
+
+            vis[ch-'a']=true;
+            st.push(ch);
+        }
+        
+        string ans="";
+        while(st.size()>0){
+            ans+=st.top();
+            st.pop();
+        }
+
+        reverse(ans.begin(),ans.end());
+        return ans;
+    }
+
+
 
 int main(int argc, const char** argv) {
     
