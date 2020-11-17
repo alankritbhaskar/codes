@@ -1,4 +1,9 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <stack>
+#include <map>
+#include <algorithm>
+
 using namespace std;
 
 
@@ -844,7 +849,72 @@ Output: "abc"
         return ans;
     }
 
+// Leetcode 1441:- Build an Array With Stack Operations
+/*
+Given an array target and an integer n. In each iteration, you will read a number from  list = {1,2,3..., n}.
 
+Build the target array using the following operations:
+
+Push: Read a new element from the beginning list, and push it in the array.
+Pop: delete the last element of the array.
+If the target array is already built, stop reading more elements.
+
+Return the operations to build the target array.
+
+Example 1:
+
+Input: target = [1,3], n = 3
+Output: ["Push","Push","Pop","Push"]
+*/
+
+    vector<string> buildArray(vector<int>& target, int n) {
+      vector<string > operations;
+      int ind=0;
+      
+      for(int e=1;e<=n;e++){
+          if(ind==target.size())break;
+          if(target[ind]==e){
+             
+              operations.push_back("Push");
+              ind++;
+          }
+          else if(target[ind]!=e){
+              operations.push_back("Push");
+              operations.push_back("Pop");
+          }
+      }
+        return operations;
+    }
+
+// Leetcode 921:- Minimum Add to Make Parenthesis Valid
+/*
+Given a string S of '(' and ')' parentheses, we add the minimum number of parentheses ( '(' or ')', 
+and in any positions ) so that the resulting parentheses string is valid.
+
+Formally, a parentheses string is valid if and only if:
+
+It is the empty string, or
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+Given a parentheses string, return the minimum number of parentheses 
+we must add to make the resulting string valid.
+
+Example 1:
+
+Input: "())"
+Output: 1
+*/
+    
+    int minAddToMakeValid(string s) {
+    stack<char> st;
+    for(char ch: s){
+        if(st.size()!=0 && st.top()=='(' && ch==')')
+        st.pop();
+        else
+        st.push(ch);
+    }
+        return st.size();
+    }
 
 int main(int argc, const char** argv) {
     
