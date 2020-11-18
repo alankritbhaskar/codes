@@ -916,6 +916,51 @@ Output: 1
         return st.size();
     }
 
+// Leetcode 753:- Asteroid Collision
+/*
+We are given an array asteroids of integers representing asteroids in a row.
+
+For each asteroid, the absolute value represents its size, 
+and the sign represents its direction (positive meaning right, negative meaning left). 
+Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. 
+If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
+
+Example 1:
+
+Input: asteroids = [5,10,-5]
+Output: [5,10]
+Explanation: The 10 and -5 collide resulting in 10.  The 5 and 10 never collide.
+Example 2:
+
+Input: asteroids = [8,-8]
+Output: []
+Explanation: The 8 and -8 collide exploding each other.
+*/
+
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+    vector<int> st;
+    int f=0;
+    for(int e: asteroids){
+        if(e>0)
+            st.push_back(e);
+        else{
+            while(st.size()!=0 && st.back()>0 && st.back()<-e)
+                st.pop_back();
+            
+            if(st.size()!=0 && st.back()==-e)
+                st.pop_back();
+            
+            else if(st.size()==0 || st.back()<0)
+                st.push_back(e);
+            
+            else{
+                // don't push in stack the negative no. i.e. the asteroid gets destroyed
+            }
+        }
+    }
+        return st;
+    }
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
