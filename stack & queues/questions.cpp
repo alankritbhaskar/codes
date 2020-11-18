@@ -961,6 +961,46 @@ Explanation: The 8 and -8 collide exploding each other.
         return st;
     }
 
+// Leetcode 42:- Trapping Rainwater
+
+// Thought:- Mere(i.e. block) upar kitna water store ho sakta hai, i need to find out that
+                     //  ----->  = min(max. greater to me in left, max. greater to me in right) - my height 
+
+int trap01(vector<int>& height) {
+        if(height.size()==0)
+            return 0;
+        int n=height.size();
+        vector<int> leftMax(n,height[0]);
+        vector<int> rightMax(n,height[n-1]);
+        
+        int left=height[0];
+        for(int i=1;i<n;i++){
+            if(left>height[i])
+                leftMax[i]=left;
+            else{
+                leftMax[i]=height[i];
+                left=height[i];
+            }
+        }
+        
+        int right=height[n-1];
+        for(int i=n-1;i>=0;i--){
+            if(right>height[i])
+                rightMax[i]=right;
+            else{
+                rightMax[i]=height[i];
+                right=height[i];
+            }   
+        }
+        
+        int totalWater=0;
+        for(int i=0;i<n;i++){
+            totalWater+=min(leftMax[i],rightMax[i])-height[i];
+        }
+        return totalWater;   
+    }
+
+
 int main(int argc, const char** argv) {
     
     vector<int> ar={2,1,3,4,3,2,1};
