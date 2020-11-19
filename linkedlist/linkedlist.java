@@ -14,7 +14,7 @@ public class linkedlistclass{
       private Node tail=null;
       private int elementCount=0;
 
-     // basic=================
+     // basic=============
 
        public int size(){
            return this.elementCount;
