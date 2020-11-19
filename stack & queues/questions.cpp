@@ -966,6 +966,8 @@ Explanation: The 8 and -8 collide exploding each other.
 // Thought:- Mere(i.e. block) upar kitna water store ho sakta hai, i need to find out that
                      //  ----->  = min(max. greater to me in left, max. greater to me in right) - my height 
 
+// Method 1:- Using 2 arrays
+
 int trap01(vector<int>& height) {
         if(height.size()==0)
             return 0;
@@ -1000,6 +1002,88 @@ int trap01(vector<int>& height) {
         return totalWater;   
     }
 
+// Method 2:- Using Stack ---> calculation of water stored is done in horizontal trend
+
+int trap02(vector<int>& height) {
+    int n=height.size();
+    stack<int> st;
+    int water=0;
+
+    for(int i=0;i<n;i++){
+        while(st.size()!=0 && height[st.top()]<=height[i]){
+            int h=height[st.top()];
+            st.pop();
+
+            if(st.size()==0)
+            break;
+
+            int w=i-st.top()-1;
+            water+=w*(min(height[st.top()],height[i])-h);
+        }
+        st.push(i);
+    }
+    return water;
+}
+
+// Method 3:- Using O(1) space and O(n) time
+
+int trap03(vector<int>& height) {
+    if(height.size()==0)
+        return 0;
+    
+    int n=height.size();
+    int i=0, j=n-1;
+    int lmax=0, rmax=0;
+    int water=0;
+    while(i<j){
+        lmax=max(lmax,height[i]);
+        rmax=max(rmax,height[j]);
+        
+        if(lmax<=rmax)
+            water+=lmax-height[i++];
+        else
+            water+=rmax-height[j--];
+    }
+    return water;
+}
+
+// Leetcode 1541:- Minimum Insertions to Balance a Parentheses String
+/*
+Given a parentheses string s containing only the characters '(' and ')'. A parentheses string is balanced if:
+
+Any left parenthesis '(' must have a corresponding two consecutive right parenthesis '))'.
+Left parenthesis '(' must go before the corresponding two consecutive right parenthesis '))'.
+In other words, we treat '(' as openning parenthesis and '))' as closing parenthesis.
+
+For example, "())", "())(())))" and "(())())))" are balanced, ")()", "()))" and "(()))" are not balanced.
+You can insert the characters '(' and ')' at any position of the string to balance it if needed.
+Return the minimum number of insertions needed to make s balanced.
+
+Example 1:
+
+Input: s = "(()))"
+Output: 1
+Explanation: The second '(' has two matching '))', but the first '(' has only ')' matching. 
+We need to to add one more ')' at the end of the string to be "(())))" which is balanced.
+*/
+
+int minInsertions(string s) {
+     int ans = 0;
+        int open = 0;
+        
+        for(int i=0;i<s.length();i++){
+            if(s[i] == '(') open++;
+            else{
+                if(i+1 == s.length() || s[i + 1] != ')') ans++;
+                else i++;
+
+                if(open > 0) open--; // balance open bracket.
+                else ans++;  // requirement of open brackets.
+            }
+        }
+        
+        return ans + 2*open;
+    }
 
 int main(int argc, const char** argv) {
     
