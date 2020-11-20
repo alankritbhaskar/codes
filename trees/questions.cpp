@@ -147,13 +147,12 @@ int distancebwNodes(Node *node,Node *p,Node *q){
                 LCA++;
             }
 
-            int ans=list1.size()+list2.size()-2*LCA;
+            int ans=list1.size()+list2.size()-2*LCA;// in terms of edges
 
             return ans;
 }
 
 // Diameter
-
     pair<int,int> diameter(Node *root){
         if(root==nullptr){
             return make_pair(0,-1);
