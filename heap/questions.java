@@ -27,6 +27,33 @@ public class questions{
     //     return pq.top();
     // }
 
+// Leetcode 703:- kth largest element in a stream
+
+class KthLargest {
     
+    PriorityQueue<Integer> pq=new PriorityQueue<>();// minHeap
+    int K=0;
+    
+    public KthLargest(int k, int[] nums) {
+     this.K=k;
+        for(int ele: nums){
+            pq.add(ele);
+            if(pq.size()>k){
+                pq.remove();
+            }
+        }
+    }
+    
+    public int add(int val) {
+        if(pq.size() < this.K)
+            pq.add(val);
+        else{
+            pq.add(val);
+            pq.remove();
+        }
+        return pq.peek();
+    }
+}
+
 
 }
