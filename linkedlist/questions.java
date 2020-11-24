@@ -154,7 +154,203 @@ public class questions{
     }
     }
 
+// Leetcode 19. Remove nth from end of list
+
+public ListNode removeNthFromEnd(ListNode head, int n) {
+        if(head==null || head.next==null)
+            return null;
+        
+        ListNode c1=head,c2=head;
+        
+        while(n-->0)
+            c2=c2.next;
+        
+        if(c2==null)
+            return head.next;
+        
+        while(c2.next!=null)
+        {
+            c1=c1.next;
+            c2=c2.next;
+        }
+        
+        ListNode rnode=c1.next;
+        c1.next=rnode.next;
+        rnode=null;
+        
+        return head;
+}
+
+// Leetcode 21. Merge two sorted lists
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+       
+        if(l1==null || l2==null)
+            return l1==null?l2:l1;
+        
+        ListNode head=new ListNode(-1); // dummy node for head
+        ListNode prev=head;
+        
+        ListNode c1=l1, c2=l2;
+        
+        while(c1!=null && c2!=null){
+            if(c1.val<=c2.val){
+                prev.next=c1;
+                prev=c1;
+                c1=c1.next;
+            }
+            else{
+                prev.next=c2;
+                prev=c2;
+                c2=c2.next;
+            }
+        }
+        
+        if(c1==null)
+            prev.next=c2;
+        else
+            prev.next=c1;
+        
+        return head.next;
+        
+    }
+
+// Leetcode 148. Sort List -----> nlog(n)
+
+    public ListNode middle(ListNode head){
+        if(head==null || head.next==null)
+            return head;
+        
+        ListNode slow=head,fast=head;
+        
+        while(fast.next!=null && fast.next.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        
+        return slow;
+    }
     
+    public ListNode mergeTwoSortedLists(ListNode l1, ListNode l2) {
+    if(l1==null || l2==null)
+        return l1==null?l2:l1;
+        
+    ListNode head=new ListNode(-1); // dummy
+    ListNode prev=head;
+        
+    ListNode c1=l1,c2=l2;
+    while(c1!=null && c2!=null){
+        if(c1.val<=c2.val){
+            prev.next=c1;
+            prev=c1;
+            c1=c1.next;
+        }
+        else{
+            prev.next=c2;
+            prev=c2;
+            c2=c2.next;
+        }
+    }
+        
+        if(c1==null)
+            prev.next=c2;
+        else
+            prev.next=c1;
+        
+        return head.next;
+    }
+    
+    public ListNode sortList(ListNode head) {
+        if(head==null || head.next==null)
+            return head;
+        
+        ListNode mid=middle(head);
+        ListNode nhead=mid.next;
+        mid.next=null;
+        
+        return mergeTwoSortedLists(sortList(head),sortList(nhead));           
+    }
+
+// Leetcode 23. Merge k sorted lists
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+       
+        if(l1==null || l2==null)
+            return l1==null?l2:l1;
+        
+        ListNode head=new ListNode(-1); // dummy node for head
+        ListNode prev=head;
+        
+        ListNode c1=l1, c2=l2;
+        
+        while(c1!=null && c2!=null){
+            if(c1.val<=c2.val){
+                prev.next=c1;
+                prev=c1;
+                c1=c1.next;
+            }
+            else{
+                prev.next=c2;
+                prev=c2;
+                c2=c2.next;
+            }
+        }
+        
+        if(c1==null)
+            prev.next=c2;
+        else
+            prev.next=c1;
+        
+        return head.next;
+        
+    }
+    
+    // O(kN) time complexity---> approach 1
+    
+    public ListNode mergeKLists(ListNode[] lists) {
+    
+     if(lists.length==0)
+         return null;
+     if(lists.length==1)
+         return lists[0];
+        
+     ArrayList<ListNode> list=new ArrayList<>();
+     
+    for(int i=0;i<lists.length;i++)
+        list.add(lists[i]);
+        
+    while(list.size()!=1){
+        ListNode l1=list.remove(list.size()-1);
+        ListNode l2=list.remove(list.size()-1);
+        
+        ListNode l3=mergeTwoLists(l1,l2);
+        list.add(l3);
+    }
+        return list.get(0);
+    }
+
+    // Divide and Conquer approach--- O(n log k)..... approach 2
+
+ public ListNode mergeKLists(ListNode[] lists) {
+        if(lists.length==0)
+            return null;
+        
+        return mergeKLists(lists,0,lists.length-1);
+        
+    }
+    public ListNode mergeKLists(ListNode []lists,int li,int ri){
+        if(li==ri)
+            return lists[li];
+        
+        int mid=(li+ri)/2;
+        
+        ListNode l1=mergeKLists(lists,li,mid);
+        ListNode l2=mergeKLists(lists,mid+1,ri);
+        
+        ListNode l3=mergeTwoLists(l1,l2);
+        
+        return l3;
+    }
 
 
 }
