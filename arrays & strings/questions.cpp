@@ -103,6 +103,89 @@ void moveZeroes(vector<int>& arr) {
     }
 }
 
+// Leetcode 003:- Longest Substring Without Repeating Characters
+/*
+Given a string s, find the length of the longest substring without repeating characters.
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+*/
+
+    int lengthOfLongestSubstring(string s) {
+    
+        if(s.length()<=1)
+            return s.length();
+        
+        int n=s.length(),si=0,ei=0,count=0;
+        int Maxsi=0,Maxei=0;
+        vector<int> map(128,0);
+        int len=0;
+        
+        while(ei<n){
+            
+            if(map[s[ei++]]++>0)
+                count++;
+            
+            while(count>0){
+                if(map[s[si++]]-->1)
+                    count--;
+            }
+            
+            if(ei-si>len){
+                len=ei-si;
+                Maxei=ei;
+                Maxsi=si;
+            }
+        }
+        return len;
+    }
+
+
+//Smallest window that contains all characters of string itself...... https://www.geeksforgeeks.org/smallest-window-contains-characters-string/
+
+/*
+Given a string, find the smallest window length with all distinct characters of the given string. For eg. str = “aabcbcdbca”, then the result would be 4 as of the smallest window will be “dbca” .
+
+Examples:
+
+Input: aabcbcdbca
+Output: dbca
+*/
+
+int main()
+ {
+    int t;
+    cin>>t;
+    
+    while(t--){
+	string s;
+	cin>>s;
+	
+	int n=s.length();
+	vector<int> freq(128,0);
+	int si=0,ei=0,head=0,len=(int)1e8,requirement=0;
+	
+	for(int i=0;i<n;i++) freq[s[i]]=1;
+	
+    for(int ele : freq) requirement += ele;
+
+	while(ei<n){
+	    
+	    if(freq[s[ei++]]-- > 0) requirement--;
+	    
+	    while(requirement==0){
+	        
+	        len=(ei-si < len)? ei-(head=si):len;
+	        
+	        if(freq[s[si++]]++ ==0)
+	        requirement++;
+	    }
+	}
+	
+	cout<<len<<"\n";
+}
 
 int main(){
 vector<int>arr = {4,-3,6,7,2,-8,-9,10,11,12,-19};

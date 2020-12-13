@@ -86,4 +86,71 @@ public class questions{
 
         return maxSum;
     }
+
+// Kadane's algorithm :- Largest Sum Contiguous Subarray........ https://practice.geeksforgeeks.org/problems/kadanes-algorithm-1587115620/1
+
+public static void kadaneAlgo(int arr[]){
+
+int gsum = -(int) 1e8, rsum = 0; // gsum : global sum, rsum : running sum
+
+for(int ele: arr){
+
+    rsum += ele;
+
+    if(rsum > gsum)
+    gsum = rsum;
+
+    if(rsum <= 0)
+    rsum = 0;
+}
+
+return gsum;
+}
+
+// Largest Sum Contiguous Subarray (with start and end index)
+
+public static void kadaneAlgoModified(int arr[]){
+
+    int rsum = 0, gsum = -(int)1e8;
+    int rsi = 0, gsi = 0, gei = 0; // rsi : running start index, gsi : global start index, gei : global end index
+
+    for(int rei = 0, rei < arr.length; rei++){
+
+        rsum += arr[i];
+
+        if(rsum > gsum){
+        gsum = rsum;
+        gsi = rsi;
+        gei = rei;
+        }
+
+        if(rsum <= 0){
+            rsum = 0;
+            rsi = rei + 1;
+        }
+    }
+    
+    System.out.println("Start: " + gsi + ", " + " End: " + gei);
+
+    return gsum; 
+}
+
+// Kadane' s Algo Generic Version-- not suitable for indices retrieval
+
+public static void kadaneAlgoGeneric(int arr[]){
+
+    int rsum = arr[0], gsum = arr[0];
+
+    for(int i = 1; i < arr.length; i++){
+        rsum = Math.max(arr[i],rsum + arr[i]); // array ke is element ko peeche se aaye running sum mein add krne mein fayda hai
+                                               // or array ke iss element se fresh start krne mein  
+        gsum = Math.max(rsum,gsum);
+    }
+
+return gsum;
+}
+
+
+
+
 }
