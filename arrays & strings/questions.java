@@ -150,7 +150,48 @@ public static void kadaneAlgoGeneric(int arr[]){
 return gsum;
 }
 
+// 1074. Number of Submatrices That Sum to Target
 
-
+/*
+Input: matrix = [[0,1,0],[1,1,1],[0,1,0]], target = 0
+Output: 4
+Explanation: The four 1x1 submatrices that only contain 0.
+*/
+    public int numSubmatrixSumTarget(int[][] mat, int k)     {
+        
+    int n=mat.length;
+    int m=mat[0].length;
+    
+    // columnwise sum of matrix with base as row 0
+    for(int i=1;i<n;i++){
+        for(int j=0;j<m;j++)
+            mat[i][j]+=mat[i-1][j];
+    }
+    
+    int count=0;
+    
+    for(int base=0;base<n;base++) // vary base from 0 to n
+    {
+        
+        for(int row=base;row<n;row++){
+            int sum=0;
+            HashMap<Integer,Integer> map=new HashMap<>(); // (running sum,frequency)
+            
+            map.put(0,1);
+            
+            for(int col=0;col<m;col++){
+                
+                if(base==0)
+                    sum+=mat[row][col];
+                else
+                    sum+=mat[row][col]-mat[base-1][col];
+                
+                count+=map.getOrDefault(sum-k,0);
+                map.put(sum,map.getOrDefault(sum,0)+1);
+            }
+        }
+    }
+        return count;
+    }
 
 }
