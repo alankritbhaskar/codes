@@ -103,44 +103,7 @@ void moveZeroes(vector<int>& arr) {
     }
 }
 
-// Leetcode 003:- Longest Substring Without Repeating Characters
-/*
-Given a string s, find the length of the longest substring without repeating characters.
 
-Example 1:
-
-Input: s = "abcabcbb"
-Output: 3
-*/
-
-    int lengthOfLongestSubstring(string s) {
-    
-        if(s.length()<=1)
-            return s.length();
-        
-        int n=s.length(),si=0,ei=0,count=0;
-        int Maxsi=0,Maxei=0;
-        vector<int> map(128,0);
-        int len=0;
-        
-        while(ei<n){
-            
-            if(map[s[ei++]]++>0)
-                count++;
-            
-            while(count>0){
-                if(map[s[si++]]-->1)
-                    count--;
-            }
-            
-            if(ei-si>len){
-                len=ei-si;
-                Maxei=ei;
-                Maxsi=si;
-            }
-        }
-        return len;
-    }
 
 
 //Smallest window that contains all characters of string itself...... https://www.geeksforgeeks.org/smallest-window-contains-characters-string/
