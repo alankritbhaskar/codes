@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bits/stdc++.h>
 #include <vector>
 
 using namespace std;
@@ -88,6 +89,51 @@ Output: 3
         }
         return len == (int)1e8 ? "" : s.substr(head,len);
     }
+
+// Smallest window that contains all characters of itself..... https://practice.geeksforgeeks.org/problems/smallest-distant-window/0#
+
+int main()
+ {
+    int t;
+    cin>>t;
+    
+    while(t--){
+	string s;
+	cin>>s;
+	
+	int n=s.length();
+	vector<int> map(128,0);
+	int si=0,ei=0,len=(int)1e8,required=0;// no. of distinct characters in string to be mapped
+	
+	for(int i=0;i<n;i++) 
+	map[s[i]]=1;
+	
+    for(int ele : map) 
+    {
+        if(ele == 1)
+        required++;
+    }
+
+	while(ei<n){
+	    
+	    if(map[s[ei++]]-- > 0) 
+	    required--;
+	    
+	    while(required==0){
+	        
+	        len=min(ei-si,len);
+	        
+	        if(map[s[si++]]++ ==0)
+	        required++;
+	    }
+	}
+	
+	cout<<len<<"\n";
+}
+}
+
+
+
 
 
 
