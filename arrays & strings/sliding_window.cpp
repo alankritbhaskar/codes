@@ -132,6 +132,72 @@ int main()
 }
 }
 
+// https://goodtecher.com/leetcode-159-longest-substring-with-at-most-two-distinct-characters/
+
+int lengthOfLongestSubstringTwoDistinct(string s)
+{
+    int n = s.length();
+    int si = 0, ei = 0, head = 0, len = 0, distinct = 0;
+
+    vector<int> map(128, 0);
+
+        int n = s.length();
+        int si = 0, ei = 0, head = 0, len = 0, distinct = 0;
+
+       vector<int> map(128, 0);
+
+       while (ei < n)
+       {
+        if (map[s[ei++]]++ == 0)
+            distinct++;
+
+        while (distinct > 2)
+            {
+        if (map[s[si++]]-- == 1)
+                distinct--;
+            }     
+        len = max(len,ei-si);
+     }
+    return len;
+}
+
+// Leetcode 340. Longest substring with at most k distinct characters
+
+// https://www.programcreek.com/2013/02/longest-substring-which-contains-2-unique-characters/
+
+
+// Given a string, find the longest substring that contains only two unique characters. 
+// For example, given "abcbbbbcccbdddadacb", 
+// the longest substring that contains 2 unique character is "bcbbbbcccb".
+
+int lengthOfLongestSubstringKDistinct(string s,int k)
+{
+    int n = s.length();
+    int si = 0, ei = 0, head = 0, len = 0, distinct = 0;
+
+    vector<int> map(128, 0);
+
+        int n = s.length();
+        int si = 0, ei = 0, head = 0, len = 0, distinct = 0;
+
+       vector<int> map(128, 0);
+
+       while(ei < n){
+           if(map[s[ei++]]++ == 0)
+           distinct++;
+
+           while(distinct > k){
+               if(map[s[si++]]-- == 1)
+               distinct--;
+           }
+
+           len=max(len,ei-si);
+       }
+       return len;
+}
+
+// 
+
 
 
 
