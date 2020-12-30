@@ -154,9 +154,27 @@ public class basicProblems{
 
     static String[] keypad = {".;","abc","def","ghi","jkl","mno","pqrs","tu","vwx","yz"};
     
-    // public static ArrayList <String> getKPC(String str,int idx) {
+    public static ArrayList <String> getKPC(String str,int idx) {
+    if(str.length() == idx){
+        ArrayList<String> base=new ArrayList<>();
+        base.add("");
+        return ans;
+    }
+
+    int indexOfCode=str.charAt(idx)-'0';
+    ArrayList<String> smallAns= getKPC(str,idx+1);
+    ArrayList<String> myAns= new ArrayList<>();
+
+    String code = keypad[indexOfCode];
     
-    // }
+    for(int i=0;i<code.length();i++){
+        for(String s : smallAns){
+        myAns.add(code.charAt(i) + s);
+        }
+    }
+
+    return myAns;
+    }
 
 
     public static void set1(){
