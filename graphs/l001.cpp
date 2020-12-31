@@ -58,6 +58,51 @@ graph[v].push_back(Edge(u,w));
  } 
  }
 
+// DFS......
+
+// 1. Mark the src
+// 2. For all unvisited neighbours
+//    2.1. Call DFS for neighbours
+// 3. Unmark (only for all paths)
+
+
+ // Has path between src to dest
+
+ bool hasPath(int src,int dest,vector<bool> &vis){
+ if(src == dest)
+ return true;
+
+ vis[src]=true;// 1. Mark the src 
+ bool res= false;
+
+ for(Edge e: graph[src]){ // 2
+     if(!vis[e.v]){
+        res= res || hasPath(e.v,dest,vis);
+     }
+ }
+ return res;
+ }
+
+ // All paths from src to dest
+
+ int allPaths(int src,int dest,vector<bool> &vis,string path){
+ if(src == dest)
+ {
+     cout<<path<<" "<<dest<<endl;
+     return 1;
+ }
+
+ int count= 0;
+ vis[src]= true;
+ for(Edge e: graph[src]){
+     if(!vis[e.v]){
+         count+ = allPaths(e.v,dest,vis,path+to_string(src));
+     }
+ }
+ vis[src]= false;
+ return count;
+ }
+
  void constructGraph(){
     addEdge(0, 1, 10);
     addEdge(0, 3, 10);
@@ -70,8 +115,12 @@ graph[v].push_back(Edge(u,w));
     display();
  }
 
-  int main(){
+
+  int main(){ 
+
   constructGraph();
+  vector<bool> vis(N,false);
+
   return 0;
   }
 
