@@ -96,13 +96,63 @@ graph[v].push_back(Edge(u,w));
  vis[src]= true;
  for(Edge e: graph[src]){
      if(!vis[e.v]){
-         count+ = allPaths(e.v,dest,vis,path+to_string(src));
+         count += allPaths(e.v,dest,vis,path+to_string(src));
      }
  }
  vis[src]= false;
  return count;
  }
 
+ // Smallest path wrt length
+
+ pair<int,string> smallestPath(int src,int dest,vector<bool> &vis){
+ if(src == dest){
+     pair<int,string> base(0,to_string(src));
+     return base;
+ }
+
+ vis[src]= true;
+ pair<int,string> myAns(1e8,"");
+
+ for(Edge e: graph[src]){
+     if(!vis[e.v]){
+         pair<int,string> recAns= smallestPath(e.v,dest,vis);
+         if(recAns.first+1 < myAns.first){
+             myAns.first= recAns.first+1;
+             myAns.second= to_string(src)+recAns.second;
+         }
+     }
+ }
+ vis[src]= false;
+ return myAns;
+ }
+
+// Smallest Path wrt weight
+   // Pair -> (weight,path)
+
+pair<int,string> smallestPathWeight(int src,int dest,vector<bool> &vis){
+    if(src == dest){
+        pair<int,string> base(0,to_string(src)+"");// jab src= dest then 0 wt. is employed to get to the destination
+        return base;
+    }
+
+    vis[src]= true;
+    pair<int,string> myAns(1e8,"");
+    for(Edge e: graph[src]){
+        if(!vis[e.v]){
+            pair<int,string> recAns= smallestPathWeight(e.v,dest,vis);
+            if(recAns.first+e.w < myAns.first){
+                myAns.first= recAns.first+e.w;
+                myAns.second= to_string(src)+recAns.second;
+            }
+        }
+    }
+    vis[src]= false;
+    return myAns;
+}
+
+
+ 
  void constructGraph(){
     addEdge(0, 1, 10);
     addEdge(0, 3, 10);
