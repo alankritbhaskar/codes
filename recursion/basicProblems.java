@@ -131,6 +131,9 @@ public class basicProblems{
 
 // SET 3 (Medium Problems on Recursion and Backtracking)
 
+
+// All the subsequences of a string
+
     public static ArrayList<String> subsequence(String str,int idx){
      if(str.length() == idx){
          ArrayList<String> base = new ArrayList<>();
@@ -149,6 +152,36 @@ public class basicProblems{
 
      return myAns;
     }
+
+public static int subsequence1(String ques, String ans){
+    if(ques.length()==0){
+        System.out.print(ans+" ");
+        return 1;
+    }
+
+    int count= 0;
+
+    // Cutting substring take O(n)
+    count+= subsequence1(ques.substrring(1),ans+ques.charAt(0));// choose the character
+    count+= subsequence1(ques.substrring(1),ans);// do not choose the character
+
+    return count;
+}
+
+public static int subsequence2(String ques,int idx, String ans){
+    if(idx== ans.length()){
+        System.out.print(ans+" ");
+        return 1;
+    }
+
+    int count= 0;
+
+    count+= subsequence2(ques,idx+1,ans+ques.charAt(idx));// choose the character
+    count+= subsequence2(ques,idx+1,ans); // do not choose the character
+
+    return count; 
+}
+
 
 // Keypad Combination Problem
 
@@ -175,6 +208,75 @@ public class basicProblems{
 
     return myAns;
     }
+
+    public static int KPC(String ques,int idx,String ans){
+        if(idx==ques.length()){
+            System.out.println(ans);
+            return 1;
+        }
+
+        int combi=0;
+
+        int indexOfCode= ques.charAt(idx)-'0';
+        String code= keypad[indexOfCode];
+
+        for(int i=0;i<code.length();i++){
+            combi+= KPC(ques,idx+1,ans+code.charAt(i));
+        }
+
+        return combi;
+    }
+
+
+// All permutations of each character distinct string(in lexographical order)
+
+// https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string/0#
+
+
+	public static void main (String[] args) {
+	Scanner sc=new Scanner(System.in);
+	
+	int t=sc.nextInt();
+	
+	while(t-->0){
+	    
+	    String s=sortString(sc.next());
+	    
+	    permutations(s,"");
+	    System.out.println();
+	}
+	}
+	
+	public static String sortString(String inputString) 
+    { 
+        // convert input string to char array 
+        char tempArray[] = inputString.toCharArray(); 
+          
+        // sort tempArray 
+        Arrays.sort(tempArray); 
+          
+        // return new sorted string 
+        return new String(tempArray); 
+    } 
+	
+	public static int permutations(String ques,String ans){
+	    
+	    if(ques.length()==0){
+	        System.out.print(ans+" ");
+	        return 1;
+	    }
+	    
+	    int count=0;
+	    
+	    for(int idx=0;idx<ques.length();idx++){
+            char ch= ques.charAt(idx);
+	        String ros= ques.substring(0,idx)+ques.substring(idx+1);// ros: rest of string
+	        
+	        count+=permutations(ros,ans+ch);
+	    }
+	    
+	    return count;
+	}
 
 
     public static void set1(){
