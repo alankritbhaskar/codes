@@ -97,5 +97,9 @@ public class cutStrategy{
         MCM();
     }
 
+// Boolean Parenthesization
+
+
+
 
 }
