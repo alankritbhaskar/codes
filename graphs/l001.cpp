@@ -63,7 +63,7 @@ graph[v].push_back(Edge(u,w));
 // 1. Mark the src
 // 2. For all unvisited neighbours
 //    2.1. Call DFS for neighbours
-// 3. Unmark (only for all paths)
+// 3. Unmark (only for all paths,not always)
 
 
  // Has path between src to dest
@@ -151,7 +151,36 @@ pair<int,string> smallestPathWeight(int src,int dest,vector<bool> &vis){
     return myAns;
 }
 
+// Hamiltonian Path and Hamiltonian Cycle
 
+// osrc- original source for keeping a track of cycle
+int hamiltonianPath(int src, int osrc, int edgeCount, vector<bool> &vis, string path)
+{
+    if (edgeCount == N - 1)
+    {
+        int idx = searchEdge(src, osrc);
+        path += to_string(src);
+        if (idx != -1)
+            cout << "Cycle : " << path << endl;
+        else
+            cout << "Non Cycle : " << path << endl;
+        return 1;
+    }
+
+    vis[src] = true;
+    int count = 0;
+    for (Edge e : graph[src])
+    {
+        if (!vis[e.v])
+            count += hamiltonianPath(e.v, osrc, edgeCount + 1, vis, path + to_string(src) + " ");
+    }
+    vis[src] = false;
+
+    return count;
+}
+
+// https://practice.geeksforgeeks.org/problems/length-of-largest-region-of-1s/0
+// 
  
  void constructGraph(){
     addEdge(0, 1, 10);
@@ -162,14 +191,19 @@ pair<int,string> smallestPathWeight(int src,int dest,vector<bool> &vis){
     addEdge(4, 5, 2);
     addEdge(4, 6, 8);
     addEdge(5, 6, 3);
+    addEdge(2,5,1);
     display();
  }
+void solve()
+{
+     constructGraph();
+     vector<bool> vis(N,false);
+     cout << hamiltonianPath(0, 0, 0, vis, "") << endl;
+}
 
 
   int main(){ 
-
-  constructGraph();
-  vector<bool> vis(N,false);
+  solve();
 
   return 0;
   }
