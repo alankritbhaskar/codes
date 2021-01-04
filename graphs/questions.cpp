@@ -83,6 +83,92 @@
         return maxArea;  
     }
 
+// Leetcode 463. Island Perimeter
+
+// 1- island
+// 0- water
+// Strategy:- Pata karlo ki total kitne islands hai aur total sare islands ke kitne neighbour islands hai
+    
+// Formula:- Total perimeter= islands*4-nbrs
+    
+    int islandPerimeter(vector<vector<int>>& grid) {
+    
+        vector<vector<int>> dir{
+            {1,0},{0,-1},{-1,0},{0,1}  
+        };
+        
+        int islands = 0;
+        int nbrs = 0;
+        
+        for(int i=0; i<grid.size(); i++){
+            for(int j = 0;j < grid[0].size(); j++){
+                if(grid[i][j]==1){
+                    islands++;
+                    
+                    for(int d=0;d<dir.size();d++){
+                        int x=i+dir[d][0];
+                        int y=j+dir[d][1];
+                        
+                        if(x>=0 && x<grid.size() && y>=0 && y<grid[0].size() && grid[x][y]==1)
+                            nbrs++; //valid nbrs for each island 
+                    }
+                }
+            }
+        }
+        
+        int totalPerimeter=4*islands-nbrs;
+        return totalPerimeter;
+    }
+
+// Leetcode 130. Surrounded Regions
+
+    void surroundDFS(int sr,int sc,vector<vector<char>> &grid,vector<vector<int>> &dir){
+        
+        grid[sr][sc]='#';
+        for(int d=0;d<dir.size();d++){
+            int x=sr+dir[d][0];
+            int y=sc+dir[d][1];
+            
+            
+            if(x>=0 && y>=0 && x<grid.size() && y<grid[0].size() && grid[x][y]=='O'){
+                surroundDFS(x,y,grid,dir);
+            }
+        }
+    }
+    
+    void solve(vector<vector<char>>& grid) {
+    
+        if(grid.size()==0 || grid[0].size()==0)
+        return;
+        
+        vector<vector<int>> dir{
+            {1,0},{0,-1},{-1,0},{0,1}  
+        };
+
+        // DFS from boundary to mark all the 'O' as '#'
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+            
+            if((i==0 || i==grid.size()-1 || j==0 || j==grid[0].size()-1) && grid[i][j]=='O'){
+                        surroundDFS(i,j,grid,dir);
+            }
+            }
+            }
+        
+        // Mark all '#' as 'O' as they have been marked from boundary, and all left 'O' as 'X'
+        // as they are surrounded so could not be reached using dfs from boundary
+        
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]=='O')
+                    grid[i][j]='X';
+                else if(grid[i][j]=='#')
+                    grid[i][j]='O';
+            }
+        } 
+    }
+
+
 
   
   int main(){ 
