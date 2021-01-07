@@ -230,6 +230,30 @@ public static int subsequence2(String ques,int idx, String ans){
 // Keypad Combination Problem-2
 // Nos. 10 & 11 also have meaning
 
+    public static int getKPC2(String str, int idx, String ans) {
+        if (idx == str.length()) {
+            System.out.println(ans);
+            return 1;
+        }
+
+        int count = 0;
+        String code = codes[str.charAt(idx) - '0'];
+        for (int i = 0; i < code.length(); i++) {
+            count += getKPC2(str, idx + 1, ans + code.charAt(i));
+        }
+
+        if (idx < str.length() - 1) {
+            int num = (str.charAt(idx) - '0') * 10 + (str.charAt(idx + 1) - '0');
+
+            if (num == 10 || num == 11) {
+                code = codes[num];
+                for (int i = 0; i < code.length(); i++) {
+                    count += getKPC2(str, idx + 2, ans + code.charAt(i));
+                }
+            }
+        }
+        return count;
+    }
 
 
 
@@ -295,10 +319,6 @@ public static int subsequence2(String ques,int idx, String ans){
 }
 
 
-
-
-
-
 // All permutations of each character distinct string(in lexographical order)
 
 // https://practice.geeksforgeeks.org/problems/permutations-of-a-given-string/0#
@@ -349,10 +369,26 @@ public static int subsequence2(String ques,int idx, String ans){
 	    return count;
 	}
 
-// Unique Permutations(in a string)
+// Unique Permutations(in a string) ----> using a visited array for marking each elements which has occured
 
     public static int printPermutationUnique(String str, String ans) {
+        
+        if (str.length() == 0) {
+            System.out.println(ans);
+            return 1;
+        }
 
+        int count = 0;
+        boolean[] vis = new boolean[26];
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (!vis[ch - 'a']) {
+                vis[ch - 'a'] = true;
+                String ros = str.substring(0, i) + str.substring(i + 1); // ros : rest of the string
+                count += printPermutationUnique(ros, ans + ch);
+            }
+        }
+        return count;
     }
 
     public static void set1(){
