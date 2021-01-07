@@ -227,6 +227,77 @@ public static int subsequence2(String ques,int idx, String ans){
         return combi;
     }
 
+// Keypad Combination Problem-2
+// Nos. 10 & 11 also have meaning
+
+
+
+
+
+
+// Leetcode 91. Decode Ways
+// &
+// https://www.pepcoding.com/resources/online-java-foundation/recursion-on-the-way-up/print-encodings-official/ojquestion#
+
+
+    public int decode(String s,int idx,String ans){
+        
+        if(idx==s.length()){
+            //System.out.println(ans);
+            return 1;
+        }
+        
+        int ways=0;
+        
+        char ch= s.charAt(idx);
+        if(ch=='0')
+            return 0;
+        
+        ways+= decode(s,idx+1,ans+(char)(s.charAt(idx)-'1'+'A'));
+        
+        if(idx<s.length()-1){
+        int v=(s.charAt(idx)-'0')*10+(s.charAt(idx+1)-'0');
+    
+        if(v<=26)
+            ways+= decode(s,idx+2,ans+(char)(v-1+'A'));
+    }
+        
+        return ways;
+}
+    
+    public int decodeDP(String s,int idx,String ans,int dp[]){
+    
+        if(idx==s.length()){
+            //System.out.println(ans);
+            return dp[idx]=1;
+        }
+        
+        if(dp[idx]!=-1)
+            return dp[idx];
+        
+        int ways=0;
+        
+        char ch= s.charAt(idx);
+        
+        if(ch=='0')
+            return dp[idx]=0;
+        
+        ways+= decodeDP(s,idx+1,ans+(char)(s.charAt(idx)-'1'+'A'),dp);
+        
+        if(idx<s.length()-1){
+        int v=(s.charAt(idx)-'0')*10+(s.charAt(idx+1)-'0');
+    
+        if(v<=26)
+            ways+= decodeDP(s,idx+2,ans+(char)(v-1+'A'),dp);
+    }
+        
+        return dp[idx]=ways;
+}
+
+
+
+
+
 
 // All permutations of each character distinct string(in lexographical order)
 
@@ -278,7 +349,11 @@ public static int subsequence2(String ques,int idx, String ans){
 	    return count;
 	}
 
-// Unique Permutations
+// Unique Permutations(in a string)
+
+    public static int printPermutationUnique(String str, String ans) {
+
+    }
 
     public static void set1(){
         // int f = fibbonaci(6);
