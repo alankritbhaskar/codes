@@ -227,6 +227,7 @@ class GFG {
     return;
     }
 
+    
     public static void solve(){
         set1();
        // set3();
