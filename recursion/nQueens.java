@@ -25,6 +25,26 @@ public class nQueens{
 
          return true;
     }
+    
+    public static boolean row[];
+    public static boolean col[];
+    public static boolean diag[];
+    public static boolean antiDiag[];
+
+    public static void toggle(int r,int c,int m){
+        row[r]= !row[r];
+        col[c]= !col[c];
+        diag[r-c+m-1]= !diag[r-c+m-1];
+        antiDiag[r+c]= !antiDiag[r+c];
+    }
+
+// O(1) time
+    public static boolean isSafeToPlaceQueen01(int r, int c,int m) {
+         if(!row[r] && !col[c] && !diag[r-c+m-1] && !antiDiag[r+c])
+         return true;
+         return false;
+    }
+
 
 // tnq- total number of queens
 
@@ -42,7 +62,7 @@ public class nQueens{
               int r= i/m;
               int c= i%m;
 
-              if(isSafeToPlaceQueen(boxes,r,c)){
+              if(isSafeToPlaceQueen01(r,c,m)){
                   boxes[r][c]= true;
                   count += nQueen01(boxes,i+1,tnq-1,ans + "(" + r + "," + c + ") ");
                   boxes[r][c]= false;
@@ -58,7 +78,13 @@ public class nQueens{
         // boolean[] tnb = new boolean[5];
         // System.out.println(queenPermutation1D(tnb, 3, 0, ""));
 
-        int n = 4;
+        int n = 4,m = 4;
+
+        row = new boolean[n];
+        col = new boolean[n];
+        diag = new boolean[n+m+1];
+        antiDiag = new boolean[n+m+1];
+
         boolean[][] tnb = new boolean[n][n];
         System.out.println(nQueen01(tnb, 0, n, ""));
         // System.out.println(queenPermutation2D(tnb, n, ""));
