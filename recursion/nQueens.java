@@ -63,9 +63,9 @@ public class nQueens{
               int c= i%m;
 
               if(isSafeToPlaceQueen01(r,c,m)){
-                  boxes[r][c]= true;
+                  toggle(r,c,m);
                   count += nQueen01(boxes,i+1,tnq-1,ans + "(" + r + "," + c + ") ");
-                  boxes[r][c]= false;
+                  toggle(r,c,m);
               }
           }
 
