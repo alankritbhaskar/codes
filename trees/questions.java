@@ -39,6 +39,104 @@ public class question {
         return find(node.left, data) || find(node.right, data);
     }
 
+// Root to node path 
+
+     public boolean rootToNodePath(TreeNode node, TreeNode data, ArrayList<TreeNode> ans) {
+         if(node == null)
+         return false;
+
+         if(node == data){
+             ans.add(node);
+             return true;
+         }
+
+         boolean res = false;
+         res = rootToNodePath(node.left,data,ans) || rootToNodePath(node.right,data,ans);
+
+         if(res)
+         ans.add(node);
+
+         return res;
+     }
+
+     public ArrayList<TreeNode> rootToNodePath(TreeNode node, TreeNode data) {
+         if(node == null)
+         return new ArrayList<>();
+
+         if(node == data){
+             ArrayList<TreeNode> base = new ArrayList<>();
+             base.add(node);
+             return base;
+         }
+
+         ArrayList<TreeNode> left = rootToNodePath(node.left,data);
+         if(left.size() > 0){
+             left.add(node);
+             return left;
+         }
+
+         ArrayList<TreeNode> right = rootToNodePath(node.right,data);
+        if(right.size() > 0){
+            right.add(node);
+            return right;
+        }
+
+        return new ArrayList<>(); // return blank arraylist in case no root to node path found
+     }
+
+// Leetcode 236. Lowest Common Ancestor of a binary tree
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        ArrayList<TreeNode> firstPath = new ArrayList<>();
+        ArrayList<TreeNode> secondPath = new ArrayList<>();
+        
+        rootToNodePath(root,p,firstPath);
+        rootToNodePath(root,q,secondPath);
+        
+        int i = firstPath.size()-1;
+        int j = secondPath.size()-1;
+        TreeNode LCA = null;
+        
+        while(i>=0 && j>=0){
+            if(firstPath.get(i) != secondPath.get(j))
+                break;
+            
+            LCA = firstPath.get(i);
+            i--;
+            j--;
+        }
+        return LCA;
+    }
+
+// K nodes down
+
+    public void printKDown(TreeNode node, TreeNode block, int depth, List<Integer> ans) {
+        if(node == null || node == block || depth<0)
+        return;
+
+        if(depth == 0){
+            ans.add(node.val);
+            return;
+        }
+
+        printKDown(node.left,block,depth-1,ans);
+        printKDown(node.right,block,depth-1,ans);
+    }
+
+// Leetcode 863. All Nodes Distance K in Binary Tree
+
+    public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+
+    }
+
+
+
+
+
+
+
+// https://www.geeksforgeeks.org/burn-the-binary-tree-starting-from-the-target-node/
+
 // Leetcode 543. Diameter of a tree
 // O(N^2)
 
