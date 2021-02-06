@@ -172,7 +172,65 @@ public class tree_bfs{
         return ans;
     }
 
-    
+// Left view of binary tree
+// https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1
+
+    public static ArrayList<Integer> leftView(){
+        if(root == null)
+        return new ArrayList<>();
+        
+        ArrayList<Integer> ans = new ArrayList<>();
+        LinkedList<Node> que = new LinkedList<>();
+        que.addLast(root);
+
+        int level = 0;
+        while(que.size() != 0){
+            int size = que.size();
+            // System.out.print("Level "+level+" : ");
+            ans.add(que.getFirst().data);
+            while(size-- > 0){
+            Node rn = que.removeFirst(); // rn : removed node
+
+            if(rn.left != null)
+            que.addLast(rn.left);
+            if(rn.right != null)
+            que.addLast(rn.right);
+            }
+            level++;
+        }
+        return ans;
+    }
+
+// Leetcode 199. Right View of Binary Tree
+// https://practice.geeksforgeeks.org/problems/right-view-of-binary-tree/1
+
+    public List<Integer> rightSideView(TreeNode root) {
+        if(root == null)
+        return new ArrayList<>();
+        
+        ArrayList<Integer> ans = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.addLast(root);
+
+        int level = 0;
+        while(que.size() != 0){
+            int size = que.size();
+
+            //ans.add(que.getLast().val);
+            ans.add(que.getFirst().val);
+            while(size-- > 0){
+            TreeNode rn = que.removeFirst(); // rn : removed node
+            
+            if(rn.right != null)
+            que.addLast(rn.right);
+            if(rn.left != null)
+            que.addLast(rn.left);
+
+            }
+            level++;
+        }
+        return ans;
+    }
 
     public static void main(String args[]){
 
