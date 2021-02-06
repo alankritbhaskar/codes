@@ -99,15 +99,80 @@ public class tree_bfs{
             System.out.print("Level "+level+" : ");
             while(size-- > 0){
             TreeNode rn = que.removeFirst(); // rn : removed node
-            System.out.println(rn.val+" ");
+            System.out.print(rn.val+" ");
 
             if(rn.left != null)
             que.addLast(rn.left);
             if(rn.right != null)
             que.addLast(rn.right);
             }
+            level++;
+            System.out.println();
         }
     }
+
+// Leetcode 102. Level Order Traversal Linewise
+
+    public List<List<Integer>> levelOrderLineWise(TreeNode root){
+        List<List<Integer>> ans = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.addLast(root);
+        
+        while(que.size() != 0){
+            int size = que.size();
+            
+            List<Integer> s = new ArrayList<>();
+            while(size-- > 0){
+                TreeNode rn = que.removeFirst();
+                s.add(rn.val);
+                
+                if(rn.left != null)
+                    que.addLast(rn.left);
+                if(rn.right != null)
+                    que.addLast(rn.right);
+            }
+            ans.add(s);
+        }
+        return ans;
+    }
+    
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if(root == null)
+            return new ArrayList<>();
+        List<List<Integer>> ans = levelOrderLineWise(root);
+        return ans;
+    }
+
+// Leetcode 107. Level Order - II
+
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        if(root == null)
+            return new ArrayList<>();
+        
+        List<List<Integer>> ans = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        que.addLast(root);
+        
+        while(que.size() != 0){
+            int size = que.size();
+            
+            List<Integer> s = new ArrayList<>();
+            while(size-- > 0){
+                TreeNode rn = que.removeFirst();
+                s.add(rn.val);
+                
+                if(rn.left != null)
+                    que.addLast(rn.left);
+                if(rn.right != null)
+                    que.addLast(rn.right);
+            }
+            ans.add(0,s);
+        }
+        //Collections.reverse(ans);
+        return ans;
+    }
+
+    
 
     public static void main(String args[]){
 
