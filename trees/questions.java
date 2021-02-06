@@ -356,5 +356,52 @@ public class question {
         return m[0];
     } 
 
+// Leetcode 98. Validate BST
+
+// Method 1:- Using pair class
+
+    public static class BSTPair{
+        long Max = -(long)1e15;
+        long Min = (long)1e15;
+        boolean isBST = true;
+        
+        BSTPair(long Max,long Min,boolean isBST){
+            this.Max = Max;
+            this.Min = Min;
+            this.isBST = isBST;
+        }
+        
+        BSTPair(){
+            
+        }
+    }
+    
+    public BSTPair isBST(TreeNode root){
+        if(root == null)
+            return new BSTPair();
+        
+        BSTPair left = isBST(root.left);
+        BSTPair right = isBST(root.right);
+        
+        BSTPair myAns = new BSTPair();
+        
+        myAns.isBST = (left.isBST && right.isBST && (left.Max < root.val && root.val < right.Min));
+        myAns.Max = Math.max(Math.max(left.Max,root.val),right.Max);
+        myAns.Min = Math.min(Math.min(left.Min,root.val),right.Min);
+        
+        return myAns;
+    }
+    
+    public boolean isValidBST(TreeNode root) {
+        if(root == null)
+            return true;
+        else{
+            BSTPair ans= isBST(root);
+            return ans.isBST;
+        }
+    }
+
+// Method 2:- Using the concept, for a BST inorder traversal gives a sorted order
+
 
 }
