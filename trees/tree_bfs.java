@@ -52,7 +52,8 @@ public class tree_bfs{
                 System.out.println();
                 if(childQueue.size() != 0)
                 System.out.print("Level "+(++level)+" : ");
-
+                
+                // Swap both the queues 
                 LinkedList<TreeNode> temp = que;
                 que = childQueue;
                 childQueue = temp;
@@ -65,7 +66,7 @@ public class tree_bfs{
     public static void levelOrderLineWise02(TreeNode root){
         LinkedList<TreeNode> que = new LinkedList<>();
         que.addLast(root);
-        que.addLast(null);
+        que.addLast(null); // delimitter
 
         int level = 0;
         System.out.print("Level "+level+" : ");
@@ -88,6 +89,8 @@ public class tree_bfs{
     }
 
 // Method 3:- Using size variable at each state of loop
+
+// Benefits:- Simple code, can be written in less lines
 
     public static void levelOrderLineWise03(TreeNode root){
         LinkedList<TreeNode> que = new LinkedList<>();
@@ -114,25 +117,25 @@ public class tree_bfs{
 // Leetcode 102. Level Order Traversal Linewise
 
     public List<List<Integer>> levelOrderLineWise(TreeNode root){
-        List<List<Integer>> ans = new ArrayList<>();
-        LinkedList<TreeNode> que = new LinkedList<>();
-        que.addLast(root);
+    List<List<Integer>> ans = new ArrayList<>();
+    LinkedList<TreeNode> que = new LinkedList<>();
         
-        while(que.size() != 0){
-            int size = que.size();
+    que.addLast(root);
+    while(que.size() != 0){
+        int size = que.size();
+        
+        List<Integer> level = new ArrayList<>();
+        while(size-- > 0){
+            TreeNode rn = que.removeFirst();
+            level.add(rn.val);
             
-            List<Integer> s = new ArrayList<>();
-            while(size-- > 0){
-                TreeNode rn = que.removeFirst();
-                s.add(rn.val);
-                
-                if(rn.left != null)
-                    que.addLast(rn.left);
-                if(rn.right != null)
-                    que.addLast(rn.right);
-            }
-            ans.add(s);
+            if(rn.left != null)
+                que.addLast(rn.left);
+            if(rn.right != null)
+                que.addLast(rn.right);
         }
+        ans.add(level);
+    }
         return ans;
     }
     
@@ -230,6 +233,74 @@ public class tree_bfs{
             level++;
         }
         return ans;
+    }
+
+// Vertical View of a binary tree
+
+    public static class verticalPair{
+        TreeNode node = null;
+        int hl = 0;
+
+        verticalPair(TreeNode node,int hl){
+            this.node = node;
+            this.hl = hl; 
+        }
+    }
+
+    public static List<List<Integer>> verticalOrderTraversal(TreeNode node){
+        LinkedList<verticalPair> que = new LinkedList<>();
+        HashMap<Integer,List<Integer>> map = new HashMap<>();
+
+        que.add(new verticalPair(root,0));
+        int level = 0;
+        int minHl = (int)1e8;
+        int maxHl = -(int)1e8;
+
+        while(que.size() != 0){
+            int size = que.size();
+            while(size-- > 0){
+                verticalPair rp = que.removeFirst();
+            
+                if(!map.containsKey(rp.hl))
+                map.put(rp.hl,new ArrayList<>());
+
+                map.get(rp.hl).add(rp.node.val);
+                minHl = Math.min(minHl,rp.hl);
+                maxHl = Math.max(maxHl,rp.hl);
+
+                if(rp.node.left != null)
+                    que.addLast(new verticalPair(rp.node.left,rp.hl - 1));
+                if(rp.node.right != null)
+                    que.addLast(new verticalPair(rp.node.right,rp.hl + 1));
+            }
+        }
+
+        List<List<Integer>> ans = new ArrayList<>();
+        while(minHl <= maxHl){
+            ans.add(map.get(minHl));
+            minHl++;
+        }
+        return ans;
+    }
+
+    public List<List<Integer>> verticalView(TreeNode root){
+        List<List<Integer>> ans = new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        HashMap<Integer,Integer> level = new HashMap<>();
+
+        int disp = 0;
+        que.addLast(root);
+        int size = que.size();
+
+        while(size-- > 0){
+            TreeNode rn = que.removeFirst();
+
+            if(rn.left != null)
+            {
+                
+
+            }
+        }
     }
 
     public static void main(String args[]){
