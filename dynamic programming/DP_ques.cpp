@@ -195,7 +195,7 @@ void mazePath()
     print2D(dp);
 }
 
-        // Leetode 63: Unique Path-II
+// Leetode 63: Unique Path-II
 
         //Faith:- path(x,y)=path(x+1,y)+path(x,y+1),,,, in case grid[x][y]==0
 
@@ -261,7 +261,22 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
 //Faith:- minCost(x,y)=grid[x][y]+min(minCost(x+1,y),minCost(x,y+1))
 
     int minPathSumMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,vector<vector<int>> &dp){
-    
+
+// if(sr == er && sc == ec)
+//     return dp[sr][sc] = grid[sr][sc];
+        
+// if(dp[sr][sc] != -1)
+//     return dp[sr][sc];
+        
+// int overall = (int)1e8;int right=(int)1e8,down=(int)1e8;
+// if(sc+1 <= ec)
+// right = minPathMemo(sr,sc+1,er,ec,grid,dp);
+// if(sr+1 <= er)
+// down = minPathMemo(sr+1,sc,er,ec,grid,dp);
+        
+// overall = grid[sr][sc]+min(right,down);
+// return dp[sr][sc] = overall;
+
         if(sr==er && sc==ec)
         return dp[sr][sc]=grid[sr][sc];
         
