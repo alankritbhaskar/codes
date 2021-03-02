@@ -331,29 +331,54 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
 
     //Faith-- climb(n)=climb(n-1)+climb(n-2)
 
-
-    public int climbStairs(int n) {
-    int dp[]=new int[n+1];
-    int ans=climbDP(n,dp);
-    return ans;
+    int climbStairs(int n) {
+        if(n == 0)
+            return 0;
+        vector<int> dp(n+1,-1);
+        int ans = climbDP(n,dp);
+        return ans;
     }
     
-    public int climbMemo(int n,int dp[]){
+    int climb(int n,vector<int> &dp){
+        if(n == 0)
+            return dp[n] = 1;
         
-        if(n==0)
-        return dp[n]=1;
-        
-        if(dp[n]!=0)
+        if(dp[n] != -1)
             return dp[n];
         
-        int p1=0,p2=0;
-        if(n-1>=0)
-        p1=climbMemo(n-1,dp);
-        if(n-2>=0)
-        p2=climbMemo(n-2,dp);
-        int paths=p1+p2;
+        int one = 0,two = 0;
+        int ways=0;
         
-        return dp[n]=paths;
+        if(n-1 >= 0)
+            one = climb(n-1,dp);
+        if(n-2 >= 0)
+            two = climb(n-2,dp);
+        
+        ways = one+two;
+        return dp[n] = ways;
+    }
+    
+    int climbDP(int N,vector<int> &dp){
+        for(int n = 0;n <= N;n++){
+
+        if(n == 0)
+        {dp[n] = 1;
+        continue;
+        }
+        
+        int one = 0,two = 0;
+        int ways=0;
+        
+        if(n-1 >= 0)
+            one = dp[n-1];//climb(n-1,dp);
+        if(n-2 >= 0)
+            two = dp[n-2];//climb(n-2,dp);
+        
+        ways = one+two;
+        dp[n] = ways;
+        continue;
+        }
+        return dp[N];
     }
 
 // Leetcode 198:- House Robber
