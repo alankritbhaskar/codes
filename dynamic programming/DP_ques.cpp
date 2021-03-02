@@ -435,6 +435,37 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
 
 //Faith:- countPairs(n)=countPairs(n-1)+countPairs(n-2)*(n-1)...
 // https://practice.geeksforgeeks.org/problems/friends-pairing-problem5425/1#
+
+    const int mod = (int)(1e9+7);
+    
+    int countFriendsPairings(int n) 
+    {   
+        vector<int> dp(n+1,-1);
+        int ans = (int)friends(n,dp);
+        return ans;
+    }
+
+// Faith:- friends(n) = friends(n-1)+friends(n-2)*(n-1)
+
+    long friends(int n,vector<int> &dp){
+        if(n == 0 || n == 1)
+            return dp[n] = 1;
+            
+        if(dp[n] != -1)
+            return dp[n];
+        
+        long ways = 0;
+        long single = 0, paired = 0;
+        if(n-1 >= 0)
+        single = friends(n-1,dp)%mod;
+        if(n-2 >= 0)
+        paired = (friends(n-2,dp)%mod*(n-1)%mod)%mod;
+        
+        ways = (single%mod + paired%mod)%mod;
+        return dp[n]= ways;
+    }
+
+// ........................................................
     
     public long countPairs(int n){
         
@@ -699,7 +730,6 @@ long long countWays(int m){
     }
 
 // GFG:- Max. path sum    https://practice.geeksforgeeks.org/problems/path-in-matrix3805/1#
-
 
   int maximumPath(int N, vector<vector<int>> grid)
     {
