@@ -701,47 +701,46 @@ long long countWays(int m){
 // GFG:- Max. path sum    https://practice.geeksforgeeks.org/problems/path-in-matrix3805/1#
 
 
-     int maxPathSumMemo(int sr,int sc,int er,int ec,vector<vector<int>> &grid,
-     vector<vector<int>> &dir,vector<vector<int>> &dp){
-        
-        if(sr==er)
-        return dp[sr][sc]=grid[sr][sc];
-        
-        if(dp[sr][sc]!=0)
-            return dp[sr][sc];
-            
-        int maxCost=0;
-        
-        for(int d=0;d<3;d++){
-            int x=sr+dir[d][0];
-            int y=sc+dir[d][1];
-            
-            if(x>=0 && y>=0 && x<=er && y<=ec)
-            maxCost=max(maxCost,maxPathSumMemo(x,y,er,ec,grid,dir,dp)+grid[sr][sc]);
-            
-        }
-        
-        return  dp[sr][sc]=maxCost;
+  int maximumPath(int N, vector<vector<int>> grid)
+    {
+    int n = N;
+    int m = N;
+
+    vector<vector<int>> dp(n, vector<int>(m, 0));
+    vector<vector<int>> dir{{1, -1}, {1,0}, {1, 1}};
+
+    int maxVal = -(int) 1e8;
+    for (int c = 0; c < m; c++)
+    {
+        maxVal = max(maxVal, maxPathMemo(0, c, n, m, grid, dp, dir));
     }
-        
+    return maxVal;
+    }
     
-    int maximumPath(int N,vector<vector<int>>& grid) {
-        int m=grid.size();
-        int n=grid[0].size();
-        vector<vector<int>> dp(m,vector<int>(n,0));
-        vector<vector<int>> dir({
-           {1,-1},{1,0},{1,1} 
-        });
-        int mx=-1;
-        for(int c=0;c<n;c++)
-        mx=max(mx,maxPathSumMemo(0,c,m-1,n-1,grid,dir,dp));
-        // for(int i=0;i<dp.size();i++){
-        //     for(int j=0;j<dp[0].size();j++)
-        //     cout<<dp[i][j]<<" ";
-        //     cout<<"\n";
-        // }
-        return mx;
+    int maxPathMemo(int r, int c, int n, int m, vector<vector<int>> &arr, vector<vector<int>> &dp, vector<vector<int>> &dir)
+    {
+    if (r == n - 1)
+    {
+        return dp[r][c] = arr[r][c];
     }
+
+    if (dp[r][c] != 0)
+        return dp[r][c];
+
+    int maxVal = -(int)1e8;
+    for (int d = 0; d < 3; d++)
+    {
+        int x = r + dir[d][0];
+        int y = c + dir[d][1];
+
+        if (x >= 0 && y >= 0 && x < n && y < m)
+        {
+            maxVal = max(maxVal, maxPathMemo(x, y, n, m, arr, dp, dir) + arr[r][c]);
+        }
+    }
+
+    return dp[r][c] = maxVal;
+}
 
 // Count no. of paths to reach end on dice throw
 
