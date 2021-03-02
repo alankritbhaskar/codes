@@ -327,7 +327,7 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
         return ans;
     }
 
-    //Leetcode-70: Climbing Stairs(Java)
+    //Leetcode-70: Climbing Stairs
 
     //Faith-- climb(n)=climb(n-1)+climb(n-2)
 
