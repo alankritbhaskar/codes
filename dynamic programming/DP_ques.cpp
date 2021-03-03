@@ -543,7 +543,7 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
        return ans;
     }
     
-    //Leetcode 746: Min Cost Climbing Stairs
+//Leetcode 746: Min Cost Climbing Stairs
 
     //If n==length(cost) then add 0 to min obtained else add cost[n]....(I)
     
@@ -674,7 +674,35 @@ void goldMine()
 
 //GFG:- NO. of hops    https://practice.geeksforgeeks.org/problems/count-number-of-hops-1587115620/1/?track=amazon-dynamic-programming&batchId=192
 
-long long mod=1000000007;
+# define ll long long int
+const ll mod = (ll)(1e9+7);
+
+// function to count number of ways to reach top of the stair
+ll hops(int n,vector<ll> &dp){
+    if(n == 0)
+        return dp[n] = 1;
+    
+    if(dp[n] != -1)
+        return dp[n];
+        
+    ll ways = 0;ll one = 0, two = 0, three = 0;
+    
+    if(n-1 >= 0)
+    one = hops(n-1,dp);
+    if(n-2 >= 0)
+        two = hops(n-2,dp);
+    if(n-3 >= 0)
+        three = hops(n-3,dp);
+    
+    ways = (one%mod+two%mod+three%mod)%mod;
+    return dp[n] = ways;
+}
+
+long long countWays(int n){
+    vector<ll> dp(n+1,-1);
+    ll ans = hops(n,dp);
+    return ans;
+}
 
 long long countWays(int n){
     
