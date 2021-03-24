@@ -376,12 +376,14 @@ public class string_type{
 
         System.out.println();
     }
-    
+
+// lcs() knows how to return the length  of longest common subseq in the strings passed
+
     public int lcsMemo(String s,String t,int m,int n,int dp[][])     {
         
 
         if(m==0 || n==0)
-            return dp[m][n]=0;
+            return dp[m][n]=0;// since, length in either case will be 0
         
         if(dp[m][n]!=-1)
             return dp[m][n];
@@ -467,7 +469,7 @@ int lcs(string &s,string &t,int m,int n,vector<vector<int>> &dp){
     return dp[m][n];
     
     int l=0;
-    if(s[m-1]==t[n-1] && m!=n)
+    if(s[m-1]==t[n-1] && m != n)
     l=lcs(s,t,m-1,n-1,dp)+1;
     else
     l= max(lcs(s,t,m-1,n,dp),lcs(s,t,m,n-1,dp));
@@ -539,6 +541,41 @@ public int maxUncrossedLines(int[] A, int[] B) {
             c+=Math.max(uncrossedMemo(a,b,m,n-1,dp ),uncrossedMemo(a,b,m-1,n,dp));
         }
         return dp[m][n]=c;
+        
+    }
+
+// Leetcode 1458. Max Dot Product of Two Subsequences
+
+    int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size();
+        int n = nums2.size();
+        
+        vector<vector<int>> dp(m+1,vector<int>(n+1,-(int)1e8));
+            // since, dp we need to find max dot product so fill dp with -Inf
+            
+        int ans = maxDot(nums1,nums2,m,n,dp);
+        return ans;
+    }
+    
+    int maxDot(vector<int> &a,vector<int> &b,int m,int n,vector<vector<int>> &dp){
+        if(m == 0 || n == 0)
+            return dp[m][n] = -(int)1e7;// agar koi vector empty ho jata hai then return a extreme negative value which can't be the part of ans Note : can't return 0 bcoz 0 too can become a max. value.It can't be -(int)1e8 bcoz other it wise it will consider it to be default dp, so it can be any value between -(int)1e6 (constraint) and less than -(int)1e8.
+        
+        if(dp[m][n] != -(int)1e8)
+            return dp[m][n];
+        
+        // total 4 scenerios bnte hai, max. of all 4 is the reqd. answer ......
+        // 1. bas dono arrays mein se last ke dono numbers ko prouct krke max dot product milta hai
+        // 2. dono elements ko include krke max product bnta hai
+        // 3. first array ke last element ko exclude kr aur second array ke last element ko include krke max bnta hai
+        // 4. second array ke last element ko exclude krke and first array ke last element ko include krke max bnta hai
+        
+        int prodLast = a[m-1]*b[n-1];
+        int bothInclude = maxDot(a,b,m-1,n-1,dp)+ prodLast;// the two numbers are producted and rest is passed to faith
+        int firstExclude = maxDot(a,b,m-1,n,dp);
+        int secondExclude = maxDot(a,b,m,n-1,dp);
+        
+        return dp[m][n] = max({prodLast,bothInclude,firstExclude,secondExclude});
         
     }
 

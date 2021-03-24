@@ -404,7 +404,7 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
             return dp[n]=max(nums[n-1],nums[n-2]);
         }
         
-        if(dp[n]!=-1)
+        if(dp[n] != -1)
             return dp[n];
         
         int amt=0;
@@ -839,6 +839,61 @@ for(sp=ep;sp>=0;sp--){
 int countWaysOptimized(int n){
 
 }
+
+    int numDecodings(string s) {
+        if(s.length() == 0)
+            return 0;
+        vector<int> dp(s.length()+1,-1);
+        int ans = decode(s,dp,0);
+        return ans;
+    }
+    
+    int decode(string s,vector<int> &dp,int idx){
+        if(idx == s.length())
+            return dp[idx]=1;
+        
+        if(dp[idx] != -1)
+            return dp[idx];
+        
+        int ways = 0;
+        
+        char ch1 = s[idx];
+        int v1 = (int)(ch1-'0');
+        if(ch1 == '0')
+            return 0;
+        ways += decode(s,dp,idx+1);
+        if(v1 <= 2){
+            if(idx+2 <= s.length()){
+            char ch2 = s[idx+1];
+            int v2 = ch2-'0';
+           //cout<<v1<<","<<v2<<".";
+            if(10*v1+v2 <= 26)
+                ways += decode(s,dp,idx+2); 
+        }
+        }
+        return dp[idx] = ways;   
+    }
+
+// Count number of ways to partition a set into k subsets
+// https://www.geeksforgeeks.org/count-number-of-ways-to-partition-a-set-into-k-subsets/
+
+    int partition(int n,int k,vector<vector<int>> &dp){
+        if(k == 1 || n == k)
+            return dp[n][k] = 1;
+        
+        if(dp[n][k] != -1)
+            return dp[n][k];
+        
+        // very similar to friends pairing
+        int single = partition(n-1,k-1,dp);// i will make my singleton subset
+        int pairUp = partition(n-1,k,dp)*k;// i myself will go to any of k subsets 
+
+        int ans = single+pairUp;
+        return dp[n][k] = ans;
+    }
+
+
+// https://practice.geeksforgeeks.org/problems/minimum-number-of-jumps4102/1/?track=amazon-dynamic-programming&batchId=192
 
 
 
