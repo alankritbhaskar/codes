@@ -37,7 +37,7 @@ For example, if the coins are {2,3,5} and the desired sum is 9, there are 8 ways
 
 public static int coinChangePermutations2D(int coins[],int n,int tar,int dp[][]){
 
-    if(tar==0)
+    if(tar == 0)
     return dp[n][tar]=1;
     
 
@@ -58,7 +58,7 @@ public static int coinChangePermutations2D(int coins[],int n,int tar,int dp[][])
 
  public static int coinChangePermutations1D(int coins[],int tar,int dp[]){
 
- if(tar==0)
+ if(tar == 0)
  return dp[tar]=1;
 
  if(dp[tar]!=-1)
@@ -124,6 +124,50 @@ For example, for N = 4 and S = {1,2,3}, there are four solutions: {1,1,1,1},{1,1
             }            
         }
         return dp[Tar];
+    }
+
+// https://practice.geeksforgeeks.org/problems/coin-change2448/1#
+// repetition allowed
+
+     public long coinChangeDP(int[] arr,int Tar,long[] dp1){
+        dp1[0] = 1;
+
+         for(int ele : arr){
+            for(int tar = 1; tar <= Tar; tar++){
+                    if(tar-ele>=0)
+                    dp1[tar] += dp1[tar-ele];
+            }            
+        }
+        return dp1[Tar];
+    }
+
+// coin change combination 2D
+
+public long count(int s[], int m, int n) 
+    { 
+        long dp[][] = new long[m+1][n+1];
+        
+        for(long d[] : dp)
+            Arrays.fill(d,-1);
+            
+        long ans = coinChange(s,0,n,dp);
+        return ans;
+    } 
+    
+    public long coinChange(int s[],int idx,int tar,long dp[][]){
+        if(tar == 0)
+            return dp[idx][tar] = 1;
+            
+        if(dp[idx][tar] != -1)
+            return dp[idx][tar];
+        
+        long ways = 0;
+        for(int i=idx;i<s.length;i++){
+            if(tar-s[i]>=0)
+                ways += coinChange(s,i,tar-s[i],dp);
+        }
+        
+        return dp[idx][tar] = ways;
     }
 
 // Leetcode 377:- Combination Sum-IV

@@ -599,6 +599,14 @@ public int maxUncrossedLines(int[] A, int[] B) {
         if(m==0 || n==0){
             return dp[m][n] = m!=0 ? m : n;
         }
+
+    //    if(m == 0 || n == 0){
+    //         if(n == 0)
+    //             return dp[m][n] = m;
+    //         else 
+    //             return dp[m][n] = n;
+    //         return dp[m][n] = 0;
+    //     }
         
         if(dp[m][n]!=-1)
             return dp[m][n];
