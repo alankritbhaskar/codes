@@ -892,7 +892,38 @@ int countWaysOptimized(int n){
         return dp[n][k] = ans;
     }
 
+    int minimumTotal(vector<vector<int>>& triangle) {
+        if(triangle.size() == 0 || triangle[0].size() == 0)
+            return 0;
+        
+        vector<vector<int>> dp(triangle.size()+1,vector<int> (triangle.size()+1,-1));
+        int ans = minTri(triangle,0,0,dp);
+        return ans;
+    }
+    
+// Faith:- minTri()- gives me min path sum from top to bottom in next row possible position. I will add myself in this answer
+    
+    int minTri(vector<vector<int>> &tri,int row,int col,vector<vector<int>> &dp){
+        if(row == tri.size()-1)
+            return dp[row][col] = tri[row][col];
+        
+        if(dp[row][col] != -1)
+            return dp[row][col];
+        
+        int minPath = (int)1e9;
+        int same = 0;
+        int right = 0;
+            
+        same = minTri(tri,row+1,col,dp);
+        if(col <= row)
+        right = minTri(tri,row+1,col+1,dp);
+        
+        minPath = min(same,right)+tri[row][col];
+        
+        return dp[row][col] = minPath;  
+    }
 
+    
 // https://practice.geeksforgeeks.org/problems/minimum-number-of-jumps4102/1/?track=amazon-dynamic-programming&batchId=192
 
 

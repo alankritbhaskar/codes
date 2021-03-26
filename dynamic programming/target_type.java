@@ -505,23 +505,48 @@ public int coinChange(int[] coins, int amount) {
 
 // https://www.geeksforgeeks.org/unbounded-knapsack-repetition-items-allowed/
 
-  public static int unboundedKnapsack(int[] weight,int[] val,int Tar){
+     static int knapSack(int N, int W, int val[], int wt[])
+    {
+        int dp[][] = new int[N+1][W+1];
+        for(int d[]: dp)
+            Arrays.fill(d,-1);
+            
+        // int ans = knap(wt,val,0,W,dp);
+        int ans = knap1(wt,val,W);
+        return ans;
+    }
+    
+    static int knap(int wt[],int val[],int idx,int tar,int dp[][]){
+        if(idx == wt.length || tar == 0)
+            return dp[idx][tar] = 0;
+            
+        if(dp[idx][tar] != -1)
+            return dp[idx][tar];
+            
+        int maxP = -(int)1e8;
+        int max1 = -(int)1e8;
+        int max2 = -(int)1e8;
+        
+        if(tar-wt[idx] >= 0)
+            max1 = knap(wt,val,idx,tar-wt[idx],dp)+val[idx];// include(duplicacy allowed so passed same index)
+        max2 = knap(wt,val,idx+1,tar,dp); // exclude
+        
+        maxP =  Math.max(max1,max2);
+        return dp[idx][tar] = maxP;
+    }
+
+// Like coin change change
+ static int knap1(int[] wt,int[] val,int Tar){
         int[] dp = new int[Tar+1];
         
-        for(int i = 0;i<weight.length;i++){   
-           for(int tar = weight[i];tar <= Tar;tar++){
-               dp[tar] = Math.max(dp[tar],dp[tar - weight[i]] + val[i]);
+        for(int i = 0;i<wt.length;i++){   
+           for(int tar = wt[i];tar <= Tar;tar++){
+               dp[tar] = Math.max(dp[tar],dp[tar - wt[i]] + val[i]);
            }
         }
 
         return dp[Tar];
     }
-    static int knapSack(int N, int W, int val[], int wt[])
-    {
-        int ans=unboundedKnapsack(wt,val,W);
-        return ans;
-    }
-
     public static int solve(){
         int ar[]={2,3,5};
         int tar=9;
