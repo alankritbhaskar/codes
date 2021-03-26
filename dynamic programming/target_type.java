@@ -438,6 +438,43 @@ public int coinChange(int[] coins, int amount) {
 
 //https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
 
+    static int knapSack(int W, int wt[], int val[], int n) 
+    { 
+       if(n == 0 || W == 0)
+        return 0;
+        
+       int dp[][] = new int[n+1][W+1];
+       
+       for(int d[]: dp)
+       Arrays.fill(d,-1);
+       
+       int ans = knap(wt,val,0,W,dp);
+       return ans;
+    }
+    
+// Faith:- once i will consider the no. to be a part of my subbset and not to be part and then choose accordingly the best answer 
+
+   static int knap(int wt[],int val[],int idx,int tar,int dp[][]){
+        if(idx == wt.length || tar == 0)
+            return dp[idx][tar] = 0;
+            
+        if(dp[idx][tar] != -1)
+            return dp[idx][tar];
+            
+        int maxP = -(int)1e9;
+        int max1 = -(int)1e9;
+        int max2 = -(int)1e9;
+        
+        if(tar-wt[idx] >= 0)
+            max1 = knap(wt,val,idx+1,tar-wt[idx],dp)+val[idx];// include after checking
+        max2 = knap(wt,val,idx+1,tar,dp);// exclude the element no need to check
+        maxP = Math.max(max1,max2);
+        
+        return dp[idx][tar] = maxP;
+    }
+
+// ///////////////////////////////////////////////////////////////////////////////////////
+
     public static int knapsack01(int[] weight,int[] value,int n,int tar,int[][] dp){
         
         if(n == 0 || tar == 0){
