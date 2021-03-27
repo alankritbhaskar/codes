@@ -547,6 +547,31 @@ public int coinChange(int[] coins, int amount) {
 
         return dp[Tar];
     }
+
+// Leetcode 279. Perfect Squares
+
+    int numSquares(int n) {
+        vector<int> dp(n+1,-1);
+        
+        int ans = minPerfect(n,dp);
+        return ans;
+    }
+    
+    int minPerfect(int n,vector<int> &dp){
+        if(n == 0)
+            return dp[n] = 0;
+        
+        if(dp[n] != -1)
+            return dp[n];
+        
+        int minSq = (int)1e9;
+        for(int i = 1;i*i <= n;i++){
+            int count = 1+minPerfect(n-i*i,dp);
+            minSq = min(minSq,count);
+        }
+        return dp[n] = minSq;
+    }
+
     public static int solve(){
         int ar[]={2,3,5};
         int tar=9;
