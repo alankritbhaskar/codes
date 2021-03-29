@@ -24,19 +24,19 @@ void print2D(vector<vector<int>> &arr)
 
 // Leetcode 300. LIS
 
+// LIS_Left to right
+
+// Faith:-
+// Mai khud se small har element pe jake puchunga ki tum apne pe khatam hone wale 
+// longest length ka lis mujhe batado un sab me se largest ke sath me khud ko append krke uski length 1 increase 
+// kr dunga
+
 int LIS_rec (vector<int> &arr, int idx, vector<int> &dp){
 
 if (dp[idx] != 0)
     return dp[idx];
 
 int maxLen=1;// har ek element ki khud ki length 1 hai
-
-// Mai khud se small har element pe jake puchunga ki tum apne pe khatam hone wale 
-// longest length ka lis mujhe batado un sab me se largest ke sath me khud ko append krke uski length 1 increase 
-// kr dunga
-
-// If loop ka dirn left to right krna hai then we will change our faith, i will ask all the elements greater than me
-// to bring the length of lis starting from them and i will append myself to ahead of them and increase the count by 1.
 
 for(int i=idx-1;i>=0;i--){
     if(arr[i]<arr[idx]){ // for strictly increasing lis 
@@ -46,6 +46,26 @@ for(int i=idx-1;i>=0;i--){
 }
 
 return dp[idx]=maxLen;
+}
+
+// LIS_Right to left
+
+// Faith:- 
+// i will ask all the elements greater than me
+// to bring the length of lis starting from them and i will append myself to ahead of them and increase the count by 1.
+
+int lis_RL(vector<int> &arr,int idx,vector<int> &dp){
+    if(dp[idx] != -1)
+        return dp[idx];
+
+    int maxLen = 1;
+    for(int i=idx;i<=arr.size()-1;i++){
+        int len = 0;
+        if(arr[idx] < arr[i])
+        len = lis_RL(arr,i,dp)+1;
+        maxLen = max(maxLen,len);
+    }
+    return dp[idx] = maxLen;
 }
 
 int LISRec()
@@ -64,6 +84,9 @@ int LISRec()
     {
         maxLen = max(maxLen, LIS_rec(arr, i, dp));
     }
+
+    // for(int i = 0;i<=arr.size()-1;i++)
+    //     maxLen = max(maxLen,lis_RL(arr,i,dp));
 
     return maxLen;
 }

@@ -293,6 +293,21 @@ public int coinChange(int[] coins, int amount) {
     return dp[Amt];
 }
 
+// https://www.geeksforgeeks.org/find-number-of-solutions-of-a-linear-equation-of-n-variables/
+
+public static int noOfWays(int coeff[],int Rhs){
+
+int dp[] = new int[Rhs+1];
+for(int tar=0;tar<=Rhs;tar++){
+    for(int ele: coeff){
+        if(tar-ele >= 0)
+        dp[tar] += dp[tar-ele];
+    }
+}
+
+return dp[Rhs];
+}
+
 
 //https://www.geeksforgeeks.org/subset-sum-problem-dp-25/  i.e. only addition allowed
 
