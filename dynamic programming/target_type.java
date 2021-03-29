@@ -251,7 +251,7 @@ public int coinChange(int[] coins, int amount) {
     
     public int minCoinChange(int coins[],int amt,int dp[]){
         
-        if(amt==0)
+        if(amt == 0)
             return dp[amt]=0;
         
         if(dp[amt]!=-1)
@@ -261,14 +261,14 @@ public int coinChange(int[] coins, int amount) {
         
         // Agar aisa nhi krna chahte hai to...
         
-        //int val=minCoinChange(coins,amt-coin,dp);
-        //if(val!=INT_MAX && val+1<min_)
-        //min_=val+1;
+        //int val = minCoinChange(coins,amt-coin,dp);
+        //if(val != INT_MAX && val+1 < min_)
+        //min_ = val+1;
         
-        int min_=(int)1e9;
+        int min_ = (int)1e9;
         for(int coin: coins){
-            if(amt-coin>=0)
-                min_=Math.min(min_,minCoinChange(coins,amt-coin,dp)+1);
+            if(amt-coin >= 0)
+                min_ = Math.min(min_,minCoinChange(coins,amt-coin,dp)+1);
         }
         return dp[amt]=min_;
     }

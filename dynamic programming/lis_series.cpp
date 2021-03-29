@@ -22,6 +22,8 @@ void print2D(vector<vector<int>> &arr)
 // LIS---- Recursive Approach----> Time:- O(n2)
                              //    Space:- O(n)
 
+// Leetcode 300. LIS
+
 int LIS_rec (vector<int> &arr, int idx, vector<int> &dp){
 
 if (dp[idx] != 0)
@@ -32,6 +34,9 @@ int maxLen=1;// har ek element ki khud ki length 1 hai
 // Mai khud se small har element pe jake puchunga ki tum apne pe khatam hone wale 
 // longest length ka lis mujhe batado un sab me se largest ke sath me khud ko append krke uski length 1 increase 
 // kr dunga
+
+// If loop ka dirn left to right krna hai then we will change our faith, i will ask all the elements greater than me
+// to bring the length of lis starting from them and i will append myself to ahead of them and increase the count by 1.
 
 for(int i=idx-1;i>=0;i--){
     if(arr[i]<arr[idx]){ // for strictly increasing lis 
