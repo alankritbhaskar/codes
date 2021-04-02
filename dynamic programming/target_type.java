@@ -639,6 +639,46 @@ return dp[Rhs];
         return dp[n] = minSq;
     }
 
+// 698 Partition in k equal subsets
+
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int n = nums.length;
+        int sum = 0;
+        int maxElement = -(int)1e8;
+        
+        for(int ele: nums){
+            sum += ele;
+            maxElement = Math.max(ele,maxElement);
+        }
+        
+        // all elements are positive
+        if(sum%k != 0 || maxElement > (sum/k))
+            return false;
+        
+        boolean vis[] = new boolean[n];// initally false
+        int tar = (sum/k);
+        boolean res = kSubset(nums,tar,0,k,0,vis);
+        return res;       
+    }
+    
+    public boolean kSubset(int arr[],int tar,int currSum,int k,int idx,boolean vis[]){
+        if(k == 0)
+            return true;
+        if(currSum == tar)
+            return kSubset(arr,tar,0,k-1,0,vis);// again search for tar in k-1 remaining subsets
+        
+        boolean res = false;
+        for(int i=idx;i<arr.length;i++){
+            if(!vis[i]){
+                vis[i] = true;
+                res = res || kSubset(arr,tar,currSum+arr[i],k,i+1,vis);
+                vis[i] = false;
+            }
+        }
+        
+        return res;
+    }
+
     public static int solve(){
         int ar[]={2,3,5};
         int tar=9;
