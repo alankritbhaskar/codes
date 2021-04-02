@@ -451,6 +451,58 @@ return dp[Rhs];
         return dp[N][Tar];
     }
 
+// Leetcode 494. Target Sum
+
+    // Recursion
+        public int target(int arr[],int n,int tar){
+        if(n == 0){
+            return (tar == 0)?1:0; 
+        }
+
+        int count = 0;
+        count += target(arr,n-1,tar-arr[n-1]); // as +ve
+        count += target(arr,n-1,tar-(-arr[n-1])); // as -ve
+
+        return count;
+    }
+    
+    // Memoization
+    
+        public int target1(int arr[],int n,int tar,int sum,int dp[][]){
+        if(n == 0){
+            return (tar == sum)?1:0; // 0 -> sum
+        }
+        
+        if(dp[n][tar] != -1)
+            return dp[n][tar];
+            
+        int count = 0;
+        if(tar-arr[n-1] >= 0)
+        count += target1(arr,n-1,tar-arr[n-1],sum,dp); // as +ve
+        if(tar+arr[n-1] <= 2*sum)
+        count += target1(arr,n-1,tar-(-arr[n-1]),sum,dp); // as -ve
+
+        return dp[n][tar] = count;
+    }
+
+    public int findTargetSumWays(int nums[],int S){
+        
+        int sum = 0;
+        for(int ele : nums)
+            sum += ele;
+        
+        if(sum < S || S < -sum)
+            return 0;
+        
+        int n = nums.length;
+        int dp[][] = new int[n+1][2*sum+1];
+        for(int d[] :dp)
+            Arrays.fill(d,-1);
+        
+        int ans = target1(nums,nums.length,S+sum,sum,dp);
+        return ans;
+    }
+
 //https://www.geeksforgeeks.org/0-1-knapsack-problem-dp-10/
 
     static int knapSack(int W, int wt[], int val[], int n) 
