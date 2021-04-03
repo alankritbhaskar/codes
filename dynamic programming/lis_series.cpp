@@ -221,6 +221,37 @@ int LDS(vector<int> &arr, vector<int> &dp)
 	    return maxSum;
 	}
 
+    	public int maxSumIS(int arr[], int n){  
+	    int dp[] = new int[n+1];
+	    Arrays.fill(dp,-1);
+	    
+	    if(n == 0)
+	        return 0;
+	        
+	    int maxSum = 0;
+	    for(int i=0;i<n;i++){
+	        maxSum = Math.max(maxSum,lisSum(arr,i,dp));
+	    }
+	    
+	    return maxSum;
+	}  
+	
+	public int lisSum(int arr[],int idx,int dp[]){
+	    int maxSum = arr[idx]; // important
+	    
+	    if(dp[idx] != -1)
+	        return dp[idx];
+	        
+	    for(int i=idx-1;i>=0;i--){
+	        int currSum = 0;
+	        if(arr[idx] > arr[i])
+	            currSum = lisSum(arr,i,dp);
+	        maxSum = Math.max(arr[idx]+currSum,maxSum);
+	    }
+	    
+	    return dp[idx] = maxSum;
+	}
+
 // https://practice.geeksforgeeks.org/problems/minimum-number-of-deletions-to-make-a-sorted-sequence3248/1
 
 	int minDeletions(int arr[], int n) 
@@ -244,6 +275,57 @@ int LDS(vector<int> &arr, vector<int> &dp)
 	    return maxLen;
 	}
 
+	// public int minDeletions(int arr[], int n) 
+	// { 
+	//    if(n == 0)
+	//     return 0;
+	//    int lisLen = 0;
+	   
+	//    int dp[] = new int[n+1];
+	//    Arrays.fill(dp,-1);
+	   
+	//    //for(int i=0;i<n;i++){
+	//    //    lisLen = Math.max(lisLen,lis(arr,i,dp));
+	//    //}
+	   
+	//    lisLen = lisDP(arr,n);
+	   
+	//    int minDel = n-lisLen;
+	//    return minDel;
+	// } 
+	
+	// public int lis(int arr[],int idx,int dp[]){
+	//     int maxLen = 1;
+	    
+	//     if(dp[idx] != -1)
+	//         return dp[idx];
+	        
+	//     for(int i=idx;i>=0;i--){
+	//         int len = 0;
+	//         if(arr[idx] > arr[i])
+	//             len = lis(arr,i,dp)+1;
+	//         maxLen = Math.max(len,maxLen);
+	//     }
+	    
+	//     return dp[idx] = maxLen;
+	// }
+	
+	// public int lisDP(int arr[],int n){
+    // int dp[] = new int[n+1];
+    
+    // int maxLen = 0;
+    // for (int i = 0; i < n; i++)
+    // {
+    //     dp[i] = 1;
+    //     for (int j = i; j >= 0; j--)
+    //     {
+    //         if (arr[i] > arr[j])
+    //             dp[i] = Math.max(dp[i],dp[j]+1);
+    //     maxLen = Math.max(maxLen, dp[i]);
+    //     }
+    // }
+    //     return maxLen;
+    // }
 
 // Leetcode 354:- Russian Doll Envelopes
 
