@@ -197,6 +197,47 @@ int LDS(vector<int> &arr, vector<int> &dp)
     return maxLen;
 }
 
+//  https://practice.geeksforgeeks.org/problems/maximum-sum-bitonic-subsequence/0#
+
+	public static int MSBS(int arr[],int n){
+	    
+	    int lis[] = lis_Sum_Ending(arr,n);
+	    int lds[] = lds_Sum_Starting(arr,n);
+	    
+	    int maxSum = 0;
+	    for(int i = 0; i < n; i++){
+	        maxSum = Math.max(maxSum,lis[i]+lds[i]-arr[i]);
+	    }
+	    
+	    return maxSum;
+	}
+	
+	public static int[] lis_Sum_Ending(int arr[],int n){
+	    int dp[] = new int[n];
+	    
+	    for(int i = 0; i < n; i++){
+	        dp[i] = arr[i];
+	        for(int j = i-1; j >=0; j--){
+	            if(arr[i] > arr[j])
+	            dp[i] = Math.max(dp[i],dp[j]+arr[i]);
+	        }
+	    }
+	    return dp;
+	}
+	
+	public static int[] lds_Sum_Starting(int arr[],int n){
+	    int dp[] = new int[n];
+	    
+	    for(int i = n-1; i >= 0; i--){
+	        dp[i] = arr[i];
+	        for(int j = i+1; j < n; j++){
+	            if(arr[i] > arr[j])
+	            dp[i] = Math.max(dp[i],dp[j]+arr[i]);
+	        }
+	    }
+        return dp;
+	}
+
 // https://practice.geeksforgeeks.org/problems/maximum-sum-increasing-subsequence4749/1
 
 	int maxSumIS(int arr[], int n)  
