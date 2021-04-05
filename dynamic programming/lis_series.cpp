@@ -327,6 +327,56 @@ int LDS(vector<int> &arr, vector<int> &dp)
     //     return maxLen;
     // }
 
+// Leetcode 673. Number of LIS
+
+    public int findNumberOfLIS(int[] nums) {
+        
+        int n = nums.length;
+        if(n == 0)
+        return 0;
+        
+        int ans = lis_helper(nums,n);
+        return ans;
+    }
+    
+    public int lis_helper(int arr[],int n){
+        int len[] = new int[n];
+        int count[] = new int[n];
+        
+        // these variables are kept so tha i may do this task in one pass
+        int maxLen = 0;
+        int maxCount = 0;
+        
+        for(int i=0;i<n;i++){
+            len[i] = 1;
+            count[i] = 1;
+            for(int j=i-1;j>=0;j--){
+                if(arr[i] > arr[j]){
+                    if(len[j]+1 > len[i]){
+                        len[i] = len[j]+1;
+                        count[i] = count[j];
+                    }
+                    else if(len[j]+1 == len[i]){
+                        len[i] = len[j]+1;
+                        count[i] += count[j];
+                    }
+            }
+            }
+            
+            if(len[i] > maxLen){
+                maxLen = len[i];
+                maxCount = count[i];
+            }
+            else if(len[i] == maxLen){
+                maxLen = maxLen;
+                maxCount += count[i];
+            }
+        }
+        
+        return maxCount;
+}
+
+
 // Leetcode 354:- Russian Doll Envelopes
 
 int maxEnvelopes(vector<vector<int>>& arr) {
