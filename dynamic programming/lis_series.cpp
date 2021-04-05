@@ -404,6 +404,31 @@ int maxEnvelopes(vector<vector<int>>& arr) {
 
 // Same as above problem approach
 
+// {sp1,ep1},{sp2,ep2},....
+    public static int buildingBridges(int arr[][]){
+
+        int n = arr.length;
+        int dp[] = new int[n];
+        int len = 0;
+        
+        // sorting on first array
+        Arrays.sort(arr,(a,b)->{
+            return a[0] - b[0]; // this - other, default behaviour
+        });
+
+        // lis
+        for(int i = 0; i < n ; i++){
+            dp[i] = 1;
+            for(int j = i-1; j >= 0 ; j--){
+                if(arr[j][0] < arr[i][0] && arr[j][1] < arr[i][1]) // strictly increasing so that no overlap
+                dp[i] = Math.max(dp[i],dp[j]+1);
+            }
+            len = Math.max(len,dp[i]);
+        }
+
+        return len;
+    }
+
 
 int main(int argc, const char** argv) {
     int ans=LISRec();
