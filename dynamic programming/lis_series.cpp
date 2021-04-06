@@ -470,6 +470,33 @@ int maxEnvelopes(vector<vector<int>>& arr) {
         return len;
     }
 
+// Leetcode 674. Longest Contiguous Increasing Subsequence
+
+    public int findLengthOfLCIS(int[] nums) {
+        int n = nums.length;
+        
+        if(n == 0)
+            return 0;
+        
+        int ans = lengthOfLIS(nums);
+        return ans;
+    }
+    
+    public int lengthOfLIS(int[] arr) {
+        int n = arr.length;
+        int dp[] = new int[n];
+
+        int maxLen = 1;
+        for(int i = n-1; i >= 0; i--){
+            dp[i] = 1;
+            for(int j = i+1; j < n; j++){
+                if(arr[i] < arr[j] && Math.abs(i-j) <= 1)// strictly increasing
+                    dp[i] = Math.max(dp[i],dp[j]+1);
+            }
+            maxLen = Math.max(maxLen,dp[i]);
+        }
+        return maxLen;
+    }
 
 int main(int argc, const char** argv) {
     int ans=LISRec();
