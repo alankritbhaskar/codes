@@ -88,7 +88,7 @@ public class cutStrategy{
 
  // https://www.geeksforgeeks.org/printing-brackets-matrix-chain-multiplication-problem/
 
-    public static 
+
 
 
 // https://www.geeksforgeeks.org/minimum-maximum-values-expression/
@@ -98,6 +98,9 @@ public class cutStrategy{
         int minValue = (int)1e9;
         int maxValue = -(int)1e9;
 
+        String minExp = "";
+        String maxExp = "";
+
         minMaxPair(){
 
         }
@@ -106,7 +109,16 @@ public class cutStrategy{
             this.minValue = minValue;
             this.maxValue = maxValue;
         }
+
+        
+        minMaxPair(int minValue,int maxValue,String minExp,String maxExp){
+            this.minValue = minValue;
+            this.maxValue = maxValue;
+            this.minExp = minExp;
+            this.maxExp = maxExp;
+        }
     }
+
 
     public static int evaluate(int a,int b,char ch){
         if(ch == '+')
@@ -115,19 +127,19 @@ public class cutStrategy{
             return a*b;
     }
 
-// here all the elements are positive constraint(else we would have to do multiple comparisons)
+// here all the elements are positive and single digit else would need an array for the indices of opearators ,constraint(else we would have to do multiple comparisons)
 
     public static minMaxPair minMaxEvaluation(String str,int si,int ei,minMaxPair dp[][]){
         if(si == ei){
             int val = str.charAt(si) - '0';
-            return dp[si][ei] = new minMaxPair(val,val);
+            return dp[si][ei] = new minMaxPair(val,val,val+"",val+"");
         }
 
         if(dp[si][ei] != null)
             return dp[si][ei];
 
         minMaxPair myAns = new minMaxPair();
-        for(int cut = 1; cut < ei; cut = cut+2){
+        for(int cut = si+1; cut < ei; cut = cut+2){
             minMaxPair leftAns = minMaxEvaluation(str,si,cut-1,dp);
             minMaxPair rightAns = minMaxEvaluation(str,cut+1,ei,dp);
 
@@ -135,13 +147,32 @@ public class cutStrategy{
             int minValue = evaluate(leftAns.minValue,rightAns.minValue,str.charAt(cut));
             int maxValue = evaluate(leftAns.maxValue,rightAns.maxValue,str.charAt(cut));
 
-            myAns.minValue = Math.min(myAns.minValue,minValue);
-            myAns.maxValue = Math.max(myAns.maxValue,maxValue);
+            // myAns.minValue = Math.min(myAns.minValue,minValue);
+            // myAns.maxValue = Math.max(myAns.maxValue,maxValue);
+
+            if(myAns.minValue > minValue){
+                myAns.minValue = minValue;
+                myAns.minExp = "("+leftAns.minExp+" "+ str.charAt(cut)+" "+rightAns.minExp+")";
+            }
+            if(myAns.maxValue < maxValue){
+                myAns.maxValue = maxValue;
+                myAns.maxExp = "("+leftAns.maxExp+" "+ str.charAt(cut)+" "+rightAns.maxExp+")";
+            }
         }
 
         return dp[si][ei] = myAns;
     }
 
+    public static void minMaxEvalutaionAns() {
+        String str = "1+2*3+4*5";
+        int n = str.length();
+        minMaxPair [][] dp = new minMaxPair[n][n];
+
+        minMaxPair ans = minMaxEvaluation(str, 0, n - 1, dp);
+        System.out.println("Min Value: " + ans.minValue + "\nMin Expression: " + ans.minExp);
+        System.out.println("Max Value: " + ans.maxValue + "\nMax Expression: " + ans.maxExp);
+
+    }
     public static void MCM(){
 
         int[] arr = {40,20,30,10,30};
@@ -160,7 +191,7 @@ public class cutStrategy{
     }
 
     public static void main(String[] args){
-        MCM();
+        minMaxEvalutaionAns();
     }
 
 // Boolean Parenthesization
