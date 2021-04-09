@@ -260,7 +260,99 @@ public class cutStrategy{
         return dp[si] = minCuts;
     }
 
+
+// https://practice.geeksforgeeks.org/problems/boolean-parenthesization5610/1
+
+/*
+Given a boolean expression S of length N with following symbols.
+Symbols
+    'T' ---> true
+    'F' ---> false
+and following operators filled between symbols
+Operators
+    &   ---> boolean AND
+    |   ---> boolean OR
+    ^   ---> boolean XOR
+Count the number of ways we can parenthesize the expression so that the value of expression evaluates to true.
+
+Example 1:
+
+Input: N = 7
+S = T|T&F^T
+Output: 4
+Explaination: The expression evaluates 
+to true in 4 ways ((T|T)&(F^T)), 
+(T|(T&(F^T))), (((T|T)&F)^T) and (T|((T&F)^T)).
+
+*/
+
+    public static class pair{
+        int trueWays = 0;
+        int falseWays = 0;
+        
+        pair(){
+            
+        }
+        
+        pair(int trueWays,int falseWays){
+            this.trueWays = trueWays;
+            this.falseWays = falseWays;
+        }
+    }
     
+    public static pair evaluate(pair left,pair right,char operator) {
+        
+        int mod = 1003;
+        int TotalWays = ((left.trueWays + left.falseWays) % mod * (right.trueWays + right.falseWays) % mod) % mod;
+
+        pair ans = new pair(0, 0);
+        if (operator == '&') {
+            ans.trueWays = (left.trueWays * right.trueWays) % mod;
+            ans.falseWays = (TotalWays - ans.trueWays + mod) % mod;
+        } else if (operator == '|') {
+            ans.falseWays = (left.falseWays * right.falseWays) % mod;
+            ans.trueWays = (TotalWays - ans.falseWays + mod) % mod;
+        } else {
+            ans.trueWays = (left.falseWays * right.trueWays) % mod + (left.trueWays * right.falseWays) % mod;
+            ans.falseWays = (TotalWays - ans.trueWays + mod) % mod;
+        }
+
+        return ans;
+    }
+    
+    public static pair parenthesize(String s,int si,int ei,pair dp[][]){
+        if (si == ei) {
+            char ch = s.charAt(si);
+            if(ch == 'T')
+                return dp[si][ei] = new pair(1,0);
+            else
+                return dp[si][ei] = new pair(0,1);
+        }
+
+        if (dp[si][ei] != null)
+            return dp[si][ei];
+
+        pair myAns = new pair(0, 0);
+        for (int cut = si + 1; cut < ei; cut += 2) {
+            char op = s.charAt(cut);
+            pair leftAns = parenthesize(s,si,cut-1,dp);
+            pair rightAns = parenthesize(s,cut+1,ei,dp);
+
+            pair recAns = evaluate(leftAns,rightAns,op);
+            myAns.trueWays = (myAns.trueWays + recAns.trueWays) % 1003;
+            myAns.falseWays = (myAns.falseWays + recAns.falseWays) % 1003;
+        }
+
+        return dp[si][ei] = myAns;
+    }
+    
+    static int countWays(int N, String S){
+        pair dp[][] = new pair[N][N];
+        pair ans = parenthesize(S,0,N - 1,dp);
+
+        return ans.trueWays;
+    }
+
     public static void minMaxEvalutaionAns() {
         String str = "1+2*3+4*5";
         int n = str.length();
