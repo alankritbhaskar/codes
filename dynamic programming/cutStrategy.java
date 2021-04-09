@@ -88,7 +88,57 @@ public class cutStrategy{
 
  // https://www.geeksforgeeks.org/printing-brackets-matrix-chain-multiplication-problem/
 
+    public static class pair{
+        int minCost = (int)1e9;
+        String minCostExp = "";
 
+        pair(){
+
+        }
+
+        pair(int minCost,String minCostExp){
+            this.minCost = minCost;
+            this.minCostExp = minCostExp;
+        }
+    }
+
+    public static String matrixChainOrder(int p[], int n){
+        pair ans = mcm(p,n);
+        return ans.minCostExp;
+    }
+
+    public static pair mcm(int p[],int n){
+        pair dp[][] = new pair[n][n];
+
+        pair ans = mcmBracket(p,0,n-1,dp);
+        return ans;
+    }
+
+    public static pair mcmBracket(int p[],int si,int ei,pair dp[][]){
+        if(si+1 == ei){
+            char alpha = (char)(si+'A');
+            return dp[si][ei] = new pair(0,alpha+"");
+        }
+
+        if(dp[si][ei] != null)
+            return dp[si][ei];
+
+        pair myAns = new pair();
+
+        for(int cut=si+1;cut<ei;cut++){
+            pair leftAns = mcmBracket(p,si,cut,dp);
+            pair rightAns = mcmBracket(p,cut,ei,dp);
+
+            int minCost = leftAns.minCost+(p[si]*p[cut]*p[ei])+rightAns.minCost;
+
+            if(myAns.minCost > minCost){
+                myAns.minCost = minCost;
+                myAns.minCostExp = "("+leftAns.minCostExp+")"+"("+rightAns.minCostExp+")";
+            }
+        }
+
+        return dp[si][ei] = myAns;
+    }
 
 
 // https://www.geeksforgeeks.org/minimum-maximum-values-expression/
@@ -163,6 +213,54 @@ public class cutStrategy{
         return dp[si][ei] = myAns;
     }
 
+
+// Leetcode 132. Palindrome Partitioning - II
+
+// Faith:- Start to iterate from left to right and always make a valid cut at all possible palindromic substrings(which we will check in O(1) by pre-processing
+    
+    public int minCut(String s) {
+        // pre-processing for boolean palindrome substring check in O(1)
+        
+        int n = s.length();
+        boolean isPalindrome[][] = new boolean[n][n];
+        
+        for(int gap = 0;gap < n;gap++){
+            for(int i = 0,j = gap;i < n && j < n;i++,j++){
+                if(gap == 0)
+                    isPalindrome[i][j] = true;
+                else if(gap == 1)
+                    isPalindrome[i][j] = (s.charAt(i) == s.charAt(j));
+                else
+                    isPalindrome[i][j] = (s.charAt(i) == s.charAt(j))?isPalindrome[i+1][j-1]:false;
+            }
+        }
+        
+        int dp[] = new int[n];
+        Arrays.fill(dp,-1);
+        
+        int ans = minPartitions(s,0,isPalindrome,dp);
+        return ans;
+    }
+    
+    int minPartitions(String s,int si,boolean isPalindrome[][],int dp[]){
+        // base case for avoiding the corner cases as mentioned in notes
+        if(isPalindrome[si][s.length()-1])
+            return dp[si] = 0;
+        
+        if(dp[si] != -1)
+            return dp[si];
+        
+        int minCuts = (int)1e9;
+        for (int cut = si; cut < s.length(); cut++) {
+            if (isPalindrome[si][cut]) {
+                minCuts = Math.min(minCuts, minPartitions(s, cut + 1, isPalindrome, dp) + 1);
+            }
+        }
+        
+        return dp[si] = minCuts;
+    }
+
+    
     public static void minMaxEvalutaionAns() {
         String str = "1+2*3+4*5";
         int n = str.length();
@@ -173,25 +271,31 @@ public class cutStrategy{
         System.out.println("Max Value: " + ans.maxValue + "\nMax Expression: " + ans.maxExp);
 
     }
+
+
     public static void MCM(){
 
-        int[] arr = {40,20,30,10,30};
+        int[] arr = {3,3};
         int n = arr.length;
-        int[][] dp = new int[n][n];
+        // int[][] dp = new int[n][n];
         // int  ans = MCM_DP_String(arr,0,n-1,dp);
-        for(int d[]: dp)
-            Arrays.fill(d,-1);
+        // for(int d[]: dp)
+        //     Arrays.fill(d,-1);
 
-        int ans = mcm_memo1(arr,0,n-1,dp);
+        // int ans = mcm_memo1(arr,0,n-1,dp);
         //int ans=MCM_DP_String(arr,0,n-1,dp);
 
-        print2D(dp);
+        pair dp[][] = new pair[n][n];
 
-        System.out.println(ans);
+        String ans1 = matrixChainOrder(arr,n);
+        System.out.println(ans1);
+
+        // System.out.println(ans);
     }
 
     public static void main(String[] args){
-        minMaxEvalutaionAns();
+        // minMaxEvalutaionAns();
+        MCM();
     }
 
 // Boolean Parenthesization
