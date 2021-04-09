@@ -364,6 +364,55 @@ to true in 4 ways ((T|T)&(F^T)),
 
     }
 
+// Leetcode 312. Burst Balloons
+/*
+You are given n balloons, indexed from 0 to n - 1. 
+Each balloon is painted with a number on it represented by an array nums. 
+You are asked to burst all the balloons.
+
+If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. 
+If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
+
+Return the maximum coins you can collect by bursting the balloons wisely.
+
+Example:
+Input: nums = [3,1,5,8]
+Output: 167
+Explanation:
+nums = [3,1,5,8] --> [3,5,8] --> [3,8] --> [8] --> []
+coins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167
+*/
+
+    public int burst(int arr[],int si,int ei,int dp[][]){
+        
+        if(dp[si][ei] != -1)
+            return dp[si][ei];
+        
+        int leftVal = (si-1 == -1)?1:arr[si-1];
+        int rightVal = (ei+1 == arr.length)?1:arr[ei+1];
+        
+        int maxCost = -(int)1e9;
+        for(int cut = si;cut <= ei;cut++){
+            int leftAns = (cut == si)?0:burst(arr,si,cut-1,dp); // handled left most index out of bound case
+            int rightAns = (cut == ei)?0:burst(arr,cut+1,ei,dp); // handled rightmost index out of bound case
+            
+            int myAns = leftAns+leftVal*arr[cut]*rightVal+rightAns;
+            maxCost = Math.max(maxCost,myAns);
+        }
+        
+        return dp[si][ei] = maxCost;    
+    }
+    
+    public int maxCoins(int[] nums) {
+        int n = nums.length;
+        int dp[][] = new int[n][n];
+        
+        for(int d[]: dp)
+            Arrays.fill(d,-1);
+        
+        int ans = burst(nums,0,n-1,dp);
+        return ans;
+    }
 
     public static void MCM(){
 
