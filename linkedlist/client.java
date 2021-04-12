@@ -1,4 +1,7 @@
 public class client{
 
-    public class 
+    public static void main(String args[]) throws Exception{
+        linkedList ll = new linkedList();
+        ll.removeFirst();
+    }
 }
