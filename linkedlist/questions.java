@@ -496,6 +496,54 @@ Output: 1 2 3 4 5
         return dummy.next;
     }
 
+// Leetcode 141. Linked List Cycle
+
+    public boolean hasCycle(ListNode head) {
+        if(head == null || head.next == null)
+            return false;
+        
+        ListNode slow = head;
+        ListNode fast = head;
+        
+        while(fast != null && fast.next != null){
+            fast = fast.next.next; // 2:1 speed
+            slow = slow.next;
+            
+            if(slow == fast)
+                return true;
+        }
+        return false;
+    }
+
+// Leetcode 142. Linked List Cycle- II
+
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null)
+            return null;
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if(slow == fast)
+                break;
+        }
+
+        if(slow != fast)
+            return null; // loop terminated due to null i.e. no cycle
+        
+        slow = head;
+
+        while(slow != fast){
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        return slow;           
+    }
 
 
 }
