@@ -545,5 +545,294 @@ Output: 1 2 3 4 5
         return slow;           
     }
 
+// Leetcode 160. Intersection of two linked lists
+
+// Approach 1
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null)
+            return null;
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while(fast != null && fast.next != null){
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if(slow == fast)
+                break;
+        }
+
+        if(slow != fast)
+            return null; // loop terminated due to null i.e. no cycle
+        
+        slow = head;
+
+        while(slow != fast){
+            slow = slow.next;
+            fast = fast.next;
+        }
+
+        return slow;           
+    }
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if(headA == null || headB == null)
+            return null; // no intersection point in this case
+        
+        ListNode tail = headA;
+        while(tail.next != null)
+            tail = tail.next;
+        tail.next = headB;
+
+        ListNode intersectionPoint = detectCycle(headA);
+        
+        tail.next = null;// restored the list
+        return intersectionPoint;
+    }
+
+// Approach 2
+
+        public int length(ListNode head){
+        if(head == null || head.next == null)
+         return (head == null)?0:1;
+        
+        int len = 0;
+        ListNode curr = head;
+        while(curr != null){
+            curr = curr.next;
+            len++;
+        }
+        return len;
+    }
+
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if(headA == null || headB == null)
+            return null; // no intersection point in this case
+        
+        int l1 = length(headA);
+        int l2 = length(headB);
+        ListNode c1 = headA;
+        ListNode c2 = headB;
+
+        if(l1-l2 >= 0){
+            int diff = l1-l2;
+            while(diff-- > 0)
+                c1 = c1.next;
+        }
+        else{
+            int diff = l2-l1;
+            while(diff-- > 0)
+                c2 = c2.next;
+        }
+
+        while(c1 != c2){
+            c1 = c1.next;
+            c2 = c2.next;
+
+            if(c1 == c2)
+                break;
+        }
+
+        if(c1 != c2)
+            return null;
+        else
+            return c1;
+    }
+
+// Leetcode 19. Remove nth node from end of linked list
+
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        if(head == null)
+            return null;
+        
+        ListNode c1 = head;
+        ListNode c2 = head;
+        
+        while(n-- > 0)
+            c2 = c2.next;
+        
+        if(c2 == null){ 
+            ListNode temp = head;
+            head = head.next;
+            temp.next = null;
+            return head;
+        }
+        
+        while(c2.next != null){
+            c2 = c2.next;
+            c1 = c1.next;
+        }
+        
+        ListNode temp = c1.next;
+        c1.next = c1.next.next;
+        temp.next = null;
+        return head;
+    }
+
+// Leetcode 25. Reverse Nodes in k-groups
+
+// Steps:-
+// 1. Calculate the length of LL
+// 2. Till len >= k:
+//       2.1. For each k sized sub list; take a node and add addFirst
+//    3. Update oh and ot with th and tt
+//    4. th and tt, re-initialize with null
+//    5. Append the left non-reversed sublist as it is 
+    
+    ListNode tt = null;// temporary tail
+    ListNode th = null;// temporary head
+    
+    public int lengthOfLL(ListNode head){
+        if(head == null)
+            return 0;
+        
+        int len = 0;
+        ListNode curr = head;
+        
+        while(curr != null){
+            curr = curr.next;
+            len++;
+        }
+        return len;
+    }
+
+    public void addFirstNode(ListNode node){
+    if (th == null){
+        th = node;
+        tt = node;
+    }
+    else{
+        node.next = th;
+        th = node;
+    }
+    }
+
+    public ListNode reverseKGroup(ListNode head, int k){
+        if (head == null || head.next == null || k == 1)
+            return head;
+
+    // original head, original tail
+    ListNode oh = null;
+    ListNode ot = null;
+
+    int len = lengthOfLL(head);
+    ListNode curr = head;
+
+    while (len >= k)
+    {
+        int tempK = k;
+        while (tempK-- > 0)
+        {
+            ListNode fwd = curr.next;
+            curr.next = null;
+            addFirstNode(curr);
+            curr = fwd;
+        }
+        
+        if (oh == null){
+            oh = th;
+            ot = tt;
+        }
+        else{
+            ot.next = th;
+            ot = tt;
+        }
+
+        th = null;
+        tt = null;
+        len -= k;
+    }
+
+    ot.next = curr;
+    return oh;
+   }
+
+// Leetcode 138. Copy Linked List with Random pointers
+
+// O(n) time, O(n) space
+    public Node copyRandomList(Node head) {
+        Node curr = head;
+        Node nHead = new Node(-1);
+        Node prev = nHead;
+        
+        HashMap<Node,Node> map = new HashMap<>();
+        while(curr != null){
+           Node newNode = new Node(curr.val);
+           map.put(curr,newNode);
+           prev.next = newNode; 
+           prev = prev.next; 
+           curr = curr.next; 
+        }
+        
+        nHead = nHead.next;
+        Node c1 = head;
+        Node c2 = nHead;
+        
+        while(c1 != null){
+            // important to handle the case for null pointer using the check
+            c2.random = (c1.random != null)?map.get(c1.random):null;
+            c1 = c1.next;
+            c2 = c2.next;
+        }
+        
+        return nHead;   
+    }
+
+// O(1) space
+
+// First step is to copy all the nodes by inserting new nodes in the same linked list in an alternate fashion 
+    public void copyList(Node head){
+        Node curr = head;
+        while(curr != null){
+            Node fwd = curr.next;
+
+            Node newNode = new Node(curr.val);
+            curr.next = newNode;
+            newNode.next = fwd;
+
+            curr = fwd; 
+        }
+    }
+
+// Next step, copy the random pointers
+    public void copyRandomPointers(Node head){
+        Node curr = head;
+        while(curr != null){
+            Node random = curr.random;
+            if(random != null){
+                curr.next.random = random.next;
+            }
+            curr = curr.next.next;
+        }
+    }
+
+// Separate the original list
+    public Node extractDeepCopy(Node head){
+        Node dummy = new Node(-1);
+        Node prev = dummy;
+
+        Node curr = head;
+
+        while(curr != null){
+            prev.next = curr.next;
+            curr.next = curr.next.next;
+
+            prev = prev.next;
+            curr = curr.next;
+        }
+
+        return dummy.next;
+    }
+
+    public Node copyRandomList(Node head) {
+        if(head == null)
+            return null;
+        
+        copyList(head);
+        copyRandomPointers(head);
+        return extractDeepCopy(head);
+    }
+
 
 }
