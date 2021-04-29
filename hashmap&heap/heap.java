@@ -2,40 +2,105 @@ import java.util.ArrayList;
 
 public class heap{
 
-    public class MyHeap{
-        ArrayList<Integer> arr=new ArrayList<>();
+    private ArrayList<Integer> arr;
+    private boolean isMaxHeap = true;
 
-        private void constructHeap(int data[]){
-        for(int d: data)
-        arr.add(d);
+    void defaultValue(boolean isMaxHeap){
+        this.arr = new ArrayList<>();
+        this.isMaxHeap = isMaxHeap;
+    }
+    
+// Constructors
 
-        for(int i=arr.size()-1;i>=0;i--)
-            downHeapify(i);
-        }
+    // Jo heap bnegi wo maxHeap hogi and usme user ko authority hogi ki wo ek ek krke elements enter kre
+    heap(){
+        defaultValue(true);
+    }
 
-        private void downHeapify(int pi){
-        int maxIdx=pi;
-        int lci=2*pi+1;
-        int rci=2*pi+2;
+    // Jo heap bnegi wo user decided hogi and usme user ko authority hogi ki wo ek ek krke elements enter kre
+    heap(boolean isMaxHeap){
+        defaultValue(isMaxHeap);
+    }
 
-        if(lci<arr.size() && arr.get(lci)>arr.get(maxIdx))
-        maxIdx=lci;
-        if(rci<arr.size() && arr.get(rci)>arr.get(maxIdx))
-        maxIdx=rci;
+    // Jo heap bnegi wo user decided heap hogi and usme user ko authority hogi ki wo complete array enter kr ske
+    heap(int arr[],boolean isMaxHeap){
+        defaultValue(isMaxHeap);
+        for(int ele: arr)
+            this.arr.add(ele); //I want the changes to be reflected in my arraylist, not of the user
+        constructHeap();
+    }
 
-        if(maxIdx!=pi){
-            swap(pi,maxIdx);
-            downHeapify(maxIdx);
-        }
+    private void swap(int i,int j){
+        int temp = this.arr.get(i);
+        arr.set(i,arr.get(j));
+        arr.set(j,temp);
+    }
 
-        }
+    private void constructHeap(){ // Seems to be O(nlogn) but actually it is O(n)
+        for(int i = this.arr.size()-1;i >= 0;i--)
+            downHeapify(i); // jao is index ko heap me convert krke lao
+    }
 
-        private void swap(int i,int j){
-            int v1=arr.get(i);
-            int v2=arr.get(j);
+// this,other
+    private boolean compareTo(int i,int j){
+        
+    }
 
-            arr.set(i,v2);
-            arr.set(j,v1);
+    public int size(){
+        return this.arr.size();
+    }
+
+    public boolean isEmpty(){
+        return this.arr.size() == 0;
+    }
+
+    private void upHeapify(int ci){
+        int pi = (ci - 1)/2;
+
+        if(pi >= 0 && this.arr.get(ci) > this.arr.get(pi)){
+            swap(pi,ci);
+            upHeapify(pi);
         }
     }
+
+// O(log n)
+    public void add(int data){
+        this.arr.add(data);
+        int n = this.arr.size();
+
+        upHeapify(n-1);
+    }
+
+    public int top(){
+        return this.arr.get(0); // return the first element
+    }
+
+    private void downHeapify(int pi) { // O(logn)
+        int maxIdx = pi;
+        int lci = 2 * pi + 1;
+        int rci = 2 * pi + 2;
+
+        if (lci < arr.size() && this.arr.get(lci) > this.arr.get(maxIdx))
+            maxIdx = lci;
+
+        if (rci < arr.size() && this.arr.get(rci) > this.arr.get(maxIdx))
+            maxIdx = rci;
+
+        if (maxIdx != pi) {
+            swap(pi, maxIdx);
+            downHeapify(maxIdx);
+        }
+    }
+
+// O(log n)
+    public int remove(){
+        int removedElement = this.arr.get(0);
+        int n = this.arr.size();
+        swap(0,n-1);
+
+        this.arr.remove(n-1);
+        downHeapify(0);
+        return removedElement;
+    }
+
 }
