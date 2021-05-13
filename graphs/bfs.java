@@ -90,18 +90,23 @@ public class bfs{
     public static void BFS_01(int src,boolean vis[]){
     LinkedList<Integer> que=new LinkedList<>();
     que.addLast(src);
+
     boolean cycle=false;
+    
     while(que.size()!=0){
-        int vtx=que.removeFirst();
+        int vtx = que.removeFirst();
+
         //optimum pos. for cycle detection
         if(vis[vtx]){
-        cycle=true;
+        cycle = true;
         continue;//agar same vtx pehle se visited hai to to usme nbrs ko que me add nhi krenge
         }
+
         vis[vtx]=true;
+        
         for(Edge e: graph[vtx]){
-        if(!vis[e.v])
-        que.addLast(e.v);
+         if(!vis[e.v])
+         que.addLast(e.v);
     }
     }
     }
@@ -139,19 +144,28 @@ public class bfs{
     //......Cycle Wala BFS........
     public static void BFS_03_WithCycle(int src,boolean vis[]){
     LinkedList<Integer> que=new LinkedList<>();
+    int dest = 6;
     que.addLast(src);
     boolean cycle=false;
+    boolean found = false;
+
     int level=0;
     int dis[]=new int[n];//stores min. dist. from src vtx to all vertex
-    while(que.size()!=0){
-        int size=que.size();
-        while(size-->0){
-            int vtx=que.removeFirst();
+
+    while(que.size() != 0){
+        int size = que.size();
+        while(size-- > 0){
+            int vtx = que.removeFirst();
             if(vis[vtx]){
                 cycle=true;
                 continue;
             }
+            if(vtx == dest){
+                found = true;
+                continue;
+            }
             dis[vtx]=level;
+            
             for(Edge e: graph[vtx]){
                 if(!vis[e.v]){
                     que.addLast(e.v);
@@ -162,6 +176,7 @@ public class bfs{
         level++;
     }
 
+// BFS for shortest path
     public static void BFS_04_WithoutCycle(int src,boolean vis[]){
     LinkedList<Integer> que=new LinkedList<>();
     que.addLast(src);
@@ -171,7 +186,7 @@ public class bfs{
     int dis[]=new int[n];
     while(que.size()!=0){
         int size=que.size();
-        while(size-->0){
+        while(size-- > 0){
             int vtx=que.removeFirst();
             dis[vtx]=level;
             for(Edge e: graph[vtx]){
@@ -181,8 +196,63 @@ public class bfs{
                 }
             }
         }
+        level++;
     }
-    level++;
+    }
+
+// BFS for shortestPath Print
+
+public static void BFS_04_WithoutCycle(int src,int dest,boolean vis[]){
+    LinkedList<Integer> que = new LinkedList<>();
+    que.addLast(src);
+    vis[src] = true;
+
+    int atLevel = -1;
+    int level = 0;
+    int dis[] = new int[n];
+    int parent[] = new int[n];
+    Arrays.fill(parent,-1);
+
+    while(que.size() != 0){
+        int size = que.size();
+        while(size-- > 0){
+            int vtx = que.removeFirst();
+            dis[vtx] = level;
+            
+            for(Edge e: graph[vtx]){
+                if(!vis[e.v]){
+                    vis[e.v] = true;
+                    que.addLast(e.v);
+                    parent[e.v] = vtx;
+                }
+
+                if(e.v == dest)
+                    atLevel = level + 1;
+            }
+        }
+        level++;
+    }
+    System.out.print(dest+"is present at distance:"+atLevel);
+    int idx = dest;
+
+    while(idx != -1){
+        System.out.print(idx+"-> ");
+        idx = parent[idx];
+    }
+    }
+
+// If graphs are disconnected
+    public static int BFS_GCC(int n){
+        boolean vis[] = new boolean[n];
+
+        int components = 0;
+        for(int i = 0;i < n;i++){
+            if(!vis[i]){
+                BFS_03_WithCycle(i,vis);
+                components++;
+            }
+        }
+        return components;
     }
 
     public static void main(String args[]){
