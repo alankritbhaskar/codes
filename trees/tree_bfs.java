@@ -496,6 +496,64 @@ public class tree_bfs{
         return ans;
     }
 
+// 987. Vertical Order Traversal with (x,y)
+
+    public class verticalPair{
+        int x = 0; // horizontal level
+        int y = 0; // vertical level
+        TreeNode node = null;
+        
+        verticalPair(TreeNode node,int x,int y){
+            this.node = node;
+            this.x = x;
+            this.y = y;
+        }
+    }
+    
+    public void width(TreeNode node,int hl,int minMax[]){
+        if(node == null)
+            return;
+        
+        minMax[0] = Math.min(minMax[0],hl);
+        minMax[1] = Math.max(minMax[1],hl);
+        
+        width(node.left,hl-1,minMax);
+        width(node.right,hl+1,minMax);
+    }
+    
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        PriorityQueue<verticalPair> que = new PriorityQueue<>((a,b)->{
+             // comp to be done on basis of y
+            if(a.y != b.y)
+                return a.y-b.y;// agar y ki val diff hai then smaller y value comes first // this - other -> minPQ
+            else
+                return a.node.val - b.node.val; // this - other // default
+        }); 
+        
+        int minMax[] = new int[2];
+        width(root,0,minMax);
+        int len = minMax[1]-minMax[0]+1;
+        List<List<Integer>> ans = new ArrayList<>();
+        for(int i = 0;i < len;i++)
+            ans.add(new ArrayList<>());
+        
+        que.add(new verticalPair(root,-minMax[0],0)); // vertical level = 0 initially
+        
+        // RPA
+        while(que.size() > 0){
+            verticalPair rp = que.remove();
+            
+            ans.get(rp.x).add(rp.node.val);
+            
+            if(rp.node.left != null)
+                que.add(new verticalPair(rp.node.left,rp.x-1,rp.y+1));
+            if(rp.node.right != null)
+                que.add(new verticalPair(rp.node.right,rp.x+1,rp.y+1));
+        }
+        
+        return ans;
+    }
+
 
 
     public static void main(String args[]){
