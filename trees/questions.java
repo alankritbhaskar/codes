@@ -84,6 +84,31 @@ public class question {
         return new ArrayList<>(); // return blank arraylist in case no root to node path found
      }
 
+     public ArrayList<TreeNode> nodeToRootPath(TreeNode node, TreeNode data) {
+         if(node == null)
+         return new ArrayList<>();
+
+         ArrayList<TreeNode> left = nodeToRootPath(node.left,data);
+         if(left.size() > 0){
+             left.add(node);
+             return left;
+         }
+
+        ArrayList<TreeNode> right = nodeToRootPath(node.right,data);
+        if(right.size() > 0){
+            right.add(node);
+            return right;
+        }
+
+        if(node == data){
+             ArrayList<TreeNode> base = new ArrayList<>();
+             base.add(node);
+             return base;
+         }
+
+        return new ArrayList<>(); // return blank arraylist in case no root to node path found
+     }
+
 // Leetcode 236. Lowest Common Ancestor of a binary tree
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
@@ -126,14 +151,76 @@ public class question {
 // Leetcode 863. All Nodes Distance K in Binary Tree
 
     public List<Integer> distanceK(TreeNode root, TreeNode target, int K) {
+        List<TreeNode> path = nodeToRootPath(root,target);
 
+        List<Integer> ans = new ArrayList<>();
+        TreeNode blockNode = null;
+
+        for(int i=0;i<path.size();i++){
+            printKDown(path.get(i),blockNode,K-i,ans);
+            blockNode = path.get(i);
+        }
+
+        return ans;
     }
 
 
+// Node to root distance
 
+public static int rootToNodeDistance(TreeNode node,TreeNode data){
+    if(node == null)
+        return -1;
+    
+    if(node == data)
+        return 0;
+    
+    int lans = rootToNodeDistance(node.left,data);
+    if(lans != -1)
+        return lans+1;
+    
+    int rans = rootToNodeDistance(node.right,data);
+    if(rans != -1)
+        return rans+1;
 
+    return -1;
+}
 
+// 968. Binary Tree Cameras
 
+    
+    // 0 - the node has camera
+    // -1 - the node needs camera
+    // 1 - the node is covered by another camera, if any child node has camera
+    
+    public int cameras = 0;
+    
+    public int minCameraTree(TreeNode root){
+        if(root == null)
+            return 1;
+        
+        int leftChild = minCameraTree(root.left);
+        int rightChild = minCameraTree(root.right);
+        
+        if(leftChild == -1 || rightChild == -1){
+            cameras++;
+            return 0;
+        }
+        
+        else if (leftChild == 0 || rightChild == 0){
+            return 1;
+        }
+        
+        else
+            return -1;      
+    }
+    
+    public int minCameraCover(TreeNode root) {
+        if(minCameraTree(root) == -1)
+            cameras++; // in case root needs a camera we are bound to place one here
+        
+        return cameras;
+    }
+    
 
 // https://www.geeksforgeeks.org/burn-the-binary-tree-starting-from-the-target-node/
 
@@ -300,6 +387,89 @@ public class question {
     // return ans;
     // }
 
+// https://practice.geeksforgeeks.org/problems/check-for-balanced-tree/1
+
+class Node
+{
+	int data;
+	Node left,right;
+	
+	Node(int d)
+	{
+		data = d;
+		left = right = null;		
+	}
+} 
+
+class Tree
+{
+    
+    //Function to check whether a binary tree is balanced or not.
+    
+    // O(n^2)
+    
+    int height(Node root){
+        if(root == null)
+            return -1; // in terms of edges
+        
+        int lh = height(root.left);
+        int rh = height(root.right);
+        
+        return Math.max(lh,rh)+1;
+    }
+    
+    boolean isBalanced1(Node root)
+    {
+	    if(root == null)
+	        return true;
+	       
+	    int  lsubtree = height(root.left);
+	    int  rsubtree = height(root.right);
+	    
+	    if(isBalanced1(root.left) && isBalanced1(root.right) && Math.abs(lsubtree-rsubtree) <= 1)
+	        return true;
+	    else
+	        return false;
+    }
+
+// O(n)
+
+    public class pair{
+        int h = 0;
+        boolean isBalance = false;
+        
+        pair(){
+            
+        }
+        
+        pair(int h,boolean isBalance){
+            this.h = h;
+            this.isBalance = isBalance;
+        }
+    }
+    
+    pair balance(Node root){
+        if(root == null)
+            return new pair(-1,true);
+        
+        pair l = balance(root.left);
+        pair r = balance(root.right);
+        
+        pair myAns = new pair();
+        myAns.h = Math.max(l.h,r.h)+1;
+        if(l.isBalance == true && r.isBalance == true && Math.abs(l.h-r.h) <= 1)
+            myAns.isBalance = true;
+        else
+            myAns.isBalance = false;
+        return myAns;
+    }
+    
+    boolean isBalanced(Node root){
+        boolean ans = balance(root).isBalance;
+        return ans;
+    }
+}
+
 // https://practice.geeksforgeeks.org/problems/maximum-path-sum/1 ..... Max path sum bw two leaf
 
     int maxPathSumLeafToLeaf = -(int)1e9; // max path sum between two leaves
@@ -403,5 +573,71 @@ public class question {
 
 // Method 2:- Using the concept, for a BST inorder traversal gives a sorted order
 
+    long prevNodeData = -(long)1e15;
+    
+    public boolean isBST(TreeNode root){
+        if(root == null)
+            return true;
+        
+        if(!isBST(root.left))
+            return false;
+        
+        if(root.val <= prevNodeData)
+            return false;
+        prevNodeData = root.val;
+        
+        if(!isBST(root.right))
+            return false;
+        return true;
+    }
+    
+    public boolean isValidBST(TreeNode root) {
+        if(root == null)
+            return true;
+        else{
+            boolean ans= isBST(root);
+            return ans;
+        }
+    }
 
+
+// 99. Recover BST 
+
+    TreeNode a = null, b = null, prev = null;
+
+    public boolean recoverTree_(TreeNode root){
+        if(root == null)
+            return true;
+        
+        if(!recoverTree_(root.left))
+            return false;
+        
+        if(prev != null && prev.val > root.val){
+            b = root;
+            if(a == null)
+                a = prev;
+            else
+                return false;
+        }
+
+        prev = root;
+
+        if(!recoverTree_(root.right))
+            return false;
+        
+        return true;
+    }
+
+    public void recoverTree(TreeNode root){
+        recoverTree_(root);
+        if(a != null){
+            int temp = a.val;
+            a.val = b.val;
+            b.val = temp;
+        }
+    }
+
+
+
+    
 }

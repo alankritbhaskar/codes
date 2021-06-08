@@ -106,4 +106,66 @@ public class heap{
         return removedElement;
     }
 
+// 380. Insert, delete and getRandom in O(1)
+
+class RandomizedSet {
+    
+    HashMap<Integer,Integer> hm;
+    ArrayList<Integer> arr ;
+    
+    
+    /** Initialize your data structure here. */
+    public RandomizedSet() {
+        hm = new HashMap<>();
+        arr = new ArrayList<>();
+    }
+    
+    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+    public boolean insert(int val) {
+        if(hm.containsKey(val))
+            return false;
+        arr.add(val);
+        int idx = arr.size()-1; // 0 or greater 
+        hm.put(val,idx);
+        return true;
+    }
+    
+    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    public boolean remove(int val) {
+        if(!hm.containsKey(val))
+            return false;
+        
+        int cidx=hm.get(val);
+        int lidx=arr.size()-1;
+        
+        hm.put(arr.get(lidx),cidx);
+        hm.remove(val);
+        arr.set(cidx,arr.get(lidx));
+        arr.remove(lidx);
+        return true;
+    }
+    
+    /** Get a random element from the set. */
+    public int getRandom() {
+        // define the range
+        int max = arr.size()-1;
+        int min = 0;
+        int range = max - min + 1;
+  
+        // generate random indices
+        int rand = (int)(Math.random() * range) + min;
+        return arr.get(rand);
+    }
+}
+
+
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet obj = new RandomizedSet();
+ * boolean param_1 = obj.insert(val);
+ * boolean param_2 = obj.remove(val);
+ * int param_3 = obj.getRandom();
+ */
+
+ 
 }

@@ -588,6 +588,55 @@ long long int uniquePathDP(int sr,int sc,int er,int ec,vector<vector<int>> &grid
         return minCostClimbingStairsDP(n,cost,dp);
 }
 
+// Mobile Numeric Keypad
+// https://practice.geeksforgeeks.org/problems/mobile-numeric-keypad5456/1
+
+    // Faith:- mobKeypadMemo(sr,sc,n) = mobKeypad(sr+d,sc+d,n-1)
+    public long mobKeypadMemo(int sr,int sc,int n,long dp[][],int keypad[][]){
+        if(n == 1)
+            return dp[keypad[sr][sc]][n] = 1;
+        
+        if(dp[keypad[sr][sc]][n] != -1)
+            return dp[keypad[sr][sc]][n];
+        
+        long u = 0, r = 0, d = 0, l = 0;
+        int m1 = keypad.length;
+        int n1 = keypad[0].length;
+        
+        long mine = mobKeypadMemo(sr,sc,n-1,dp,keypad);
+        
+        if(sr-1 >=0 && keypad[sr-1][sc] != -1) // up
+            u = mobKeypadMemo(sr-1,sc,n-1,dp,keypad);
+        if(sc+1 < n1 && keypad[sr][sc+1] != -1) // right
+            r = mobKeypadMemo(sr,sc+1,n-1,dp,keypad);
+        if(sr+1 < m1 && keypad[sr+1][sc] != -1) // down
+            d = mobKeypadMemo(sr+1,sc,n-1,dp,keypad);
+        if(sc-1 >= 0 && keypad[sr][sc-1] != -1) // left
+            l = mobKeypadMemo(sr,sc-1,n-1,dp,keypad);
+        
+        return dp[keypad[sr][sc]][n] = mine+u+r+d+l;
+    }
+    
+	public long getCount(int n)
+	{   
+	    int keypad[][] = {{1,2,3},{4,5,6},{7,8,9},{-1,0,-1}};
+	    
+		long dp[][] = new long[10][n+1];
+		
+		for(long d[]: dp)
+		    Arrays.fill(d,-1);
+		
+		long ans = 0;
+		
+		for(int sr = 0; sr < keypad.length;sr++){
+		    for(int sc = 0;sc < keypad[0].length;sc++){
+		        if(keypad[sr][sc] != -1){
+		            ans += mobKeypadMemo(sr,sc,n,dp,keypad);
+		        }
+		    }
+		}
+		return ans;
+	}
 
 // GFG:- GoldMine Problem....  https://www.geeksforgeeks.org/gold-mine-problem/
 

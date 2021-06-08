@@ -443,7 +443,104 @@ For the north-south pairs(2, 6) and (1, 5) the bridges can be built. We can cons
         
         return ans;
     }
+
+// 994. Rotting Oranges
+
+// 2d array format of graph
+// Non-cycle bfs
     
+    public int orangesRotting(int[][] grid) {
+        if(grid.length==0 || grid[0].length==0) return 0;
+    
+    int n = grid.length;
+    int m = grid[0].length;
+    
+    int[][] dir = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+    LinkedList<Integer> que = new LinkedList<>();
+    int freshOranges = 0;
+
+    for(int i = 0;i<n;i++){
+        for(int j = 0;j<m;j++){
+            if(grid[i][j] == 2) que.addLast(i*m+j);
+            if(grid[i][j] == 1) freshOranges++;
+        }
+    }
+
+    if(freshOranges == 0) return 0;
+    int time = 0;
+    while(que.size() != 0){
+        int size = que.size();
+        while(size-->0){
+            int idx = que.removeFirst();
+            int r = idx / m;
+            int c = idx % m;
+
+            for(int d = 0; d < 4; d++){
+                int x = r + dir[d][0];
+                int y = c + dir[d][1];
+
+                if(x >= 0 && y >= 0 && x < n && y < m && grid[x][y] == 1){
+                    grid[x][y] = 2;
+                    freshOranges--;
+                    que.addLast(x * m + y);
+                    if(freshOranges == 0) return time + 1;
+                }
+            }
+        }
+        time++;
+    }
+
+    return -1;
+}
+
+// 256. Walls and Gates -> https://www.lintcode.com/problem/walls-and-gates/
+
+    public void wallsAndGates(int[][] rooms) {
+        if(rooms.length == 0 || rooms[0].length)
+            return;
+
+        int m = rooms.length;
+        int n = rooms[0].length;
+
+        int dir[] = = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 } };
+        LinkedList<Integer> que = new LinkedList<>();
+        int dist = 0; int countEmptyRooms = 0;
+
+        for(int i = 0;i < m;i++){
+            for(int j = 0;j < n;j++){
+                if(rooms[i][j] == 0) //gates
+                    que.addLast(i*n+j); // 2d -> 1d
+                if(rooms[i][j] == (int)Integer.MAX_VALUE - 1) // free room
+                    countEmptyRooms++;
+            }
+        }
+
+        while(que.size() != 0){
+            int size = que.size();
+            while(size-- > 0){
+                int rvtx = que.removeFirst();
+                
+                // 1d -> 2d
+                int r = rvtx/n;
+                int c = rvtx%n;
+
+                for(int d = 0;d < dir.length;d++){
+                    int x = r + dir[d][0];
+                    int y = c + dir[d][1];
+
+                 if(x>=0 && y>=0 && x< n && y<m && rooms[x][y] == (int)Integer.MAX_VALUE - 1){
+                    countEmptyRooms--;
+                    rooms[x][y] = dist + 1; 
+                    que.addLast(x*m+y);
+                    if(countEmptyRooms == 0)
+                        return;
+                 }
+                }
+            }
+            dist++;
+        }
+    }
+
     public static void main(String args[]){
 
         constructGraph();

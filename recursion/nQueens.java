@@ -72,6 +72,109 @@ public class nQueens{
           return count;
     }
 
+// nQueen Permutation
+
+    public static int nQueeen_Perm(boolean boxes[][],int tnq,String ans){
+        if(tnq == 0){
+            System.out.println(ans);
+            return 1;
+        }
+
+        int count= 0;
+        int n= boxes.length;
+
+        for(int i=0;i<n*n;i++){
+            int r= i/n;
+            int c= i%n;
+
+            if(!boxes[r][c] && isSafeToPlaceQueen01(r,c,n)){
+            boxes[r][c]=true;
+            toggle(r,c,n);
+            count+=nQueeen_Perm(boxes,tnq-1,ans+"("+r+","+c+") ");
+            toggle(r,c,n);
+            boxes[r][c]=false;
+        }
+    }
+
+    return count;
+    }
+
+// nQueen using the constraint that at least one queen must be placed in one row
+// Optimization in recursive call
+
+// Faith:- (n-1) queens apne aap ko (n-1) rows mein safely place krke aa jayengi then i will add myself in nth row
+
+// floor- denotes a particular row or floor where one queen has to be placed
+public static int nQueeen03(boolean boxes[][],int tnq,int floor,String ans){
+    if(tnq == 0){
+        System.out.println(ans);
+        return 1;
+    }
+
+    int count= 0;
+    int n= boxes.length;
+
+    // c- any col of that given row
+    for(int c=0;c<n;c++){
+        if(isSafeToPlaceQueen01(floor,c,n)){
+            toggle(floor,c,n);
+            count+= nQueeen03(boxes,tnq-1,floor+1,ans+"("+floor+","+c+") ");
+            toggle(floor,c,n);
+        }
+    }
+    return count;
+}
+
+// Using Bit Manipulation to further optimize the space
+
+// Concept in crux:-
+// Any boolean array of size smaller than 64 elements can be represented by an binary number
+// long for 64 bit 
+// int for 32 bit
+// This usage of a single number to replace a complete array reduces the complexity from O(n) to O(1)
+// Therefore, the extra space used in this nQueens problem can be reduced by this method
+
+static int rowBin;// no need of this variable as we place a single queen in each row so no nned to check fo other queens in
+// a given row
+
+static int colBin= 0;
+static int diagBin= 0;
+static int antiDiagBin= 0;
+
+public static void toggleXOR(int r,int c,int n){
+    colBin = (colBin^(1<<c));
+    diagBin = (diagBin^(1<<(r-c+n-1)));
+    antiDiagBin = (antiDiagBin^(1<<(r+c)));
+}
+
+public static boolean isSafeBinary(int r,int c,int n){
+boolean colB= ((colBin & (1<<c))!=0)? false:true;
+boolean diagB= ((diagBin & (1<<(r-c+n-1)))!=0)? false:true;
+boolean antiDiagB= ((antiDiagBin & (1<<(r+c)))!=0)? false:true;
+
+if(colB== true && diagB== true && antiDiagB== true)
+return true;
+return false;
+}
+
+public static int nQueenMostOpti(boolean boxes[][],int floor,int tnq,String ans){
+    if(tnq == 0){
+        System.out.println(ans);
+        return 1;
+    }
+
+    int count= 0;
+    int n= boxes.length;
+
+    for(int c=0;c<n;c++){
+        if(isSafeBinary(floor,c,n)){
+            toggleXOR(floor,c,n);
+            count+= nQueenMostOpti(boxes,floor+1,tnq-1,ans+"("+floor+","+c+") ");
+            toggleXOR(floor,c,n);
+        }
+    }
+    return count;
+}
 
     public static void main(String[] args) {
         // System.out.println(queenCombination1D(5, 0, 3, 0, ""));
@@ -86,7 +189,7 @@ public class nQueens{
         antiDiag = new boolean[n+m+1];
 
         boolean[][] tnb = new boolean[n][n];
-        System.out.println(nQueen01(tnb, 0, n, ""));
+        System.out.println(nQueenMostOpti(tnb,0,n,""));
         // System.out.println(queenPermutation2D(tnb, n, ""));
     }
 

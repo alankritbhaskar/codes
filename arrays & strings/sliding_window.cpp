@@ -78,7 +78,7 @@ Output: 3
             
             while(required == 0)
             {
-                if(ei-si < len){
+                if(ei-si < len){// check is used here so that it is ensured that required is always 0
                     len = ei-si;
                     head=si;
                 }

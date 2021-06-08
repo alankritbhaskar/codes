@@ -393,8 +393,9 @@ coins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167
         
         int maxCost = -(int)1e9;
         for(int cut = si;cut <= ei;cut++){
-            int leftAns = (cut == si)?0:burst(arr,si,cut-1,dp); // handled left most index out of bound case
             int rightAns = (cut == ei)?0:burst(arr,cut+1,ei,dp); // handled rightmost index out of bound case
+            int leftAns = (cut == si)?0:burst(arr,si,cut-1,dp); // handled left most index out of bound case
+           
             
             int myAns = leftAns+leftVal*arr[cut]*rightVal+rightAns;
             maxCost = Math.max(maxCost,myAns);

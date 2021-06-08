@@ -124,6 +124,7 @@ Output: [1,2]
      int idx = 0;
      int arr[] = new int[k];
 
+    // {val,freq}
      PriorityQueue<int []> pq = new PriorityQueue<>((a,b)->{
          return a[1] - b[1]; // this-other -> default, minHeap
      });

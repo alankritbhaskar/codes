@@ -17,7 +17,7 @@ void update(int idx,int newVal){
     blocks[block] = blocks[block]-oldValue+newVal;
 }
 
-// O(n)
+// O(sqrt(n))
 int query(int l,int r){
     int sum = 0;
 

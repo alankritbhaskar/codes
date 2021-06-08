@@ -262,7 +262,7 @@ Output: 1 2 3 4 5
         
         ListNode c1=head,c2=head;
         
-        while(n-.0)
+        while(n-- > 0)
             c2=c2.next;
         
         if(c2==null)
@@ -832,6 +832,60 @@ Output: 1 2 3 4 5
         copyList(head);
         copyRandomPointers(head);
         return extractDeepCopy(head);
+    }
+
+// Leetcode 82. Remove Duplicates from Sorted Linked List
+
+// Using dummy node
+     public ListNode deleteDuplicates1(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        
+        ListNode dummy = new ListNode(-(int)1e8);
+        ListNode itr = dummy;
+        ListNode curr = head;
+                     
+        while(curr != null){
+            while(curr != null && itr.val == curr.val){
+                curr = curr.next;
+            }
+            
+            itr.next = curr;
+            itr = itr.next;
+            if(curr != null)
+            curr = curr.next;
+        }
+        return dummy.next;
+    }
+    
+// Using addLast()
+    public ListNode th = null, tt = null;
+    
+    public void addLast(ListNode node){
+        if(tt == null){
+            th = tt = node;
+        }
+        else{
+            tt.next = node;
+            tt = node;
+        } 
+    }
+    
+    public ListNode deleteDuplicates(ListNode head){
+        if(head == null || head.next == null)
+            return head;
+        
+        ListNode curr = head;
+        while(curr != null){
+            ListNode fwd = curr.next;
+            curr.next = null; // break the connection
+            
+            if(tt == null || tt.val != curr.val)
+                addLast(curr);
+            curr = fwd;
+        }
+        
+        return th;
     }
 
 

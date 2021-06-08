@@ -168,8 +168,33 @@
         } 
     }
 
+// 733. Flood Fill
 
-
+       public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {       
+        if(image.length == 0 || image[0].length == 0)
+            return image;
+        
+        int oldColor = image[sr][sc];
+        
+        int dir[][] = {{0,1},{1,0},{0,-1},{-1,0}};
+        
+        if (oldColor != newColor) 
+            dfs(image,sr,sc,oldColor,newColor,dir);
+        
+        return image;
+    }
+    public void dfs(int[][] image, int sr, int sc, int oldColor, int newColor,int dir[][]) {
+            
+            image[sr][sc] = newColor;
+            
+            for(int d = 0;d < dir.length;d++){
+                int x = sr + dir[d][0];
+                int y = sc + dir[d][1];
+                
+                if(x >= 0 && y >= 0 && x < image.length && y < image[0].length && image[x][y] == oldColor)
+                    dfs(image,x,y,oldColor,newColor,dir);
+        }
+    }
   
   int main(){ 
 
