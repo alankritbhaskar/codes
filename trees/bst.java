@@ -139,6 +139,23 @@ public int maximumEle(TreeNode root){
         return curr;
     }
 
+// 108
+
+    public TreeNode createBST(int arr[],int si,int ei){
+        if(si > ei)
+            return null;
+        
+        int mid = (si+ei)/2;
+
+        TreeNode node = new TreeNode(arr[mid]);
+
+        node.left = createBST(arr,si,mid-1);
+        node.right = createBST(arr,mid+1,ei);
+
+        return node;
+    }
+
+
 
 
 
